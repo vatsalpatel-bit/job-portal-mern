@@ -7,12 +7,10 @@ import {
 } from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { User2, LogOut } from "lucide-react";
+import { User2, LogOut, Link2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "@/services/authApi";
 import { setUser } from "@/redux/slices/authslice";
-
-
 
 
 const Navbar = () => {
@@ -23,8 +21,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   // ✅ REAL AUTH STATE
-  const user = useSelector((state) => state.auth.user);
-  // const user=true;
+  const user = useSelector((state) => state.auth.user);  // const user=true;
 
   useEffect(() => {
     const onScroll = () => {
@@ -70,15 +67,30 @@ const Navbar = () => {
         <div className="flex items-center gap-10">
           {/* Navigation */}
           <nav className="flex items-center gap-10 text-sm font-medium">
-            <Link to="/" className="hover:text-primary transition">
-              Home
-            </Link>
-            <Link to="/jobs" className="hover:text-primary transition">
-              Jobs
-            </Link>
-            <Link to="/browse" className="hover:text-primary transition">
-              Browse
-            </Link>
+            {
+              user?.role === 'recruiter' ? (
+                <> <Link to="/admin/companies" className="hover:text-primary transition">
+                  Companies
+                </Link>
+                  <Link to="/admin/jobs" className="hover:text-primary transition">
+                    Jobs
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/" className="hover:text-primary transition">
+                    Home
+                  </Link>
+                  <Link to="/jobs" className="hover:text-primary transition">
+                    Jobs
+                  </Link>
+                  <Link to="/browse" className="hover:text-primary transition">
+                    Browse
+                  </Link>
+                </>
+              )
+            }
+
           </nav>
 
           {/* Auth Section */}
@@ -99,20 +111,20 @@ const Navbar = () => {
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <button className="outline-none">
-                 <Avatar className="h-9 w-9">
-  <AvatarImage
-    key={user?.profile?.profilePhoto}
-    src={
-      user?.profile?.profilePhoto
-        ? `${user.profile.profilePhoto}?t=${Date.now()}`
-        : ""
-    }
-    className="object-cover"
-  />
-  <AvatarFallback>
-    {user?.fullname?.charAt(0) || "U"}
-  </AvatarFallback>
-</Avatar>
+                  <Avatar className="h-9 w-9">
+                    <AvatarImage
+                      key={user?.profile?.profilePhoto}
+                      src={
+                        user?.profile?.profilePhoto
+                          ? `${user.profile.profilePhoto}?t=${Date.now()}`
+                          : ""
+                      }
+                      className="object-cover"
+                    />
+                    <AvatarFallback>
+                      {user?.fullname?.charAt(0) || "U"}
+                    </AvatarFallback>
+                  </Avatar>
 
                 </button>
               </PopoverTrigger>
@@ -124,20 +136,20 @@ const Navbar = () => {
               >
                 {/* User Info */}
                 <div className="flex items-center gap-3 px-3 py-3">
-                 <Avatar className="h-10 w-10">
-  <AvatarImage
-    key={user?.profile?.profilePhoto}
-    src={
-      user?.profile?.profilePhoto
-        ? `${user.profile.profilePhoto}?t=${Date.now()}`
-        : ""
-    }
-    className="object-cover"
-  />
-  <AvatarFallback>
-    {user?.fullname?.charAt(0) || "U"}
-  </AvatarFallback>
-</Avatar>
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage
+                      key={user?.profile?.profilePhoto}
+                      src={
+                        user?.profile?.profilePhoto
+                          ? `${user.profile.profilePhoto}?t=${Date.now()}`
+                          : ""
+                      }
+                      className="object-cover"
+                    />
+                    <AvatarFallback>
+                      {user?.fullname?.charAt(0) || "U"}
+                    </AvatarFallback>
+                  </Avatar>
 
 
                   <div className="flex flex-col">
@@ -154,15 +166,18 @@ const Navbar = () => {
 
                 {/* Actions */}
                 <div className="flex flex-col p-1">
-                  <Link
-                    to="/profile"
-                    className="flex items-center gap-3 rounded-md px-3 py-2 text-sm
+                  {user?.role === 'student' && (
+                    <>
+                      <Link
+                        to="/profile"
+                        className="flex items-center gap-3 rounded-md px-3 py-2 text-sm
                                hover:bg-muted transition"
-                    onClick={() => setOpen(false)}
-                  >
-                    <User2 className="h-4 w-4 text-muted-foreground" />
-                    View Profile
-                  </Link>
+                        onClick={() => setOpen(false)}
+                      >
+                        <User2 className="h-4 w-4 text-muted-foreground" />
+                        View Profile
+                      </Link></>
+                  )}
 
                   <button
                     onClick={handleLogout}

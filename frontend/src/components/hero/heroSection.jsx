@@ -2,8 +2,17 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import CategoryCarousel from "@/components/carousel/createCarsousel";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom"
 
 const HeroSection = () => {
+    const [query,setQuery]=useState("");
+    const navigate=useNavigate();
+
+    const handlSearch=()=>{
+        if(!query.trim()) return;
+        navigate(`/browse?keyword=${query}`);
+    }
     return (
         <section className="w-full bg-background">
             <div className="mx-auto max-w-7xl px-6 pt-20 pb-16 text-center">
@@ -32,10 +41,14 @@ const HeroSection = () => {
                     <Input
                         placeholder="Find your dream jobs"
                         className="h-14 flex-1 border-none px-6 text-foreground focus-visible:ring-0"
-                    />
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        onKeyDown={(e)=>e.key==="Enter" && handlSearch()}
+                    /> 
                     <Button
                         size="icon"
                         className="h-14 w-16 rounded-none rounded-r-full"
+                        onClick={handlSearch}
                     >
                         <Search className="h-5 w-5" />
                     </Button>

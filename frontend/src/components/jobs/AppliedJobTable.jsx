@@ -8,44 +8,39 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { getAppliedJobsApi } from "@/services/applicationApi";
+import { setAppliedJobs } from "@/redux/slices/jobSlice";
+import { useDispatch } from "react-redux";
 
 const AppliedJobTable = () => {
-  // dummy data (replace with API later)
-  const appliedJobs = [
-    {
-      id: 1,
-      date: "17-07-2024",
-      role: "Frontend Developer",
-      company: "Google",
-      status: "Selected",
-    },
-    {
-      id: 2,
-      date: "17-07-2024",
-      role: "Frontend Developer",
-      company: "Google",
-      status: "Selected",
-    },
-    {
-      id: 3,
-      date: "17-07-2024",
-      role: "Frontend Developer",
-      company: "Google",
-      status: "Selected",
-    },
-    {
-      id: 4,
-      date: "17-07-2024",
-      role: "Frontend Developer",
-      company: "Google",
-      status: "Selected",
-    },
-  ];
+  const dispatch = useDispatch();
+  const appliedJobs = useSelector((state) => state.job.appliedJobs || [])
+  // console.log(appliedJobs)
+  useEffect(() => {
+  const fetchAppliedJobs = async () => {
+    try {
+      const res = await getAppliedJobsApi();
+
+      console.log("API RESPONSE:", res);
+
+      const applications = res?.data?.applications || res?.applications || [];
+
+      dispatch(setAppliedJobs(applications));
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  fetchAppliedJobs();
+}, [dispatch]);
 
   return (
     <div className="rounded-xl border bg-background">
       <Table>
-       
+
         <TableHeader>
           <TableRow>
             <TableHead>Date</TableHead>
@@ -54,21 +49,24 @@ const AppliedJobTable = () => {
             <TableHead className="text-right">Status</TableHead>
           </TableRow>
         </TableHeader>
-
         <TableBody>
-          {appliedJobs.map((job) => (
-            <TableRow
-              key={job.id}
-              className="hover:bg-muted/50 transition"
-            >
-              <TableCell>{job.date}</TableCell>
-              <TableCell className="font-medium">
-                {job.role}
+          {appliedJobs.map((item) => (
+            <TableRow key={item._id}>
+              <TableCell>
+                {new Date(item.createdAt).toLocaleDateString()}
               </TableCell>
-              <TableCell>{job.company}</TableCell>
+
+              <TableCell className="font-medium">
+                {item.job?.title}
+              </TableCell>
+
+              <TableCell>
+                {item.job?.company?.name}
+              </TableCell>
+
               <TableCell className="text-right">
                 <Badge className="rounded-full px-3">
-                  {job.status}
+                  {item.status}
                 </Badge>
               </TableCell>
             </TableRow>

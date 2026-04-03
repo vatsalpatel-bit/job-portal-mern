@@ -89,6 +89,7 @@ const Login = () => {
               value={input.password}
               onChange={changeEventeHandeler}
               placeholder="••••••••"
+              autocomplete="current-password"
               className="h-11"
             />
           </div>

@@ -134,7 +134,9 @@ const Profile = () => {
       toast.success("Profile updated successfully ✅");
     } catch (error) {
       console.error("Update profile error:", error);
-      toast.error("Profile update failed ❌");
+      toast.error(
+        error?.response?.data?.message || "Profile update failed ❌"
+      );
     }
   };
   // profile pic
@@ -319,6 +321,9 @@ const Profile = () => {
               </Dialog>
             </div>
 
+            {photoError && (
+              <p className="mt-3 text-sm text-red-500">{photoError}</p>
+            )}
 
             <div className="my-6 h-px bg-muted" />
 

@@ -139,6 +139,7 @@ const Signup = () => {
               placeholder="Password"
               value={input.password}
               onChange={changeHandler}
+              autoComplete="new-password"
               required
             />
 

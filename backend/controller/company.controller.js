@@ -1,9 +1,11 @@
 // controller/company.controller.js
 import Company from "../utils/company.model.js";
+import cloudinary from "../utils/cloudinary.js";
 
 export const registerCompany = async (req, res) => {
   try {
     const { companyName } = req.body;
+    console.log(companyName);
     if (!companyName) {
       return res.status(400).json({
         message: "Company name is required",
@@ -20,18 +22,26 @@ export const registerCompany = async (req, res) => {
       });
     }
 
-    const userId = req.user?.id || req.id;
+    try {
+      const userId = req.userId || req.id;
+      console.log(userId);
+      const company = await Company.create({
+        name: companyName,
+        userId,
+      });
 
-    const company = await Company.create({
-      name: companyName,
-      userId,
-    });
-
-    return res.status(201).json({
-      message: "Company registered successfully",
-      company,
-      success: true,
-    });
+      return res.status(201).json({
+        message: "Company registered successfully",
+        company,
+        success: true,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(404).json({
+        message: "UserId not found",
+        success: false,
+      });
+    }
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error", success: false });
@@ -86,10 +96,15 @@ export const updateCompany = async (req, res) => {
   try {
     const { name, description, website, location } = req.body;
     const file = req.file;
-    // cloudinary upload logic here (if any) and add fields to updateData
 
     const updateData = { name, description, website, location };
 
+    if (file) {
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: "company_logos",
+      });
+      updateData.logo = result.secure_url;
+    }
     const company = await Company.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
     });

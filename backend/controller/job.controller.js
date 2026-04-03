@@ -64,33 +64,81 @@ export const postJob = async (req, res) => {
 // for student
 export const getAllJob = async (req, res) => {
   try {
-    const keyword = req.query.keyword || "";
-    const query = {
-      $or: [
-        { title: { $regex: keyword, $options: "i" } },
-        { description: { $regex: keyword, $options: "i" } },
-      ],
-    };
-    const jobs = await Job.find(query)
-      .populate({
-        path: "company",
-      })
-      .sort({ createdAt: -1 });
-    if (!query) {
-      return res.status(404).json({
-        message: "Job not found.",
-        success: false,
+    const { keyword = "", location, industry, salary } = req.query;
+
+    const andConditions = [];
+    // 🔍 Keyword Search
+    if (keyword) {
+      andConditions.push({
+        $or: [
+          { title: { $regex: keyword, $options: "i" } },
+          { description: { $regex: keyword, $options: "i" } },
+          { location: { $regex: keyword, $options: "i" } },
+          { jobType: { $regex: keyword, $options: "i" } },
+        ],
       });
     }
+
+    // 📍 Location Filter
+    if (location) {
+      andConditions.push({
+        location: {
+          $in: location
+            .split(",")
+            .map((loc) => new RegExp(`^${loc.trim()}$`, "i")),
+        },
+      });
+    }
+
+    // 🏢 Industry Filter
+    if (industry) {
+      andConditions.push({
+        jobType: { $in: industry.split(",") },
+      });
+    }
+
+    // 💰 Salary Filter
+    if (salary) {
+      const ranges = salary.split(",");
+      const salaryConditions = [];
+
+      ranges.forEach((range) => {
+        if (range === "0–30k") {
+          salaryConditions.push({ salary: { $gte: 0, $lte: 30000 } });
+        }
+        if (range === "30k–60k") {
+          salaryConditions.push({ salary: { $gte: 30000, $lte: 60000 } });
+        }
+        if (range === "60k–1L") {
+          salaryConditions.push({ salary: { $gte: 60000, $lte: 100000 } });
+        }
+        if (range === "1L–2L") {
+          salaryConditions.push({ salary: { $gte: 100000, $lte: 200000 } });
+        }
+        if (range === "2L+") {
+          salaryConditions.push({ salary: { $gte: 200000 } });
+        }
+      });
+
+      if (salaryConditions.length > 0) {
+        andConditions.push({ $or: salaryConditions });
+      }
+    }
+    // ✅ Final Query
+    const finalQuery = andConditions.length > 0 ? { $and: andConditions } : {};
+    const jobs = await Job.find(finalQuery)
+      .populate("company")
+      .sort({ createdAt: -1 });
+
     return res.status(200).json({
-      jobs,
       success: true,
+      jobs,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "Server error",
+    return res.status(500).json({
       success: false,
+      message: "Server error",
     });
   }
 };
@@ -99,21 +147,32 @@ export const getAllJob = async (req, res) => {
 export const getJobById = async (req, res) => {
   try {
     const jobId = req.params.id;
-    const job = await Job.findById(jobId);
+
+    const job = await Job.findById(jobId)
+      .populate("company")
+      .populate({
+        path: "application",
+        populate: {
+          path: "applicant",
+          select: "_id",
+        },
+      });
+
     if (!job) {
       return res.status(404).json({
-        message: "Job not found.",
+        message: "Job not found",
         success: false,
       });
     }
+
     return res.status(200).json({
       job,
       success: true,
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: "Server error",
+    console.log("ERRROR IN getJobById:", error);
+    return res.status(500).json({
+      message: "server error",
       success: false,
     });
   }
@@ -139,6 +198,23 @@ export const getAdminJobs = async (req, res) => {
     res.status(500).json({
       message: "Server error",
       success: false,
+    });
+  }
+};
+
+export const getJobFilters = async (req, res) => {
+  try {
+    const locations = await Job.distinct("location");
+    const industries = await Job.distinct("jobType"); // ✅ changed here
+
+    res.status(200).json({
+      locations,
+      industries,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Failed to fetch filters",
     });
   }
 };

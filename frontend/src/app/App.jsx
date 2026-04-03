@@ -8,27 +8,51 @@ import Jobs from "@/pages/Jobs";
 import Browse from "@/pages/Browse";
 import ProfilePage from "@/pages/ProfilePage";
 import DetailPage from "@/pages/DetailPage";
+import companySetup from "@/pages/admin/companySetup";
+
+// ✅ Admin pages
+import Companies from "@/pages/admin/Companies";
+
+// ✅ Protected Route
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import CompanyCreate from "@/pages/admin/CompanyCreate";
+import CompanySetUp from "@/pages/admin/companySetup";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />, // 🔥 LAYOUT
+    element: <MainLayout />,
     children: [
       { index: true, element: <Home /> },
       { path: "jobs", element: <Jobs /> },
       { path: "browse", element: <Browse /> },
       { path: "profile", element: <ProfilePage /> },
-      { path: "description/:jobId", element: <DetailPage /> },
+      { path: "job/:id", element: <DetailPage /> },
+
+      
+      {
+        path: "admin/companies",
+        element: (
+          <Companies />
+        ),
+      },
+      {
+        path: "admin/company/create",
+        element: (
+          <CompanyCreate />
+        )
+      },
+      {
+        path: "admin/companies/:id",
+        element: (
+          <CompanySetUp />)
+      }
     ],
   },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
+
+  // 🔓 Public routes
+  { path: "/signup", element: <Signup /> },
+  { path: "/login", element: <Login /> },
 ]);
 
 const App = () => {

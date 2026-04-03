@@ -2,85 +2,77 @@ import { Application } from "../utils/application.model.js";
 import { Job } from "../utils/job.model.js";
 import "../utils/user.model.js";
 
-
 export const applyJob = async (req, res) => {
   try {
-    const userId =req.user?.id || req.id;
-    const jobId = req.params.id;
-    if (!jobId) {
+    const userId = req.userId; // 👈 this comes from auth middleware
+    const jobId = req.params.id; // that come from url
+
+    if (!userId) {
       return res.status(400).json({
-        message: "Job id is required",
-        success: false,
+        message: "User not authenticated",
       });
     }
-    // check if user already applied for job
+
+    // check duplicate
     const existingApplication = await Application.findOne({
       job: jobId,
       applicant: userId,
     });
+
     if (existingApplication) {
       return res.status(400).json({
-        message: "You have already applied for this job.",
-        success: false,
+        message: "You already applied",
       });
     }
-    // check if the job exists
-    const job = await Job.findById(jobId);
-    if (!job) {
-      return res.status(400).json({
-        message: "Job is not found",
-        success: false,
-      });
-    }
-    //  create a new application
-    const newApplication = await Application.create({
+
+    // create application
+    const application = await Application.create({
       job: jobId,
       applicant: userId,
     });
-    job.application.push(newApplication._id);
+
+    // push into job
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+    
+    job.application.push(application._id);
     await job.save();
 
-    return res.status(201).json({
-      message: "Applied successfully.",
-      success: true,
+    res.status(201).json({
+      message: "Application submitted",
     });
   } catch (error) {
     console.log(error);
-    return res.status(400).json({
-      message: "Server error",
-      success: false,
-    });
   }
 };
 
 export const getAppliedJobs = async (req, res) => {
   try {
-    const userId = req.user?.id || req.id;
-    const application = await Application.find({ applicant: userId })
-      .sort({ createdAt: -1 })
-      .populate({
-        path: "job",
-        options: { sort: { createdAt: -1 } },
-        populate: {
-          path: "company",
-          options: { sort: { createdAt: -1 } },
-        },
-      });
-    if (application.length == 0) {
-      return res.status(404).json({
-        message: "Application not found.",
-        success: false,
-      });
-    }
-    return res.status(200).json({
-      application,
-      success: true,
+    const userId = req.userId;
+
+    const applications = await Application.find({
+      applicant: userId,
+    }).populate({
+      path: "job",
+      populate: {
+        path: "company",
+      },
     });
+
+    return res.status(200).json({
+      success: true,
+      applications,
+    });
+    
   } catch (error) {
-    console.log(error);
-    return res.status(400).json({
-      message: "Server error",
+    console.error("Get Applied Jobs Error:", error);
+
+    return res.status(500).json({
       success: false,
+      message: "Server error",
     });
   }
 };
@@ -147,6 +139,37 @@ export const updateStatus = async (req, res) => {
     return res.status(400).json({
       message: "Server error",
       success: false,
+    });
+  }
+};
+
+export const getAllJobs = async (req, res) => {
+  try {
+    const userId = req.id;
+
+    const jobs = await Job.find().populate("company");
+
+    const applications = await Application.find({
+      applicant: userId,
+    });
+
+    const appliedJobIds = applications.map((app) => app.job.toString());
+
+    const jobsWithStatus = jobs.map((job) => ({
+      ...job.toObject(),
+      hasApplied: appliedJobIds.includes(job._id.toString()),
+    }));
+
+    return res.status(200).json({
+      success: true,
+      jobs: jobsWithStatus,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
     });
   }
 };

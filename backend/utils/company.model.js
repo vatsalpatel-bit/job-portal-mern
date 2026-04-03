@@ -16,6 +16,7 @@ const companySchema = new mongoose.Schema(
     location: {
       type: String,
     },
+    
     logo: {
       type: String, // URL to company logo
     },
@@ -23,9 +24,9 @@ const companySchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-    }
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("Company", companySchema);

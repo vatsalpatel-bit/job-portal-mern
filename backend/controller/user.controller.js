@@ -5,6 +5,15 @@ import cloudinary from "../utils/cloudinary.js";
 import streamifier from "streamifier";
 import { getPublicIdFromUrl } from "../utils/cloudinary.js";
 
+const buildSafeUser = (user) => ({
+  _id: user._id,
+  fullname: user.fullname,
+  email: user.email,
+  phoneNumber: user.phoneNumber,
+  role: user.role,
+  profile: user.profile || null,
+});
+
 
 export const Register = async (req, res) => {
   try {
@@ -119,14 +128,7 @@ export const login = async (req, res) => {
       expiresIn: "1d",
     });
 
-    const safeUser = {
-      // server to client
-      _id: user._id,
-      fullname: user.fullname,
-      phoneNumber: user.phoneNumber,
-      role: user.role,
-      profile: user.profile || null,
-    };
+    const safeUser = buildSafeUser(user);
 
     res
       .status(200)
@@ -189,8 +191,26 @@ export const updateProfile = async (req, res) => {
 
     if (!user.profile) user.profile = {};
 
-    if (fullname) user.fullname = fullname;
-    if (email) user.email = email.toLowerCase().trim();
+    if (fullname) user.fullname = fullname.trim();
+
+    if (email) {
+      const normalizedEmail = String(email).trim().toLowerCase();
+
+      const existingUser = await User.findOne({
+        email: normalizedEmail,
+        _id: { $ne: userId },
+      });
+
+      if (existingUser) {
+        return res.status(400).json({
+          success: false,
+          message: "Email is already in use",
+        });
+      }
+
+      user.email = normalizedEmail;
+    }
+
     if (phoneNumber) user.phoneNumber = Number(phoneNumber);
     if (bio !== undefined) user.profile.bio = bio;
 
@@ -207,7 +227,7 @@ export const updateProfile = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Profile updated successfully",
-      user,
+      user: buildSafeUser(user),
     });
   } catch (error) {
     console.error("Update profile error:", error);
@@ -293,7 +313,7 @@ export const uploadUserResume = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Resume uploaded successfully",
-      user,
+      user: buildSafeUser(user),
     });
   } catch (error) {
     console.error("Resume upload error:", error);
@@ -352,7 +372,7 @@ export const uploadProfilePhoto = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      user,
+      user: buildSafeUser(user),
     });
   } catch (error) {
     console.error("Profile photo upload error:", error);

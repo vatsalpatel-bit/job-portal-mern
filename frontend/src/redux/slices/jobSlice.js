@@ -6,6 +6,7 @@ const jobSlice = createSlice({
     allJobs: [],
     singleJob: null,
     searchedJobs: [],
+    savedJobs: [],
     appliedJobs: [],
     loading: false,
     error: null,
@@ -24,7 +25,7 @@ const jobSlice = createSlice({
     },
 
     setAppliedJobs: (state, action) => {
-      state.appliedJobs = action.payload;
+     state.appliedJobs = action.payload;
     },
 
     setJobLoading: (state, action) => {
