@@ -3,11 +3,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { createCompanyApi, editCompanyApi } from "@/services/companyApi";
 
 const CompanySetup = () => {
   const navigate = useNavigate();
-
+  const { id: companyId } = useParams();
+  // console.log(companyId)
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -29,7 +31,7 @@ const CompanySetup = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
       const formData = new FormData();
       formData.append("name", form.name);
@@ -41,7 +43,12 @@ const CompanySetup = () => {
       if (form.logo) {
         formData.append("logo", form.logo);
       }
+      for (let pair of formData.entries()) {
+        console.log(pair[0], pair[1]);
+      }
 
+      const data = await editCompanyApi(companyId, formData)
+      console.log(data);
     } catch (error) {
 
     }

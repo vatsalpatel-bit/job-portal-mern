@@ -14,5 +14,13 @@ export const createCompanyApi = async (companyName) => {
       withCredentials: true,
     },
   );
-  return res.data
+  return res.data;
+};
+
+export const editCompanyApi = async (companyId, formData) => {
+  const res = await axios.put(
+    `${COMPANY_API_END_PORT}/update/${companyId}`,
+    formData,
+  );
+  return res.data;
 };
