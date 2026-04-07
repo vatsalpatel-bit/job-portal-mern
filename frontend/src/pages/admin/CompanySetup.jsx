@@ -4,12 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { createCompanyApi, editCompanyApi } from "@/services/companyApi";
+import { editCompanyApi } from "@/services/companyApi";
+import { useSelector } from "react-redux";
+import { setSingleCompany } from "@/redux/slices/companiesSlice";
 
 const CompanySetup = () => {
   const navigate = useNavigate();
   const { id: companyId } = useParams();
-  // console.log(companyId)
+  const singleCompany = useSelector(
+    (state) => state.company?.singleCompany
+  );
+  console.log(singleCompany || "singleCompany undefind")
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -39,7 +44,6 @@ const CompanySetup = () => {
       formData.append("website", form.website);
       formData.append("location", form.location);
 
-      //
       if (form.logo) {
         formData.append("logo", form.logo);
       }
@@ -80,8 +84,8 @@ const CompanySetup = () => {
               name="name"
               value={form.name}
               onChange={handleChange}
-              placeholder="Enter company name"
-              className="mt-2"
+              placeholder={singleCompany?.name}
+              className="mt-2 placeholder-gray-900"
             />
           </div>
 
@@ -136,9 +140,10 @@ const CompanySetup = () => {
           <div className="md:col-span-2 flex justify-end">
             <Button
               onClick={handleSubmit}
+              disabled={!handleSubmit}
               className="w-full md:w-auto px-8"
             >
-              Update
+              Done
             </Button>
           </div>
         </div>

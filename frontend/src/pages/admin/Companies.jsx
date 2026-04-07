@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
@@ -9,18 +9,15 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Pencil } from "lucide-react";
+import { getAllCompanyApi } from "@/services/companyApi";
 
 const Companies = () => {
   const navigate = useNavigate();
 
-  const [companies] = useState([
-    {
-      id: 1,
-      name: "Company Name",
-      date: "18 Jul 2024",
-      logo: "",
-    },
-  ]);
+  useEffect(() => {
+    const data = getAllCompanyApi();
+    console.log(data)
+  },[])
 
   return (
     <div className="min-h-screen bg-gray-50">

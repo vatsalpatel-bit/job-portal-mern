@@ -16,7 +16,7 @@ const companySchema = new mongoose.Schema(
     location: {
       type: String,
     },
-    
+
     logo: {
       type: String, // URL to company logo
     },
@@ -24,6 +24,9 @@ const companySchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+    },
+    logoPublicId: {
+      type: String,
     },
   },
   { timestamps: true },

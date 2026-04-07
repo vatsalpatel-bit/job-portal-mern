@@ -24,3 +24,10 @@ export const editCompanyApi = async (companyId, formData) => {
   );
   return res.data;
 };
+
+export const getAllCompanyApi = async () => {
+  const res = await axios.get(`${COMPANY_API_END_PORT}/register`, {
+    withCredentials: true,
+  });
+  return res.data;
+};
