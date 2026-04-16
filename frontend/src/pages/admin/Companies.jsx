@@ -16,14 +16,20 @@ import { setCompanies } from "@/redux/slices/companiesSlice";
 const Companies = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const allCompaies = useSelector((state) => state.allCompaies)
+  // const allCompaies=[]
+  const allCompaies = useSelector((state) => state.company.allCompanies)
+  // console.log(allCompaies)
+  // allCompaies.forEach(company => {
+  //   console.log(company._id);
+  // });
+
 
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
         const data = await getAllCompanyApi();
-        console.log(data);
-        dispatch(setCompanies(data));
+        // console.log(data.companies);
+        dispatch(setCompanies(data.companies));
       } catch (error) {
         console.log(error)
       }
@@ -81,13 +87,17 @@ const Companies = () => {
               />
 
               {/* Name */}
-              <p className="font-medium text-gray-800">
+              <p className="font-medium text-gray-700">
                 {company.name}
               </p>
 
               {/* Date */}
-              <p className="text-sm text-gray-500">
-                {company.date}
+              <p className="text-sm text-gray-700">
+                {new Date(company.createdAt).toLocaleDateString("en-IN", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric"
+                })}
               </p>
 
               {/* Action */}
@@ -107,7 +117,7 @@ const Companies = () => {
                     className="w-32 p-1 rounded-lg shadow-md"
                   >
                     <button
-                      onClick={() => navigate(`/admin/company/${company.id}/edit`)}
+                      onClick={() => navigate(`/admin/company/${company._id}/edit`)}
                       className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md hover:bg-gray-100 transition"
                     >
                       <Pencil className="w-4 h-4" />

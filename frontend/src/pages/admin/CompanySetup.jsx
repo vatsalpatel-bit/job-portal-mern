@@ -5,16 +5,17 @@ import { Label } from "@/components/ui/label";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { editCompanyApi } from "@/services/companyApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSingleCompany } from "@/redux/slices/companiesSlice";
 
 const CompanySetup = () => {
   const navigate = useNavigate();
+  const dispatch=useDispatch();
   const { id: companyId } = useParams();
   const singleCompany = useSelector(
     (state) => state.company?.singleCompany
   );
-  console.log(singleCompany || "singleCompany undefind")
+  // console.log(singleCompany || "singleCompany undefind")
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -50,12 +51,13 @@ const CompanySetup = () => {
       if (form.logo) {
         formData.append("logo", form.logo);
       }
-      for (let pair of formData.entries()) {
-        console.log(pair[0], pair[1]);
-      }
+      // for (let pair of formData.entries()) {
+      //   console.log(pair[0], pair[1]);
+      // }
 
       const data = await editCompanyApi(companyId, formData)
-      console.log(data);
+      console.log(data.company);
+      dispatch(setSingleCompany(data.company))
     } catch (error) {
 
     }
