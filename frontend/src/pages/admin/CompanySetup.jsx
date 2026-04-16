@@ -39,7 +39,10 @@ const CompanySetup = () => {
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
-      formData.append("name", form.name);
+      if (form.name) {
+        formData.append("name", form.name);
+      }
+
       formData.append("description", form.description);
       formData.append("website", form.website);
       formData.append("location", form.location);

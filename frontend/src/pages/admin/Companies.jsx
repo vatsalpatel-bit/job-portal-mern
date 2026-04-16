@@ -10,15 +10,26 @@ import {
 } from "@/components/ui/popover";
 import { Pencil } from "lucide-react";
 import { getAllCompanyApi } from "@/services/companyApi";
+import { useDispatch, useSelector } from "react-redux";
+import { setCompanies } from "@/redux/slices/companiesSlice";
 
 const Companies = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const allCompaies = useSelector((state) => state.allCompaies)
 
   useEffect(() => {
-    const data = getAllCompanyApi();
-    console.log(data)
-  },[])
-
+    const fetchCompanies = async () => {
+      try {
+        const data = await getAllCompanyApi();
+        console.log(data);
+        dispatch(setCompanies(data));
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchCompanies();
+  }, []);
   return (
     <div className="min-h-screen bg-gray-50">
 
@@ -52,7 +63,7 @@ const Companies = () => {
           </div>
 
           {/* Body */}
-          {companies.map((company) => (
+          {allCompaies?.map((company) => (
             <div
               key={company.id}
               onClick={() => navigate(`/admin/company/${company.id}`)}

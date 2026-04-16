@@ -26,7 +26,7 @@ export const editCompanyApi = async (companyId, formData) => {
 };
 
 export const getAllCompanyApi = async () => {
-  const res = await axios.get(`${COMPANY_API_END_PORT}/register`, {
+  const res = await axios.get(`${COMPANY_API_END_PORT}/get`, {
     withCredentials: true,
   });
   return res.data;

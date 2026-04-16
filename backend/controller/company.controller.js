@@ -48,7 +48,8 @@ export const registerCompany = async (req, res) => {
 
 export const getCompany = async (req, res) => {
   try {
-    const userId = req?.user?.id;
+    const userId = req?.userId;
+    console.log(userId);
     const companies = await Company.find({ userId });
 
     if (companies?.length === 0) {
