@@ -71,8 +71,8 @@ const Companies = () => {
           {/* Body */}
           {allCompaies?.map((company) => (
             <div
-              key={company.id}
-              onClick={() => navigate(`/admin/company/${company.id}`)}
+              key={company._id}
+              onClick={() => navigate(`/admin/company/${company._id}`)}
               className="grid grid-cols-[80px_1fr_1fr_60px] items-center px-6 py-4 hover:bg-gray-50 transition cursor-pointer"
             >
               {/* Logo */}
