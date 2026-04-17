@@ -4,17 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { editCompanyApi } from "@/services/companyApi";
-import { useSelector } from "react-redux";
+import { editCompanyApi, getCompanyById } from "@/services/companyApi";
+import { useDispatch, useSelector } from "react-redux";
 import { setSingleCompany } from "@/redux/slices/companiesSlice";
 
 const CompanyEdit = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { id: companyId } = useParams();
     const singleCompany = useSelector(
         (state) => state.company.singleCompany
     );
-      console.log(singleCompany || "singleCompany undefind")
+    // console.log(singleCompany || "singleCompany undefind")
     const [form, setForm] = useState({
         name: "",
         description: "",
@@ -22,6 +23,7 @@ const CompanyEdit = () => {
         location: "",
         logo: null,
     });
+    const [preview, setPreview] = useState(null);
 
     useEffect(() => {
         if (singleCompany) {
@@ -34,13 +36,24 @@ const CompanyEdit = () => {
             })
 
         }
-    },[singleCompany])
+    }, [singleCompany])
+
+    useEffect(() => {
+        const fetchCompanyApi = async () => {
+            const data = await getCompanyById(companyId);
+            // console.log(data.company);
+            dispatch(setSingleCompany(data.company))
+        }
+        fetchCompanyApi();
+    }, [])
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
 
         if (name === "logo") {
+            const file = files[0];
             setForm({ ...form, logo: files[0] });
+            setPreview(URL.createObjectURL(file));
         } else {
             setForm((prev) => ({
                 ...prev,
@@ -68,7 +81,7 @@ const CompanyEdit = () => {
             }
 
             const data = await editCompanyApi(companyId, formData)
-            console.log(data);
+            // console.log(data);
         } catch (error) {
 
         }
@@ -142,16 +155,40 @@ const CompanyEdit = () => {
                     </div>
 
                     {/* Logo (Full width) */}
-                    <div className="md:col-span-2">
-                        <Label>Logo</Label>
-                        <Input
-                            type="file"
-                            name="logo"
-                            onChange={handleChange}
-                            className="mt-2"
-                        />
-                    </div>
+                    <div className="space-y-2">
 
+                        {/* Current Logo */}
+                        <div className="flex items-center gap-4">
+
+                            {/* Image Preview */}
+                            <img
+                                src={preview || singleCompany?.logo}
+                                alt="logo"
+                                className="w-16 h-16 rounded-lg object-cover border"
+                            />
+
+                            {/* Hidden file input */}
+                            <input
+                                type="file"
+                                name="logo"
+                                id="logoUpload"
+                                className="hidden"
+                                onChange={handleChange}
+                            />
+
+                            {/* Custom button */}
+                            <label
+                                htmlFor="logoUpload"
+                                className="px-4 py-2  hover: rounded-md cursor-pointer text-sm font-medium"
+                            >
+                                Change Logo
+                            </label>
+
+
+                        </div>
+
+
+                    </div>
                     {/* Button */}
                     <div className="md:col-span-2 flex justify-end">
                         <Button

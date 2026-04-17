@@ -1,6 +1,7 @@
 // controller/company.controller.js
 import Company from "../utils/company.model.js";
 import { uploadFromBuffer } from "../utils/cloudinaryUpload.js";
+import cloudinary from "../utils/cloudinary.js";
 
 export const registerCompany = async (req, res) => {
   try {
@@ -49,7 +50,6 @@ export const registerCompany = async (req, res) => {
 export const getCompany = async (req, res) => {
   try {
     const userId = req?.userId;
-    console.log(userId);
     const companies = await Company.find({ userId });
 
     if (companies?.length === 0) {

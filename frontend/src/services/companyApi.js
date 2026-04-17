@@ -31,3 +31,8 @@ export const getAllCompanyApi = async () => {
   });
   return res.data;
 };
+
+export const getCompanyById = async (companyId) => {
+  const res = await axios.get(`${COMPANY_API_END_PORT}/get/${companyId}`);
+  return res.data;
+};

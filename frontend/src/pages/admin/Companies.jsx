@@ -18,7 +18,7 @@ const Companies = () => {
   const dispatch = useDispatch();
   // const allCompaies=[]
   const allCompaies = useSelector((state) => state.company.allCompanies)
-  // console.log(allCompaies)
+  console.log(allCompaies)
   // allCompaies.forEach(company => {
   //   console.log(company._id);
   // });
