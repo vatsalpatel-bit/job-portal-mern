@@ -10,7 +10,7 @@ import { setSingleCompany } from "@/redux/slices/companiesSlice";
 
 const CompanySetup = () => {
   const navigate = useNavigate();
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const { id: companyId } = useParams();
   const singleCompany = useSelector(
     (state) => state.company?.singleCompany
@@ -56,10 +56,13 @@ const CompanySetup = () => {
       // }
 
       const data = await editCompanyApi(companyId, formData)
-      console.log(data.company);
-      dispatch(setSingleCompany(data.company))
-    } catch (error) {
 
+      dispatch(setSingleCompany(data.company))
+      if (data?.success) {
+        navigate("/admin/companies");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

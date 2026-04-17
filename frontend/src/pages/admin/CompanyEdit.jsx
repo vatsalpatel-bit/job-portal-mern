@@ -80,7 +80,10 @@ const CompanyEdit = () => {
                 console.log(pair[0], pair[1]);
             }
 
-            const data = await editCompanyApi(companyId, formData)
+            const data = await editCompanyApi(companyId, formData);
+            if (data?.success) {
+                navigate("/admin/companies");
+            }
             // console.log(data);
         } catch (error) {
 
