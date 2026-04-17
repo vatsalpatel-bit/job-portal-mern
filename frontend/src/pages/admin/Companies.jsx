@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
@@ -9,19 +9,33 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Pencil } from "lucide-react";
+import { getAllCompanyApi } from "@/services/companyApi";
+import { useDispatch, useSelector } from "react-redux";
+import { setCompanies } from "@/redux/slices/companiesSlice";
 
 const Companies = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // const allCompaies=[]
+  const allCompaies = useSelector((state) => state.company.allCompanies)
+  console.log(allCompaies)
+  // allCompaies.forEach(company => {
+  //   console.log(company._id);
+  // });
 
-  const [companies] = useState([
-    {
-      id: 1,
-      name: "Company Name",
-      date: "18 Jul 2024",
-      logo: "",
-    },
-  ]);
 
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const data = await getAllCompanyApi();
+        // console.log(data.companies);
+        dispatch(setCompanies(data.companies));
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchCompanies();
+  }, []);
   return (
     <div className="min-h-screen bg-gray-50">
 
@@ -55,7 +69,7 @@ const Companies = () => {
           </div>
 
           {/* Body */}
-          {companies.map((company) => (
+          {allCompaies?.map((company) => (
             <div
               key={company.id}
               onClick={() => navigate(`/admin/company/${company.id}`)}
@@ -73,13 +87,17 @@ const Companies = () => {
               />
 
               {/* Name */}
-              <p className="font-medium text-gray-800">
+              <p className="font-medium text-gray-700">
                 {company.name}
               </p>
 
               {/* Date */}
-              <p className="text-sm text-gray-500">
-                {company.date}
+              <p className="text-sm text-gray-700">
+                {new Date(company.createdAt).toLocaleDateString("en-IN", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric"
+                })}
               </p>
 
               {/* Action */}
@@ -99,7 +117,7 @@ const Companies = () => {
                     className="w-32 p-1 rounded-lg shadow-md"
                   >
                     <button
-                      onClick={() => navigate(`/admin/company/${company.id}/edit`)}
+                      onClick={() => navigate(`/admin/company/${company._id}/edit`)}
                       className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md hover:bg-gray-100 transition"
                     >
                       <Pencil className="w-4 h-4" />

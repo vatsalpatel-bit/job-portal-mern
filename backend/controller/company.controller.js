@@ -1,5 +1,6 @@
 // controller/company.controller.js
 import Company from "../utils/company.model.js";
+import { uploadFromBuffer } from "../utils/cloudinaryUpload.js";
 import cloudinary from "../utils/cloudinary.js";
 
 export const registerCompany = async (req, res) => {
@@ -48,10 +49,10 @@ export const registerCompany = async (req, res) => {
 
 export const getCompany = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req?.userId;
     const companies = await Company.find({ userId });
 
-    if (companies.length === 0) {
+    if (companies?.length === 0) {
       return res.status(404).json({
         message: "No companies found",
         success: false,
@@ -92,35 +93,50 @@ export const getCompanyById = async (req, res) => {
 
 export const updateCompany = async (req, res) => {
   try {
-    const { name, description, website, location } = req?.body;
+    const { name, description, website, location } = req.body;
     const file = req.file;
 
-    const updateData = { name, description, website, location };
+    // 🔍 Get existing company first
+    const existingCompany = await Company.findById(req.params.id);
 
-    if (file) {
-      const result = await cloudinary.uploader.upload(file.path, {
-        folder: "company_logos",
-      });
-      updateData.logo = result.secure_url;
-    }
-    const company = await Company.findByIdAndUpdate(req.params.id, updateData, {
-      new: true,
-    });
-
-    if (!company) {
+    if (!existingCompany) {
       return res.status(404).json({
         message: "Company not found",
         success: false,
       });
     }
 
+    const updateData = { name, description, website, location };
+
+    // ✅ If new file uploaded
+    if (file) {
+      // 🔥 1. Delete old image
+      if (existingCompany.logoPublicId) {
+        await cloudinary.uploader.destroy(existingCompany.logoPublicId);
+      }
+
+      // 🔥 2. Upload new image
+      const result = await uploadFromBuffer(file.buffer);
+
+      // 🔥 3. Save new data
+      updateData.logo = result.secure_url;
+      updateData.logoPublicId = result.public_id;
+    }
+
+    const company = await Company.findByIdAndUpdate(req.params.id, updateData, {
+      new: true,
+    });
+
     return res.status(200).json({
-      message: "Company information updated",
+      message: "Company updated successfully",
       company,
       success: true,
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error", success: false });
+    return res.status(500).json({
+      message: "Server error",
+      success: false,
+    });
   }
 };

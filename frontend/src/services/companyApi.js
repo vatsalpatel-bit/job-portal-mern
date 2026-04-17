@@ -24,3 +24,15 @@ export const editCompanyApi = async (companyId, formData) => {
   );
   return res.data;
 };
+
+export const getAllCompanyApi = async () => {
+  const res = await axios.get(`${COMPANY_API_END_PORT}/get`, {
+    withCredentials: true,
+  });
+  return res.data;
+};
+
+export const getCompanyById = async (companyId) => {
+  const res = await axios.get(`${COMPANY_API_END_PORT}/get/${companyId}`);
+  return res.data;
+};
