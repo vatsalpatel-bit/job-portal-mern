@@ -16,13 +16,9 @@ import { setCompanies } from "@/redux/slices/companiesSlice";
 const Companies = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const allCompaies=[]
-  const allCompaies = useSelector((state) => state.company.allCompanies)
-  console.log(allCompaies)
-  // allCompaies.forEach(company => {
-  //   console.log(company._id);
-  // });
-
+  const [search, setSearch] = useState("");
+  const [debounceSearch, setDebounceSearch] = useState("");
+  const allCompaies = useSelector((state) => state.company.allCompanies);
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -36,6 +32,23 @@ const Companies = () => {
     }
     fetchCompanies();
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebounceSearch(search);
+    }, 500);                                         //0.5s delay 
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const searchText = debounceSearch.trim().toLowerCase();
+
+  const filterCompanies = allCompaies?.filter((company) => {
+    const name = company?.name.toLowerCase() || "";
+    return (
+      name.includes(searchText)
+    );
+  });
+
   return (
     <div className="min-h-screen bg-gray-50">
 
@@ -45,6 +58,8 @@ const Companies = () => {
         <div className="flex items-center justify-between mb-10">
 
           <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search companies..."
             className="w-72 bg-white border rounded-lg shadow-sm"
           />
@@ -69,7 +84,7 @@ const Companies = () => {
           </div>
 
           {/* Body */}
-          {allCompaies?.map((company) => (
+          {filterCompanies?.map((company) => (
             <div
               key={company._id}
               onClick={() => navigate(`/admin/company/${company._id}`)}
