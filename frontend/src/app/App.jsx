@@ -18,6 +18,7 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import CompanyCreate from "@/pages/admin/CompanyCreate";
 import CompanySetUp from "@/pages/admin/companySetup";
 import CompanyEdit from "@/pages/admin/CompanyEdit";
+import CompanyDetialPage from "@/pages/admin/CompanyDetialPage";
 
 const router = createBrowserRouter([
   {
@@ -52,7 +53,12 @@ const router = createBrowserRouter([
         path: "/admin/company/:id/edit",
         element: (
           <CompanyEdit />)
-      },
+      }, {
+        path: "/admin/company/:id",
+        element: (
+          <CompanyDetialPage />
+        )
+      }
 
     ],
   },
