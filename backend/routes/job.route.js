@@ -13,7 +13,7 @@ const router = express.Router();
 router.get("/filters", getJobFilters);
 router.post("/post", isAuthenticated, postJob);
 router.get("/",getAllJob);
-router.get("/getadminjob", isAuthenticated, getAdminJobs);
+router.get("/get", isAuthenticated, getAdminJobs);
 router.get("/get/:id", getJobById);
 
 
