@@ -1,4 +1,4 @@
-import { COMPANY_API_END_PORT } from "@/utils/constant";
+import { COMPANY_API_END_PORT, JOB_API_END_PORT } from "@/utils/constant";
 import axios from "axios";
 
 export const createCompanyApi = async (companyName) => {
@@ -34,5 +34,12 @@ export const getAllCompanyApi = async () => {
 
 export const getCompanyById = async (companyId) => {
   const res = await axios.get(`${COMPANY_API_END_PORT}/get/${companyId}`);
+  return res.data;
+};
+
+export const getAdminJobsApi = async () => {
+  const res = await axios.get(`${JOB_API_END_PORT}/get`, {
+    withCredentials: true,
+  });
   return res.data;
 };
