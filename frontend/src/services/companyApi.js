@@ -43,3 +43,15 @@ export const getAdminJobsApi = async () => {
   });
   return res.data;
 };
+
+export const postJobApi = async (jobData) => {
+  const res = await axios.post(
+    `${JOB_API_END_PORT}/post`,
+    { jobData },
+    {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    },
+  );
+  return res.data;
+};

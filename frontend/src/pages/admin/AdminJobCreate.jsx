@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import { getAllCompanyApi, postJobApi } from '@/services/companyApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAllCompanies } from '@/redux/slices/companiesSlice';
 
 
 const AdminJobCreate = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [input, setInput] = useState({
         title: "",
         description: "",
@@ -16,6 +20,16 @@ const AdminJobCreate = () => {
         experience: "",
         companyId: "",
     });
+    const allCompanies = useSelector((state) => state.company.allCompanies);
+
+    useEffect(() => {
+        const fetchCompanyApi = async () => {
+            const data = await getAllCompanyApi();
+            dispatch(setAllCompanies(data.companies))
+        }
+        fetchCompanyApi();
+
+    }, [dispatch]);
 
     const changeHandler = (e) => {
         const { name, value } = e.target;
@@ -25,7 +39,7 @@ const AdminJobCreate = () => {
         }));
     }
 
-    const submitHandler = () => {
+    const submitHandler = async () => {
         try {
             if (
                 !input.title ||
@@ -37,22 +51,23 @@ const AdminJobCreate = () => {
                 !input.experience ||
                 !input.position ||
                 !input.companyId
-            ){
+            ) {
                 alert("Please fill all fields");
                 return;
             }
-            const data={
+            const jobData = {
                 ...input,
-                requirements:input.requirements
-                ?input.requirements.split(",").map((r)=>r.trim())
-                :[],
-                salary:Number(input.salary),
-                position:Number(input.position),
+                requirements: input.requirements
+                    ? input.requirements.split(",").map((r) => r.trim()).filter(Boolean)
+                    : [],
+                salary: Number(input.salary),
+                position: Number(input.position),
             };
-            console(data);
-            cons
+            console.log(jobData);
+            const data = await postJobApi(jobData);
+            console.log(data)
         } catch (error) {
-
+            console.log(error);
         }
     }
 
@@ -153,20 +168,24 @@ const AdminJobCreate = () => {
                         <div>
                             <label className="text-sm text-gray-600">Job Type</label>
                             <select
-                                name='experience'
-                                value={input.experience}
+                                name='jobType'
+                                value={input.jobType}
                                 onChange={changeHandler}
-                                className="w-full mt-1 border px-4 py-2 rounded">
-                                <option>Full-Time</option>
-                                <option>Part-Time</option>
-                                <option>Internship</option>
+                                className="w-full mt-1 border px-4 py-2 rounded"
+                            >
+                                <option value="">Select Job Type</option>
+                                <option value="Full-Time">Full-Time</option>
+                                <option value="Part-Time">Part-Time</option>
+                                <option value="Internship">Internship</option>
                             </select>
                         </div>
 
                         <div>
                             <label className="text-sm text-gray-600">Experience</label>
                             <input
+                                name='experience'
                                 value={input.experience}
+                                onChange={changeHandler}
                                 type="number"
                                 placeholder="2 years"
                                 className="w-full mt-1 border px-4 py-2 rounded"
@@ -183,8 +202,8 @@ const AdminJobCreate = () => {
                             onChange={changeHandler}
                             className="w-full mt-1 border px-4 py-2 rounded">
                             <option value="">Select Company</option>
-                            {Companies?.map((company) => (
-                                <option key={company.id} value={company.id}>
+                            {allCompanies?.map((company) => (
+                                <option key={company._id} value={company._id}>
                                     {company.name}
                                 </option>
                             ))}
@@ -198,7 +217,9 @@ const AdminJobCreate = () => {
                             Cancel
                         </button>
 
-                        <button className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        <button
+                            onClick={submitHandler}
+                            className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                             Create Job
                         </button>
                     </div>

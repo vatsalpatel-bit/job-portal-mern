@@ -3,7 +3,8 @@ import { Job } from "../utils/job.model.js";
 // for recruiter
 export const postJob = async (req, res) => {
   try {
-    const userId = req.user?.id || req.id;
+    const userId = req.userId;
+
     const {
       title,
       description,
@@ -16,6 +17,8 @@ export const postJob = async (req, res) => {
       companyId,
     } = req.body;
 
+    console.log(req.body);
+
     if (
       !title ||
       !description ||
@@ -23,22 +26,21 @@ export const postJob = async (req, res) => {
       !location ||
       !experience ||
       !companyId ||
-      position == null ||
-      salary == null ||
+      position === undefined ||
+      salary === undefined ||
       !Array.isArray(requirements) ||
       requirements.length === 0
     ) {
       return res.status(400).json({
-        message: "something is missing",
+        message: "Something is missing",
         success: false,
       });
     }
+
     const job = await Job.create({
       title,
       description,
-      requirements: Array.isArray(requirements)
-        ? requirements
-        : requirements.split(","),
+      requirements,
       salary: Number(salary),
       location,
       jobType,
@@ -47,14 +49,15 @@ export const postJob = async (req, res) => {
       company: companyId,
       created_by: userId,
     });
+
     return res.status(201).json({
-      message: "New job create successfully",
+      message: "New job created successfully",
       job,
       success: true,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "Server error",
       success: false,
     });
@@ -205,7 +208,7 @@ export const getAdminJobs = async (req, res) => {
 export const getJobFilters = async (req, res) => {
   try {
     const locations = await Job.distinct("location");
-    const industries = await Job.distinct("jobType"); // ✅ changed here
+    const industries = await Job.distinct("jobType");
 
     res.status(200).json({
       locations,
