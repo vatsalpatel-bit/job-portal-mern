@@ -10,7 +10,7 @@ const MainLayout = () => {
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    // 🔥 hydrate redux from cookie
+    // hydrate redux from cookie
     if (!user) {
       getProfileApi()
         .then((res) => {

@@ -14,7 +14,7 @@ const FilterCard = ({ options, onFilterChange }) => {
 
   const [open, setOpen] = useState(true);
 
-  // ✅ SAFE parent update
+  //  SAFE parent update
   useEffect(() => {
     onFilterChange?.(filters);
   }, [filters]);
@@ -59,7 +59,7 @@ const FilterCard = ({ options, onFilterChange }) => {
       {open && (
         <div className="space-y-8">
 
-          {/* 🔥 Location */}
+          {/*  Location */}
           <div>
             <h2 className="text-sm font-medium mb-3 text-muted-foreground">
               Location
@@ -83,7 +83,7 @@ const FilterCard = ({ options, onFilterChange }) => {
             </div>
           </div>
 
-          {/* 🔥 Industry */}
+          {/*  Industry */}
           <div>
             <h2 className="text-sm font-medium mb-3 text-muted-foreground">
               Industry
@@ -107,7 +107,7 @@ const FilterCard = ({ options, onFilterChange }) => {
             </div>
           </div>
 
-          {/* 🔥 Salary (Static for now) */}
+          {/* Salary (Static for now) */}
           <div>
             <h2 className="text-sm font-medium mb-3 text-muted-foreground">
               Salary

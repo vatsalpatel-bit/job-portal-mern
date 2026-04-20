@@ -48,8 +48,8 @@ const AdminJobCreate = () => {
                 !input.salary ||
                 !input.location ||
                 !input.jobType ||
-                !input.experience ||
-                !input.position ||
+                input.experience === "" ||
+                input.position === "" ||
                 !input.companyId
             ) {
                 alert("Please fill all fields");
@@ -58,14 +58,18 @@ const AdminJobCreate = () => {
             const jobData = {
                 ...input,
                 requirements: input.requirements
-                    ? input.requirements.split(",").map((r) => r.trim()).filter(Boolean)
-                    : [],
+                    .split(",")
+                    .map((r) => r.trim())
+                    .filter(Boolean),
                 salary: Number(input.salary),
                 position: Number(input.position),
+                experience: Number(input.experience),
             };
-            console.log(jobData);
             const data = await postJobApi(jobData);
             console.log(data)
+            if (data.success) {
+                navigate("/admin/jobs")
+            }
         } catch (error) {
             console.log(error);
         }

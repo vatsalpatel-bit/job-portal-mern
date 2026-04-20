@@ -10,10 +10,10 @@ import ProfilePage from "@/pages/ProfilePage";
 import DetailPage from "@/pages/DetailPage";
 import companySetup from "@/pages/admin/companySetup";
 
-// ✅ Admin pages
+// Admin pages
 import Companies from "@/pages/admin/Companies";
 
-// ✅ Protected Route
+// Protected Route
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import CompanyCreate from "@/pages/admin/CompanyCreate";
 import CompanySetUp from "@/pages/admin/companySetup";
@@ -77,7 +77,7 @@ const router = createBrowserRouter([
     ],
   },
 
-  // 🔓 Public routes
+  // Public routes
   { path: "/signup", element: <Signup /> },
   { path: "/login", element: <Login /> },
 ]);

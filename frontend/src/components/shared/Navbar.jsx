@@ -20,7 +20,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // ✅ REAL AUTH STATE
+  // REAL AUTH STATE
   const user = useSelector((state) => state.auth.user);  // const user=true;
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // ✅ LOGOUT HANDLER
+  //  LOGOUT HANDLER
   const handleLogout = async () => {
     try {
       await logoutUser(); // backend cookie clear

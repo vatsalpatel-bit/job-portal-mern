@@ -41,7 +41,7 @@ export const Register = async (req, res) => {
       Number(process.env.SALT_ROUND)
     );
 
-    // 🔥 NEW: handle profile photo
+    //  NEW: handle profile photo
     let profilePhoto = "";
 
     if (req.file) {
@@ -70,7 +70,7 @@ export const Register = async (req, res) => {
       password: hashPassword,
       role,
       profile: {
-        profilePhoto, // ✅ SAVED HERE
+        profilePhoto, // SAVED HERE
       },
     });
 
@@ -285,7 +285,7 @@ export const uploadUserResume = async (req, res) => {
 
     if (!user.profile) user.profile = {};
 
-    // 🔥 Upload to Cloudinary
+    // Upload to Cloudinary
     const uploadResult = await new Promise((resolve, reject) => {
       cloudinary.uploader
         .upload_stream(
@@ -302,7 +302,7 @@ export const uploadUserResume = async (req, res) => {
         .end(req.file.buffer);
     });
 
-    // 🔥 SAVE INTO MONGODB (THIS WAS MISSING)
+    // SAVE INTO MONGODB (THIS WAS MISSING)
     user.profile.resume = uploadResult.secure_url;
     user.profile.resumeOringinalName = req.file.originalname;
 
@@ -338,7 +338,7 @@ export const uploadProfilePhoto = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // 🔥 DELETE OLD IMAGE (if exists)
+    // DELETE OLD IMAGE (if exists)
     if (user.profile.profilePhoto) {
       const publicId = getPublicIdFromUrl(user.profile.profilePhoto);
       if (publicId) {
@@ -346,7 +346,7 @@ export const uploadProfilePhoto = async (req, res) => {
       }
     }
 
-    // 🔥 UPLOAD NEW IMAGE
+    // UPLOAD NEW IMAGE
     const uploadResult = await new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         {

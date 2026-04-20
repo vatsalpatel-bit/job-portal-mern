@@ -23,7 +23,7 @@ const [applying, setApplying] = useState(false);
 
   const isApplied = appliedJobs.includes(job._id);
 
-  // 💰 Format Salary
+  //  Format Salary
   const formatSalary = (amount) => {
     if (!amount) return "Not Disclosed";
     if (amount >= 100000) {
@@ -32,7 +32,7 @@ const [applying, setApplying] = useState(false);
     return `₹ ${amount.toLocaleString()}`;
   };
 
-  // 📅 Posted Time
+  //  Posted Time
   const getDaysAgo = (date) => {
     if (!date) return "";
     const diff = Math.floor(
@@ -60,7 +60,7 @@ const [applying, setApplying] = useState(false);
 
     dispatch(setAppliedJobs([...appliedJobs, job._id]));
 
-    setApplied(true);   // 🔥 this immediately disables button
+    setApplied(true);   //  this immediately disables button
 
     toast.success("Applied Successfully");  
 

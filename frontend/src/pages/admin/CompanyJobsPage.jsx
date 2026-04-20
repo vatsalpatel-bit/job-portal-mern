@@ -3,12 +3,13 @@ import { getAdminJobsApi } from "@/services/companyApi";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { MapPin, IndianRupee, Calendar } from "lucide-react";
 
 const CompanyJobsPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { jobs = [] } = useSelector((state) => state.company.allAdminJobs);
+    const jobs = useSelector((state) => state.company.allAdminJobs);
     useEffect(() => {
         const fetchAdminJobsApi = async () => {
             const data = await getAdminJobsApi();
@@ -22,7 +23,7 @@ const CompanyJobsPage = () => {
         <div className="min-h-screen bg-gray-50 mt-16">
             <div className="max-w-6xl mx-auto px-6 py-10">
 
-                {/* 🔝 Top Section */}
+                {/*  Top Section */}
                 <div className="flex items-center justify-between mb-8">
 
                     {/* Search */}
@@ -41,10 +42,10 @@ const CompanyJobsPage = () => {
                     </button>
                 </div>
 
-                {/* 🧾 Jobs List */}
+                {/*  Jobs List */}
                 <div className="space-y-4">
 
-                    {jobs.map((job) => (
+                    {jobs?.map((job) => (
                         <div
                             key={job._id}
                             className="bg-white p-5 rounded-xl shadow-sm flex justify-between items-center hover:shadow-md transition"
@@ -52,13 +53,6 @@ const CompanyJobsPage = () => {
 
                             {/* Left Section */}
                             <div className="flex items-center gap-4">
-
-                                {/* Company Logo */}
-                                <img
-                                    src={job.company?.logo || "https://via.placeholder.com/40"}
-                                    alt="logo"
-                                    className="w-12 h-12 rounded-md object-cover"
-                                />
 
                                 {/* Job Info */}
                                 <div>
@@ -72,14 +66,25 @@ const CompanyJobsPage = () => {
 
                                     {/* Meta Info */}
                                     <div className="flex gap-4 text-sm text-gray-500 mt-1">
-                                        <span>📍 {job.location}</span>
-                                        <span>💰 {job.salary}</span>
-                                        <span>
-                                            🕒 {new Date(job.createdAt).toLocaleDateString("en-IN", {
+
+                                        <span className="flex items-center gap-1">
+                                            <MapPin size={14} />
+                                            {job.location}
+                                        </span>
+
+                                        <span className="flex items-center gap-1">
+                                            <IndianRupee size={14} />
+                                            {job.salary}
+                                        </span>
+
+                                        <span className="flex items-center gap-1">
+                                            <Calendar size={14} />
+                                            {new Date(job.createdAt).toLocaleDateString("en-IN", {
                                                 day: "numeric",
                                                 month: "short",
                                             })}
                                         </span>
+
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +112,7 @@ const CompanyJobsPage = () => {
                     ))}
 
                     {/* Empty State */}
-                    {jobs.length === 0 && (
+                    {jobs?.length === 0 && (
                         <p className="text-center text-gray-500 py-10">
                             No jobs found
                         </p>

@@ -25,7 +25,7 @@ const Job = ({ job }) => {
   // console.log(appliedJobs)
   // console.log(isApplied)
 
-  // 💰 Format Salary
+  //  Format Salary
   const formatSalary = (amount) => {
     if (!amount) return "Not Disclosed";
     if (amount >= 100000) {
@@ -34,7 +34,7 @@ const Job = ({ job }) => {
     return `₹ ${amount.toLocaleString()}`;
   };
 
-  // 📅 Posted Time
+  //  Posted Time
   const getDaysAgo = (date) => {
     if (!date) return "";
     const diff = Math.floor(
