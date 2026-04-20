@@ -11,7 +11,7 @@ import {
 import { Pencil } from "lucide-react";
 import { getAllCompanyApi } from "@/services/companyApi";
 import { useDispatch, useSelector } from "react-redux";
-import { setCompanies } from "@/redux/slices/companiesSlice";
+import { setAllCompanies} from "@/redux/slices/companiesSlice";
 
 const Companies = () => {
   const navigate = useNavigate();
@@ -19,13 +19,13 @@ const Companies = () => {
   const [search, setSearch] = useState("");
   const [debounceSearch, setDebounceSearch] = useState("");
   const allCompaies = useSelector((state) => state.company.allCompanies);
-
+  console.log(allCompaies);
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
         const data = await getAllCompanyApi();
         // console.log(data.companies);
-        dispatch(setCompanies(data.companies));
+        dispatch(setAllCompanies(data.companies));
       } catch (error) {
         console.log(error)
       }

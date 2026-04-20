@@ -17,25 +17,25 @@ import { useDispatch } from "react-redux";
 const AppliedJobTable = () => {
   const dispatch = useDispatch();
   const appliedJobs = useSelector((state) => state.job.appliedJobs || [])
-  // console.log(appliedJobs)
+  
   useEffect(() => {
-  const fetchAppliedJobs = async () => {
-    try {
-      const res = await getAppliedJobsApi();
+    const fetchAppliedJobs = async () => {
+      try {
+        const res = await getAppliedJobsApi();
 
-      console.log("API RESPONSE:", res);
+        console.log("API RESPONSE:", res);
 
-      const applications = res?.data?.applications || res?.applications || [];
+        const applications = res?.data?.applications || res?.applications || [];
 
-      dispatch(setAppliedJobs(applications));
+        dispatch(setAppliedJobs(applications));
 
-    } catch (error) {
-      console.log(error);
-    }
-  };
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-  fetchAppliedJobs();
-}, [dispatch]);
+    fetchAppliedJobs();
+  }, [dispatch]);
 
   return (
     <div className="rounded-xl border bg-background">

@@ -108,17 +108,17 @@ export const updateCompany = async (req, res) => {
 
     const updateData = { name, description, website, location };
 
-    // ✅ If new file uploaded
+    // If new file uploaded
     if (file) {
-      // 🔥 1. Delete old image
+      //  1. Delete old image
       if (existingCompany.logoPublicId) {
         await cloudinary.uploader.destroy(existingCompany.logoPublicId);
       }
 
-      // 🔥 2. Upload new image
+      //  2. Upload new image
       const result = await uploadFromBuffer(file.buffer);
 
-      // 🔥 3. Save new data
+      //  3. Save new data
       updateData.logo = result.secure_url;
       updateData.logoPublicId = result.public_id;
     }

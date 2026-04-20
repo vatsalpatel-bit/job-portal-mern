@@ -12,7 +12,7 @@ const CategoryCarousel = () => {
   const navigate = useNavigate();
   const { allJobs } = useSelector((state) => state.job);
 
-  // ✅ Extract unique job titles
+  // Extract unique job titles
   const categories = [...new Set(allJobs.map((job) => job.title))];
 
   return (

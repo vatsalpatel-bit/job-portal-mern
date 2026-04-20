@@ -11,10 +11,10 @@ const isAuthenticated = (req, res, next) => {
       });
     }
 
-    // 🔥 MUST MATCH login controller
+    // MUST MATCH login controller
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
-    // 🔥 THIS IS THE FIX
+    //  THIS IS THE FIX
     req.userId = decoded.userId;
 
     next();

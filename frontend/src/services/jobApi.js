@@ -13,7 +13,7 @@ export const getFilteredJobsApi = async (filters = {}) => {
     withCredentials: true,
   });
 
-  return res.data; // 🔥 IMPORTANT FIX
+  return res.data; 
 };
 
 

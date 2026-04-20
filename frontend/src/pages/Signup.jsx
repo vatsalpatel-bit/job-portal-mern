@@ -65,19 +65,19 @@ const Signup = () => {
 
       await signupUser(formData);
 
-      /* 2️⃣ LOGIN (SET COOKIE) */
+      /* SET COOKE */
       const loginRes = await loginUser({
         email: input.email.trim().toLowerCase(),
         password: input.password,
         role: input.role.toLowerCase(),
       });
 
-      /* 3️⃣ SET USER IN REDUX (🔥 CRITICAL) */
+  
       dispatch(setUser(loginRes.data.user));
 
       toast.success("Welcome 🎉 Account created successfully!");
 
-      /* 4️⃣ NAVIGATE AFTER REDUX UPDATE */
+      /* 4️ NAVIGATE AFTER REDUX UPDATE */
       navigate("/");
 
     } catch (error) {

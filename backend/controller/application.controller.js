@@ -4,7 +4,7 @@ import "../utils/user.model.js";
 
 export const applyJob = async (req, res) => {
   try {
-    const userId = req.userId; // 👈 this comes from auth middleware
+    const userId = req.userId; // this comes from auth middleware
     const jobId = req.params.id; // that come from url
 
     if (!userId) {

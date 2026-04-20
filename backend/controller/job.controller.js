@@ -3,7 +3,8 @@ import { Job } from "../utils/job.model.js";
 // for recruiter
 export const postJob = async (req, res) => {
   try {
-    const userId = req.user?.id || req.id;
+    const userId = req.userId;
+
     const {
       title,
       description,
@@ -14,31 +15,30 @@ export const postJob = async (req, res) => {
       experience,
       position,
       companyId,
-    } = req.body;
+    } = req.body.jobData;
 
     if (
       !title ||
       !description ||
       !jobType ||
       !location ||
-      !experience ||
+      !experience === undefined ||
       !companyId ||
-      position == null ||
-      salary == null ||
+      position === undefined ||
+      salary === undefined ||
       !Array.isArray(requirements) ||
-      requirements.length === 0
+      requirements?.length === 0
     ) {
       return res.status(400).json({
-        message: "something is missing",
+        message: "Something is missing",
         success: false,
       });
     }
+   
     const job = await Job.create({
       title,
       description,
-      requirements: Array.isArray(requirements)
-        ? requirements
-        : requirements.split(","),
+      requirements,
       salary: Number(salary),
       location,
       jobType,
@@ -47,14 +47,15 @@ export const postJob = async (req, res) => {
       company: companyId,
       created_by: userId,
     });
+
     return res.status(201).json({
-      message: "New job create successfully",
+      message: "New job created successfully",
       job,
       success: true,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "Server error",
       success: false,
     });
@@ -67,7 +68,7 @@ export const getAllJob = async (req, res) => {
     const { keyword = "", location, industry, salary } = req.query;
 
     const andConditions = [];
-    // 🔍 Keyword Search
+    // Keyword Search
     if (keyword) {
       andConditions.push({
         $or: [
@@ -79,7 +80,7 @@ export const getAllJob = async (req, res) => {
       });
     }
 
-    // 📍 Location Filter
+    // Location Filter
     if (location) {
       andConditions.push({
         location: {
@@ -90,14 +91,14 @@ export const getAllJob = async (req, res) => {
       });
     }
 
-    // 🏢 Industry Filter
+    //  Industry Filter
     if (industry) {
       andConditions.push({
         jobType: { $in: industry.split(",") },
       });
     }
 
-    // 💰 Salary Filter
+    // Salary Filter
     if (salary) {
       const ranges = salary.split(",");
       const salaryConditions = [];
@@ -124,7 +125,7 @@ export const getAllJob = async (req, res) => {
         andConditions.push({ $or: salaryConditions });
       }
     }
-    // ✅ Final Query
+    // Final Query
     const finalQuery = andConditions.length > 0 ? { $and: andConditions } : {};
     const jobs = await Job.find(finalQuery)
       .populate("company")
@@ -181,7 +182,7 @@ export const getJobById = async (req, res) => {
 // for recruiter
 export const getAdminJobs = async (req, res) => {
   try {
-    const adminId = req.id;
+    const adminId = req.userId;
     const jobs = await Job.find({ created_by: adminId });
     if (!jobs) {
       return res.status(404).json({
@@ -205,7 +206,7 @@ export const getAdminJobs = async (req, res) => {
 export const getJobFilters = async (req, res) => {
   try {
     const locations = await Job.distinct("location");
-    const industries = await Job.distinct("jobType"); // ✅ changed here
+    const industries = await Job.distinct("jobType");
 
     res.status(200).json({
       locations,

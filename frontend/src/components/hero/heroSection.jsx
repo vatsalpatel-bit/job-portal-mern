@@ -24,7 +24,7 @@ const HeroSection = () => {
                     </span>
                 </div>
 
-                {/* ✅ FORCE TEXT COLOR */}
+                {/*  FORCE TEXT COLOR */}
                 <h1 className="text-5xl font-extrabold leading-tight text-foreground">
                     Search, Apply & <br />
                     Get Your{" "}
