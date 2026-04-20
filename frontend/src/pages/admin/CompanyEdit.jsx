@@ -15,7 +15,7 @@ const CompanyEdit = () => {
     const singleCompany = useSelector(
         (state) => state.company.singleCompany
     );
-    // console.log(singleCompany || "singleCompany undefind")
+    
     const [form, setForm] = useState({
         name: "",
         description: "",
@@ -41,7 +41,6 @@ const CompanyEdit = () => {
     useEffect(() => {
         const fetchCompanyApi = async () => {
             const data = await getCompanyById(companyId);
-            // console.log(data.company);
             dispatch(setSingleCompany(data.company))
         }
         fetchCompanyApi();
@@ -84,7 +83,6 @@ const CompanyEdit = () => {
             if (data?.success) {
                 navigate("/admin/companies");
             }
-            // console.log(data);
         } catch (error) {
 
         }
@@ -103,7 +101,7 @@ const CompanyEdit = () => {
                         <ArrowLeft size={18} />
                         Back
                     </button>
-                    {/* <h1 className="text-2xl font-semibold">Edit</h1> */}
+
                 </div>
 
                 {/* Form */}

@@ -55,3 +55,8 @@ export const postJobApi = async (jobData) => {
   );
   return res.data;
 };
+
+export const getJobByIdApi = async (jobId) => {
+  const res = await axios.get(`${JOB_API_END_PORT}/get/${jobId}`);
+  return res.data;
+};

@@ -6,6 +6,7 @@ const companySlice = createSlice({
     singleCompany: null,
     allCompanies: [],
     allAdminJobs: [],
+    singleJob: null,
   },
   reducers: {
     setSingleCompany: (state, action) => {
@@ -17,9 +18,16 @@ const companySlice = createSlice({
     setAllAdminJobs: (state, action) => {
       state.allAdminJobs = action.payload;
     },
+    setSingleJob: (state, action) => {
+      state.singleJob = action.payload;
+    },
   },
 });
 
-export const { setSingleCompany, setAllCompanies, setAllAdminJobs } =
-  companySlice.actions;
+export const {
+  setSingleCompany,
+  setAllCompanies,
+  setAllAdminJobs,
+  setSingleJob,
+} = companySlice.actions;
 export default companySlice.reducer;
