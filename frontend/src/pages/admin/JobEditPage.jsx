@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from 'react-router-dom';
-import { getAllCompanyApi, getJobByIdApi, postJobApi } from '@/services/companyApi';
+import { getAllCompanyApi, getJobByIdApi, postJobApi, updateJobApi } from '@/services/companyApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllCompanies, setSingleJob } from '@/redux/slices/companiesSlice';
 
@@ -21,12 +21,14 @@ const jobEditPage = () => {
         experience: "",
         companyId: "",
     });
-    const { allCompanies, singleJob } = useSelector((state) => state.company.allCompanies);
+    const { allCompanies, singleJob } = useSelector((state) => state.company);
+    console.log(singleJob)
+    console.log(allCompanies)
     useEffect(() => {
         const fetchJobApi = async () => {
             const data = await getJobByIdApi(jobId);
-            console.log(data)
-            dispatch(setSingleJob(data))
+            // console.log(data.job)
+            dispatch(setSingleJob(data.job))
         }
         fetchJobApi();
     }, [jobId])
@@ -42,18 +44,18 @@ const jobEditPage = () => {
     useEffect(() => {
         if (singleJob) {
             setInput({
-                title: "",
-                description: "",
-                requirements: "",
-                salary: "",
-                location: "",
-                position: "",
-                jobType: "",
-                experience: "",
-                companyId: "",
+                title: singleJob.title || "",
+                description: singleJob.description || "",
+                requirements: singleJob.requirements || "",
+                salary: singleJob.salary || "",
+                location: singleJob.location || "",
+                position: singleJob.position || "",
+                jobType: singleJob.jobType || "",
+                experience: singleJob.experienceLevel || "",
+                companyId: singleJob?.company?.name || "",
             })
         }
-    })
+    }, [singleJob])
 
     const changeHandler = (e) => {
         const { name, value } = e.target;
@@ -81,15 +83,18 @@ const jobEditPage = () => {
             }
             const jobData = {
                 ...input,
-                requirements: input.requirements
-                    .split(",")
-                    .map((r) => r.trim())
-                    .filter(Boolean),
+                requirements: Array.isArray(input.requirements)
+                    ? input.requirements
+                    : input.requirements
+                        .split(",")
+                        .map((r) => r.trim())
+                        .filter(Boolean)
+                ,
                 salary: Number(input.salary),
                 position: Number(input.position),
                 experience: Number(input.experience),
             };
-            const data = await postJobApi(jobData);
+            const data = await updateJobApi(jobData);
             console.log(data)
             if (data.success) {
                 navigate("/admin/jobs")
@@ -224,19 +229,12 @@ const jobEditPage = () => {
                     {/* Company */}
                     <div>
                         <label className="text-sm text-gray-600">Company</label>
-                        <select
+                        <input type="text"
+                            disabled
                             name='companyId'
                             value={input.companyId}
                             onChange={changeHandler}
-                            className="w-full mt-1 border px-4 py-2 rounded">
-                            <option value="">Select Company</option>
-                            {allCompanies?.map((company) => (
-                                <option key={company._id} value={company._id}>
-                                    {company.name}
-                                </option>
-                            ))}
-
-                        </select>
+                            className="w-full mt-1 border px-4 py-2 rounded" />
                     </div>
 
                     {/* Buttons */}

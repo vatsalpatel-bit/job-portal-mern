@@ -60,3 +60,14 @@ export const getJobByIdApi = async (jobId) => {
   const res = await axios.get(`${JOB_API_END_PORT}/get/${jobId}`);
   return res.data;
 };
+
+export const updateJobApi = async (jobId) => {
+  try {
+    const res = await axios.put(`${JOB_API_END_PORT}/update/${jobId}`);
+    return res.data;
+  } catch (error) {
+    console.log(error)
+    console.log()
+  }
+  
+};

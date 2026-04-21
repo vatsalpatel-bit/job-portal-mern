@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Job } from "../utils/job.model.js";
 
 // for recruiter
@@ -34,7 +35,7 @@ export const postJob = async (req, res) => {
         success: false,
       });
     }
-   
+
     const job = await Job.create({
       title,
       description,
@@ -50,6 +51,48 @@ export const postJob = async (req, res) => {
 
     return res.status(201).json({
       message: "New job created successfully",
+      job,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false,
+    });
+  }
+};
+
+export const updateJob = async (req, res) => {
+  try {
+    const jobId = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(jobId)) {
+      return res.status(400).json({
+        message: "Invalid Job Id",
+        success: false,
+      });
+    }
+
+    const updateData = {};
+    Object.keys(req.body).forEach((key) => {
+      if (req.body[key] !== undefined) {
+        updateData[key] = req.body[key];
+      }
+    });
+
+    const job = await Job.findByIdAndUpdate(jobId, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!job) {
+      return res.status(401).json({
+        message: "Job is not found",
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Job update successfully",
       job,
       success: true,
     });
@@ -84,7 +127,7 @@ export const getAllJob = async (req, res) => {
     if (location) {
       andConditions.push({
         location: {
-          $in: location
+          $in: lconstocation
             .split(",")
             .map((loc) => new RegExp(`^${loc.trim()}$`, "i")),
         },
