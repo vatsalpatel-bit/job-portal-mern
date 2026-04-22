@@ -22,8 +22,8 @@ const jobEditPage = () => {
         companyId: "",
     });
     const { allCompanies, singleJob } = useSelector((state) => state.company);
-    console.log(singleJob)
-    console.log(allCompanies)
+    console.log(singleJob.company._id)
+    
     useEffect(() => {
         const fetchJobApi = async () => {
             const data = await getJobByIdApi(jobId);
@@ -94,9 +94,9 @@ const jobEditPage = () => {
                 position: Number(input.position),
                 experience: Number(input.experience),
             };
-            const data = await updateJobApi(jobData);
-            console.log(data)
-            if (data.success) {
+            const data = await updateJobApi(jobId, jobData);
+            console.log(data);
+            if (data?.success) {
                 navigate("/admin/jobs")
             }
         } catch (error) {
