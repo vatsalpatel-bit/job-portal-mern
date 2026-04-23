@@ -96,7 +96,7 @@ export const updateCompany = async (req, res) => {
     const { name, description, website, location } = req.body;
     const file = req.file;
 
-    // 🔍 Get existing company first
+    //  Get existing company first
     const existingCompany = await Company.findById(req.params.id);
 
     if (!existingCompany) {
