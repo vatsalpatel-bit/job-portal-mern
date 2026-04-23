@@ -80,7 +80,7 @@ export const updateJob = async (req, res) => {
       }
     });
 
-    const job = await Job.findByIdAndUpdate(jobId, updateData, {
+    const job = await Job.findByIdAndUpdate(jobId, updateData.jobData, {
       new: true,
       runValidators: true,
     });
@@ -91,6 +91,7 @@ export const updateJob = async (req, res) => {
         success: false,
       });
     }
+
     return res.status(200).json({
       message: "Job update successfully",
       job,

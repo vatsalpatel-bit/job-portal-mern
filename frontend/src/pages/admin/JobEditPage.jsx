@@ -8,7 +8,6 @@ import { setAllCompanies, setSingleJob } from '@/redux/slices/companiesSlice';
 
 const jobEditPage = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const { id: jobId } = useParams();
     const [input, setInput] = useState({
         title: "",
@@ -18,44 +17,29 @@ const jobEditPage = () => {
         location: "",
         position: "",
         jobType: "",
-        experience: "",
-        companyId: "",
+        experienceLevel: "",
     });
-    const { allCompanies, singleJob } = useSelector((state) => state.company);
-    console.log(singleJob.company._id)
-    
+    const [companyName, setCompanyName] = useState("");
+
     useEffect(() => {
         const fetchJobApi = async () => {
+
             const data = await getJobByIdApi(jobId);
-            // console.log(data.job)
-            dispatch(setSingleJob(data.job))
+            const job = data.job;
+            setInput({
+                title: job.title || "",
+                description: job.description || "",
+                requirements: job.requirements.join(", ") || "",
+                salary: job.salary || "",
+                location: job.location || "",
+                position: job.position || "",
+                jobType: job.jobType || "",
+                experienceLevel: job.experienceLevel || "",
+            })
+            setCompanyName( job.company.name );
         }
         fetchJobApi();
     }, [jobId])
-    useEffect(() => {
-        const fetchCompanyApi = async () => {
-            const data = await getAllCompanyApi();
-            dispatch(setAllCompanies(data.companies))
-        }
-        fetchCompanyApi();
-
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (singleJob) {
-            setInput({
-                title: singleJob.title || "",
-                description: singleJob.description || "",
-                requirements: singleJob.requirements || "",
-                salary: singleJob.salary || "",
-                location: singleJob.location || "",
-                position: singleJob.position || "",
-                jobType: singleJob.jobType || "",
-                experience: singleJob.experienceLevel || "",
-                companyId: singleJob?.company?.name || "",
-            })
-        }
-    }, [singleJob])
 
     const changeHandler = (e) => {
         const { name, value } = e.target;
@@ -74,9 +58,8 @@ const jobEditPage = () => {
                 !input.salary ||
                 !input.location ||
                 !input.jobType ||
-                input.experience === "" ||
-                input.position === "" ||
-                !input.companyId
+                input.experienceLevel === "" ||
+                input.position === ""
             ) {
                 alert("Please fill all fields");
                 return;
@@ -92,7 +75,7 @@ const jobEditPage = () => {
                 ,
                 salary: Number(input.salary),
                 position: Number(input.position),
-                experience: Number(input.experience),
+                experienceLevel: Number(input.experienceLevel),
             };
             const data = await updateJobApi(jobId, jobData);
             console.log(data);
@@ -216,8 +199,8 @@ const jobEditPage = () => {
                         <div>
                             <label className="text-sm text-gray-600">Experience</label>
                             <input
-                                name='experience'
-                                value={input.experience}
+                                name='experienceLevel'
+                                value={input.experienceLevel}
                                 onChange={changeHandler}
                                 type="number"
                                 placeholder="2 years"
@@ -230,10 +213,8 @@ const jobEditPage = () => {
                     <div>
                         <label className="text-sm text-gray-600">Company</label>
                         <input type="text"
-                            disabled
-                            name='companyId'
-                            value={input.companyId}
-                            onChange={changeHandler}
+                            readOnly
+                            value={companyName}
                             className="w-full mt-1 border px-4 py-2 rounded" />
                     </div>
 
