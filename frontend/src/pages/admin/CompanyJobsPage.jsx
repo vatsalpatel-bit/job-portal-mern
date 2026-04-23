@@ -36,7 +36,7 @@ const CompanyJobsPage = () => {
                     {/* New Job Button */}
                     <button
                         onClick={() => navigate("/admin/job/create")}
-                        className="bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700"
+                        className="bg-red-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700"
                     >
                         New Job
                     </button>
@@ -100,12 +100,22 @@ const CompanyJobsPage = () => {
                                 </button>
 
                                 <button
-                                    onClick={() => navigate(`/admin/job/${job._id}`)}
+                                    onClick={() => navigate(`/admin/job/${job._id}/view`)}
                                     className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
                                 >
                                     View
                                 </button>
+                                <button
+                                    onClick={() => navigate(`/admin/job/${job._id}/applicant`)}
+                                    className="px-4 py-2 bg-purple-600 text-white rounded-md text-sm hover:bg-purple-700"
+                                >
+                                    Applicants
+                                </button>
 
+                                {/* More menu */}
+                                <button className="px-2 py-1 border rounded">
+                                    ⋮
+                                </button>
                             </div>
 
                         </div>

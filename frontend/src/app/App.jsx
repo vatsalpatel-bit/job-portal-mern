@@ -22,6 +22,8 @@ import CompanyDetialPage from "@/pages/admin/CompanyDetialPage";
 import CompanyJobsPage from "@/pages/admin/CompanyJobsPage";
 import AdminJobCreate from "@/pages/admin/AdminJobCreate";
 import JobEditPage from "@/pages/admin/JobEditPage";
+import JobViewPage from "@/pages/admin/JobViewPage";
+import JobApplicantPage from "@/pages/admin/JobApplicantPage";
 
 const router = createBrowserRouter([
   {
@@ -78,6 +80,18 @@ const router = createBrowserRouter([
         path: "/admin/job/:id/edit",
         element: (
           <JobEditPage />
+        )
+      },
+      {
+        path: "/admin/job/:id/view",
+        element: (
+          <JobViewPage />
+        )
+      },
+      {
+        path: "/admin/job/:id/applicant",
+        element: (
+          <JobApplicantPage />
         )
       }
 
