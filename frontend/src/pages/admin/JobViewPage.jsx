@@ -98,56 +98,79 @@ const JobViewPage = () => {
                     </div>
                 </div>
 
-                {/* Top Card */}
-                <div className="bg-white p-6 rounded-xl shadow flex justify-between items-start">
+                <div className="bg-white p-6 rounded-xl shadow flex justify-between items-center">
 
-                    {/* LEFT: Job Info */}
-                    <div>
-                        <h2 className="text-xl font-semibold text-gray-800">
-                            {job?.title}
-                        </h2>
-                        <p className="text-gray-500 mt-1">
-                            {job?.location}
-                        </p>
-                        <p className="text-sm text-gray-400 mt-1">
-                            Posted on {new Date(job?.createdAt).toLocaleDateString("en-IN", {
-                                day: "numeric"
-                            })}
-                        </p>
+                    {/* LEFT: Logo + Info */}
+                    <div className="flex items-center gap-4">
+
+                        {/* Logo */}
+                        <img
+                            src={
+                                job?.company.logo && job?.company.logo.startsWith("http")
+                                    ? job?.company.logo
+                                    : "https://via.placeholder.com/40"
+                            }
+                            alt="logo"
+                            className="w-12 h-12 rounded-lg object-cover border bg-gray-50"
+                        />
+
+                        {/* Info */}
+                        <div className="flex flex-col">
+                            <h2 className="text-lg font-semibold text-gray-800 leading-tight">
+                                {job?.title}
+                            </h2>
+
+                            <p className="text-sm text-gray-500 leading-tight">
+                                {job?.location}
+                            </p>
+
+                            <p className="text-xs text-gray-400 leading-tight">
+                                Posted on{" "}
+                                {new Date(job?.createdAt).toLocaleDateString("en-IN", {
+                                    day: "numeric",
+                                    month: "short",
+                                })}
+                            </p>
+                        </div>
+
                     </div>
 
                     {/* RIGHT: Stats + Salary */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-5">
 
                         {/* Stats */}
-                        <div className="flex gap-2">
+                        <div className="flex items-center gap-4 text-sm">
 
-                            <div className="bg-gray-50 px-3 py-2 rounded-md text-center">
-                                <p className="text-gray-400 text-xs">Total</p>
-                                <p className="font-semibold text-gray-800 text-sm">12</p>
+                            <div className="text-center">
+                                <p className="text-[10px] text-gray-400">Total</p>
+                                <p className="font-semibold text-gray-800">12</p>
                             </div>
 
-                            <div className="bg-gray-50 px-3 py-2 rounded-md text-center">
-                                <p className="text-gray-400 text-xs">Accepted</p>
-                                <p className="font-semibold text-green-600 text-sm">5</p>
+                            <div className="text-center">
+                                <p className="text-[10px] text-gray-400">Accepted</p>
+                                <p className="font-semibold text-green-600">5</p>
                             </div>
 
-                            <div className="bg-gray-50 px-3 py-2 rounded-md text-center">
-                                <p className="text-gray-400 text-xs">Pending</p>
-                                <p className="font-semibold text-yellow-600 text-sm">7</p>
+                            <div className="text-center">
+                                <p className="text-[10px] text-gray-400">Pending</p>
+                                <p className="font-semibold text-yellow-600">7</p>
                             </div>
 
                         </div>
 
+                        {/* Divider (optional but pro) */}
+                        <div className="h-6 w-px bg-gray-200"></div>
+
                         {/* Salary */}
-                        <div className="bg-green-100 px-5 py-3 rounded-lg text-center">
-                            <p className="text-xs text-gray-600">Salary</p>
-                            <p className="text-lg font-semibold text-green-700">
+                        <div className="bg-green-100 px-4 py-2 rounded-lg text-center">
+                            <p className="text-[10px] text-gray-600">Salary</p>
+                            <p className="text-sm font-semibold text-green-700">
                                 ₹ {job?.salary}
                             </p>
                         </div>
 
                     </div>
+
                 </div>
 
                 {/* Grid Section */}
