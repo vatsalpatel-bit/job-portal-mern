@@ -2,89 +2,140 @@ import React from 'react'
 
 const JobApplicantPage = () => {
   return (
- <div className="min-h-screen bg-gray-50 p-6 mt-16">
-  <div className="max-w-6xl mx-auto">
+   <div className="min-h-screen bg-gray-50 p-6 mt-16">
+  <div className="max-w-6xl mx-auto space-y-6">
 
     {/* Header */}
-    <div className="flex justify-between items-center mb-6">
-      <h2 className="text-xl font-semibold text-gray-800">Applicants</h2>
-      <span className="text-sm text-gray-500 bg-white px-3 py-1 rounded-full shadow">
-        12 Applicants
-      </span>
+    <div className="flex items-center justify-between">
+      <h2 className="text-xl font-semibold text-gray-800">
+        Applicants
+      </h2>
+
+      <div className="flex items-center gap-3">
+        <input
+          placeholder="Search..."
+          className="px-3 py-1.5 text-sm border rounded-md focus:outline-none"
+        />
+
+        <span className="text-xs bg-white border px-3 py-1 rounded-full text-gray-600">
+          12 Applicants
+        </span>
+      </div>
     </div>
 
-    {/* Card */}
-    <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
+    {/* Cards */}
+    <div className="space-y-4">
 
-      {/* Table Header */}
-      <div className="grid grid-cols-5 px-6 py-3 text-sm text-gray-500 font-medium border-b bg-gray-50">
-        <p>Candidate</p>
-        <p>Email</p>
-        <p>Phone</p>
-        <p>Status</p>
-        <p className="text-right">Action</p>
+      {/* Applicant Card */}
+      <div className="bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition">
+
+        <div className="flex items-center justify-between">
+
+          {/* LEFT */}
+          <div className="flex items-center gap-4">
+
+            {/* Avatar */}
+            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
+              VP
+            </div>
+
+            {/* Info */}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-800">
+                Vatsal Patel
+              </h3>
+              <p className="text-xs text-gray-400">
+                Frontend Developer
+              </p>
+
+              <div className="flex gap-4 mt-2 text-xs text-gray-500">
+                <span>📧 vatsal@gmail.com</span>
+                <span>📞 +91 9999999999</span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* RIGHT */}
+          <div className="flex items-center gap-4">
+
+            {/* Status */}
+            <span className="px-3 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-700">
+              Pending
+            </span>
+
+            {/* Actions */}
+            <div className="flex items-center gap-2">
+
+              <button className="px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100">
+                View
+              </button>
+
+              <button className="px-3 py-1 text-xs bg-green-50 text-green-600 rounded-md hover:bg-green-100">
+                Accept
+              </button>
+
+              <button className="px-3 py-1 text-xs bg-red-50 text-red-600 rounded-md hover:bg-red-100">
+                Reject
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
 
-      {/* Row */}
-      <div className="grid grid-cols-5 items-center px-6 py-4 hover:bg-gray-50 transition">
-        
-        {/* Candidate */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
-            VP
+      {/* Card 2 */}
+      <div className="bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition">
+
+        <div className="flex items-center justify-between">
+
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold">
+              RS
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-gray-800">
+                Rahul Sharma
+              </h3>
+              <p className="text-xs text-gray-400">
+                Backend Developer
+              </p>
+
+              <div className="flex gap-4 mt-2 text-xs text-gray-500">
+                <span>📧 rahul@gmail.com</span>
+                <span>📞 +91 8888888888</span>
+              </div>
+            </div>
           </div>
-          <div>
-            <p className="font-medium text-gray-800">Vatsal Patel</p>
-            <p className="text-xs text-gray-400">Frontend Developer</p>
+
+          <div className="flex items-center gap-4">
+
+            <span className="px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
+              Accepted
+            </span>
+
+            <div className="flex items-center gap-2">
+              <button className="px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100">
+                View
+              </button>
+
+              <button className="px-3 py-1 text-xs bg-red-50 text-red-600 rounded-md hover:bg-red-100">
+                Reject
+              </button>
+            </div>
+
           </div>
+
         </div>
 
-        {/* Email */}
-        <p className="text-gray-600">vatsal@gmail.com</p>
-
-        {/* Phone */}
-        <p className="text-gray-600">+91 9999999999</p>
-
-        {/* Status */}
-        <span className="w-fit px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
-          Pending
-        </span>
-
-        {/* Actions */}
-        <div className="flex justify-end gap-3 text-sm font-medium">
-          <button className="text-blue-600 hover:underline">View</button>
-          <button className="text-green-600 hover:underline">Accept</button>
-          <button className="text-red-500 hover:underline">Reject</button>
-        </div>
-      </div>
-
-      {/* Row 2 */}
-      <div className="grid grid-cols-5 items-center px-6 py-4 hover:bg-gray-50 transition border-t">
-        
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold">
-            RS
-          </div>
-          <div>
-            <p className="font-medium text-gray-800">Rahul Sharma</p>
-            <p className="text-xs text-gray-400">Backend Developer</p>
-          </div>
-        </div>
-
-        <p className="text-gray-600">rahul@gmail.com</p>
-        <p className="text-gray-600">+91 8888888888</p>
-
-        <span className="w-fit px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
-          Accepted
-        </span>
-
-        <div className="flex justify-end gap-3 text-sm font-medium">
-          <button className="text-blue-600 hover:underline">View</button>
-          <button className="text-red-500 hover:underline">Reject</button>
-        </div>
       </div>
 
     </div>
+
   </div>
 </div>
   )
