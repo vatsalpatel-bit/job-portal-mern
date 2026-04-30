@@ -26,9 +26,10 @@ const JobViewPage = () => {
             dispatch(setSingleJob(data.job))
         }
         fetchJobApi();
-    }, []);
+    }, [dispatch, jobId]);
     return (
         <div className="min-h-screen bg-gray-50 p-6 mt-16">
+
             <div className="max-w-6xl mx-auto space-y-6">
 
                 <div className="flex items-center justify-between">
@@ -195,7 +196,7 @@ const JobViewPage = () => {
                     <div className="bg-white p-5 rounded-xl shadow">
                         <h3 className="font-semibold mb-3">Requirements</h3>
                         <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
-                            {job?.requirements?.map((r) => (<li>{r}</li>)
+                            {job?.requirements?.map((r) => (<li><div key={job._id}>{r}</div></li>)
                             )}
 
                         </ul>

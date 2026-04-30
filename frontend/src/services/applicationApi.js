@@ -22,3 +22,10 @@ export const getApplicantsApi = async (jobId) => {
   const res = await axios.get(`${APPLICATION_API_END_PORT}/${jobId}/applicant`);
   return res.data;
 };
+
+export const getAdminJobStatus = async () => {
+  const res = await axios.get(`${APPLICATION_API_END_PORT}/status/get`, {
+    withCredentials: true,
+  });
+  return res.data;
+};

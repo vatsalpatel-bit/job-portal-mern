@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/popover";
 import { MoreVertical } from "lucide-react";
 import { Pencil, Trash2 } from "lucide-react";
+import { getAdminJobStatus } from "@/services/applicationApi";
 
 const CompanyJobsPage = () => {
     const navigate = useNavigate();
@@ -19,8 +20,8 @@ const CompanyJobsPage = () => {
     const jobs = useSelector((state) => state.company.allAdminJobs);
     useEffect(() => {
         const fetchAdminJobsApi = async () => {
-            const data = await getAdminJobsApi();
-            console.log(data.jobs);
+            const data = await getAdminJobStatus();
+            console.log(data);
             dispatch(setAllAdminJobs(data.jobs));
         }
         fetchAdminJobsApi();
@@ -104,17 +105,21 @@ const CompanyJobsPage = () => {
 
                                     <div className="text-center">
                                         <p className="text-[10px] text-gray-400">Total</p>
-                                        <p className="font-semibold text-gray-800">12</p>
+                                        <p className="font-semibold text-gray-800">{job.total}</p>
                                     </div>
 
                                     <div className="text-center">
                                         <p className="text-[10px] text-gray-400">Accepted</p>
-                                        <p className="font-semibold text-green-600">5</p>
+                                        <p className="font-semibold text-green-600">{job.accepted}</p>
                                     </div>
 
                                     <div className="text-center">
                                         <p className="text-[10px] text-gray-400">Pending</p>
-                                        <p className="font-semibold text-yellow-600">7</p>
+                                        <p className="font-semibold text-yellow-600">{job.pending}</p>
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="text-[10px] text-gray-400">Rejected</p>
+                                        <p className="font-semibold text-red-600">{job.rejected}</p>
                                     </div>
 
                                 </div>

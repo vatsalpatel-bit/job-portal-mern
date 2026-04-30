@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Application } from "../utils/application.model.js";
 import { Job } from "../utils/job.model.js";
 import "../utils/user.model.js";
@@ -37,7 +38,7 @@ export const applyJob = async (req, res) => {
     if (!job) {
       return res.status(404).json({ message: "Job not found" });
     }
-    
+
     job.application.push(application._id);
     await job.save();
 
@@ -66,7 +67,6 @@ export const getAppliedJobs = async (req, res) => {
       success: true,
       applications,
     });
-    
   } catch (error) {
     console.error("Get Applied Jobs Error:", error);
 
@@ -170,6 +170,87 @@ export const getAllJobs = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server error",
+    });
+  }
+};
+export const getAdminJobStatus = async (req, res) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.userId);
+
+    const jobs = await Job.aggregate([
+      {
+        $match: {
+          created_by: userId,
+        },
+      },
+
+      {
+        $lookup: {
+          from: "applications",
+          localField: "_id",
+          foreignField: "job",
+          as: "applications",
+        },
+      },
+
+      {
+        $addFields: {
+          total: { $size: "$applications" },
+
+          accepted: {
+            $size: {
+              $filter: {
+                input: "$applications",
+                as: "app",
+                cond: { $eq: ["$$app.status", "accepted"] },
+              },
+            },
+          },
+
+          pending: {
+            $size: {
+              $filter: {
+                input: "$applications",
+                as: "app",
+                cond: { $eq: ["$$app.status", "pending"] },
+              },
+            },
+          },
+
+          rejected: {
+            $size: {
+              $filter: {
+                input: "$applications",
+                as: "app",
+                cond: { $eq: ["$$app.status", "rejected"] },
+              },
+            },
+          },
+        },
+      },
+
+      {
+        $project: {
+          applications: 0,
+        },
+      },
+
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      jobs,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false,
     });
   }
 };
