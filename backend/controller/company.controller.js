@@ -2,6 +2,7 @@
 import Company from "../utils/company.model.js";
 import { uploadFromBuffer } from "../utils/cloudinaryUpload.js";
 import cloudinary from "../utils/cloudinary.js";
+import mongoose from "mongoose";
 
 export const registerCompany = async (req, res) => {
   try {
@@ -49,23 +50,99 @@ export const registerCompany = async (req, res) => {
 
 export const getCompany = async (req, res) => {
   try {
-    const userId = req?.userId;
-    const companies = await Company.find({ userId });
+    const userId = new mongoose.Types.ObjectId(req.userId);
 
-    if (companies?.length === 0) {
-      return res.status(404).json({
-        message: "No companies found",
-        success: false,
-      });
-    }
+    const companies = await Company.aggregate([
+      {
+        $match: {
+          userId: userId,
+        },
+      },
+
+      // 🔹 get jobs
+      {
+        $lookup: {
+          from: "jobs",
+          localField: "_id",
+          foreignField: "company",
+          as: "jobs",
+        },
+      },
+
+      // 🔹 get applications (IMPORTANT FIX HERE)
+      {
+        $lookup: {
+          from: "applications",
+          localField: "jobs._id", 
+          foreignField: "job",
+          as: "applications",
+        },
+      },
+
+      // 🔹 counts
+      {
+        $addFields: {
+          totalJobs: { $size: "$jobs" },
+          totalApplicants: { $size: "$applications" },
+
+          accepted: {
+            $size: {
+              $filter: {
+                input: "$applications",
+                as: "app",
+                cond: { $eq: ["$$app.status", "accepted"] },
+              },
+            },
+          },
+
+          pending: {
+            $size: {
+              $filter: {
+                input: "$applications",
+                as: "app",
+                cond: { $eq: ["$$app.status", "pending"] },
+              },
+            },
+          },
+
+          rejected: {
+            $size: {
+              $filter: {
+                input: "$applications",
+                as: "app",
+                cond: { $eq: ["$$app.status", "rejected"] },
+              },
+            },
+          },
+        },
+      },
+
+      // 🔹 clean
+      {
+        $project: {
+          jobs: 0,
+          applications: 0,
+          __v: 0,
+        },
+      },
+
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+    ]);
 
     return res.status(200).json({
-      companies,
       success: true,
+      companies,
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error", success: false });
+    return res.status(500).json({
+      message: "Server error",
+      success: false,
+    });
   }
 };
 
