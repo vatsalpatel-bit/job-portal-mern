@@ -21,6 +21,7 @@ const companySlice = createSlice({
     setSingleJob: (state, action) => {
       state.singleJob = action.payload;
     },
+    
   },
 });
 

@@ -1,23 +1,32 @@
 import React, { useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getApplicantsApi } from '@/services/applicationApi';
+import { getApplicantsApi, updateApplicantStatus } from '@/services/applicationApi';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAllApplicant } from '@/redux/slices/applicationSlice';
+import { setAllApplicant, updateApplicationStatus } from '@/redux/slices/applicationSlice';
 
 const JobApplicantPage = () => {
   const navigate = useNavigate();
   const { id: jobId } = useParams();
   const dispatch = useDispatch();
   const applicant = useSelector((state) => state.application.allApplicant);
-// console.log(app)
+  console.log(applicant);
   useEffect(() => {
     const fetchApplicantApi = async () => {
       const data = await getApplicantsApi(jobId);
-      dispatch(setAllApplicant(data.job));
+      dispatch(setAllApplicant(data.job.application));
     };
     fetchApplicantApi();
   }, [jobId, dispatch]);
+
+  const handleStatus = async (id, newStatus) => {
+    try {
+      await updateApplicantStatus(id, newStatus);
+      dispatch(updateApplicationStatus({ id, status: newStatus }))
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 mt-16">
@@ -40,13 +49,13 @@ const JobApplicantPage = () => {
           </div>
 
           <span className="text-xs bg-white border px-3 py-1 rounded-full text-gray-600">
-            {applicant?.application?.length || 0} Applicants
+            {applicant?.length || 0} Applicants
           </span>
         </div>
 
         {/* Applicant List */}
         <div className="space-y-4">
-          {applicant?.application?.map((a) => (
+          {applicant?.map((a) => (
             <div
               key={a?.applicant?._id}
               className="bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition"
@@ -92,13 +101,16 @@ const JobApplicantPage = () => {
 
                   {/* STATUS */}
                   <span
-                    className={`px-3 py-1 text-xs font-medium rounded-full ${
-                      a?.status === "accepted"
-                        ? "bg-green-100 text-green-700"
+                    className={`px-3 py-1 text-xs font-medium rounded-full ${a?.status === "accepted"
+                      ? "bg-green-100 text-green-700"
+                      : a?.status === "rejected"
+                        ? "bg-red-100 text-red-700"
                         : "bg-yellow-100 text-yellow-700"
-                    }`}
+                      }`}
                   >
-                    {a?.status === "accepted" ? "Accepted" : "Pending"}
+                    {a?.status === "accepted" ? "Accepted" :
+                      a?.status === "rejected" ? "Rejected" :
+                        "Pending"}
                   </span>
 
                   {/* ACTIONS */}
@@ -108,15 +120,31 @@ const JobApplicantPage = () => {
                       View
                     </button>
 
-                    {a?.status !== "accepted" && (
-                      <button className="px-3 py-1 text-xs bg-green-50 text-green-600 rounded-md hover:bg-green-100">
-                        Accept
-                      </button>
+                    {/* Pending → show both */}
+                    {a?.status === "pending" && (
+                      <>
+                        <button
+                          onClick={() => handleStatus(a._id, "accepted")}
+                          className="px-3 py-1 text-xs bg-green-50 text-green-600 rounded-md hover:bg-green-100">
+                          Accept
+                        </button>
+
+                        <button
+                          onClick={() => handleStatus(a._id, "rejected")}
+                          className="px-3 py-1 text-xs bg-red-50 text-red-600 rounded-md hover:bg-red-100">
+                          Reject
+                        </button>
+                      </>
                     )}
 
-                    <button className="px-3 py-1 text-xs bg-red-50 text-red-600 rounded-md hover:bg-red-100">
-                      Reject
-                    </button>
+                    {/* Accepted OR Rejected → only Undo */}
+                    {(a?.status === "accepted" || a?.status === "rejected") && (
+                      <button
+                        onClick={() => handleStatus(a._id, "pending")}
+                        className="px-3 py-1 text-xs bg-gray-50 text-gray-600 rounded-md hover:bg-gray-100">
+                        Undo
+                      </button>
+                    )}
 
                   </div>
                 </div>

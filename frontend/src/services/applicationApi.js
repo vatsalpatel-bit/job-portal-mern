@@ -29,3 +29,13 @@ export const getAdminJobStatus = async () => {
   });
   return res.data;
 };
+
+export const updateApplicantStatus = async (id, newStatus) => {
+  const res = await axios.post(
+    `${APPLICATION_API_END_PORT}/status/${id}/update`,
+    {
+      status: newStatus,
+    },
+  );
+  return res.data;
+};

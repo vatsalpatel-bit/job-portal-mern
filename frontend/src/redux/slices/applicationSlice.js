@@ -9,7 +9,17 @@ const applicationSlice = createSlice({
     setAllApplicant: (state, action) => {
       state.allApplicant = action.payload;
     },
+
+    updateApplicationStatus: (state, action) => {
+      const { id, status } = action.payload;
+
+      state.allApplicant = state.allApplicant.map((app) =>
+        app._id === id ? { ...app, status } : app,
+      );
+    },
   },
 });
-export const { setAllApplicant } = applicationSlice.actions;
+
+export const { setAllApplicant, updateApplicationStatus } =
+  applicationSlice.actions;
 export default applicationSlice.reducer;
