@@ -1,6 +1,6 @@
 import { setSingleJob } from '@/redux/slices/companiesSlice';
 import { getJobByIdApi } from '@/services/companyApi';
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
@@ -18,7 +18,7 @@ const JobViewPage = () => {
     const dispatch = useDispatch();
     const { id: jobId } = useParams();
     const job = useSelector((state) => state?.company?.singleJob);
-    console.log(job)
+    console.log(job?.application)
     useEffect(() => {
         const fetchJobApi = async () => {
             const data = await getJobByIdApi(jobId);
@@ -27,6 +27,17 @@ const JobViewPage = () => {
         }
         fetchJobApi();
     }, [dispatch, jobId]);
+
+    const status = useMemo(() => {
+        const result = { length: 0, accepted: 0, rejected: 0, pending: 0 }
+        job?.application?.forEach((r) => {
+            if (r.status === 'pending') result.pending++;
+            else if (r.status === 'rejected') result.rejected++;
+            else if (r.status === 'accepted') result.accepted++;
+        });
+        return result;
+    }, [job?.application]);
+
     return (
         <div className="min-h-screen bg-gray-50 p-6 mt-16">
 
@@ -144,17 +155,21 @@ const JobViewPage = () => {
 
                             <div className="text-center">
                                 <p className="text-[10px] text-gray-400">Total</p>
-                                <p className="font-semibold text-gray-800">12</p>
+                                <p className="font-semibold text-gray-800">{job?.application?.length}</p>
                             </div>
 
                             <div className="text-center">
                                 <p className="text-[10px] text-gray-400">Accepted</p>
-                                <p className="font-semibold text-green-600">5</p>
+                                <p className="font-semibold text-green-600">{status.accepted}</p>
                             </div>
 
                             <div className="text-center">
                                 <p className="text-[10px] text-gray-400">Pending</p>
-                                <p className="font-semibold text-yellow-600">7</p>
+                                <p className="font-semibold text-yellow-600">{status.pending}</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-[10px] text-gray-400">Rejected</p>
+                                <p className="font-semibold text-red-600">{status.rejected}</p>
                             </div>
 
                         </div>
@@ -196,7 +211,7 @@ const JobViewPage = () => {
                     <div className="bg-white p-5 rounded-xl shadow">
                         <h3 className="font-semibold mb-3">Requirements</h3>
                         <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
-                            {job?.requirements?.map((r) => (<li><div key={job._id}>{r}</div></li>)
+                            {job?.requirements?.map((r, i) => { return (<li key={`${r}-${i}`}>{r}</li>) }
                             )}
 
                         </ul>
@@ -222,8 +237,8 @@ const JobViewPage = () => {
                     <p className="text-gray-600">{job?.location}</p>
                 </div>
 
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 

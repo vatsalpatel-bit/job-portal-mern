@@ -10,7 +10,7 @@ const JobApplicantPage = () => {
   const { id: jobId } = useParams();
   const dispatch = useDispatch();
   const applicant = useSelector((state) => state.application.allApplicant);
-
+// console.log(app)
   useEffect(() => {
     const fetchApplicantApi = async () => {
       const data = await getApplicantsApi(jobId);
