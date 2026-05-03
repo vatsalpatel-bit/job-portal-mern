@@ -69,7 +69,7 @@ export const getCompany = async (req, res) => {
         },
       },
 
-      // 🔹 get applications (IMPORTANT FIX HERE)
+      // 🔹 get applications
       {
         $lookup: {
           from: "applications",

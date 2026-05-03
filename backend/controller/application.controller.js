@@ -173,6 +173,7 @@ export const getAllJobs = async (req, res) => {
     });
   }
 };
+
 export const getAdminJobStatus = async (req, res) => {
   try {
     const userId = new mongoose.Types.ObjectId(req.userId);
@@ -253,4 +254,75 @@ export const getAdminJobStatus = async (req, res) => {
       success: false,
     });
   }
+};
+
+export const getCompanyStatus = async () => {
+  try {
+    const companyId = new mongoose.Types.ObjectId(req.params.id);
+    const jobsStatus = await aggregate([
+      {
+        $match: {
+          company: companyId,
+        },
+      },
+      {
+        $lookup: {
+          from: "jobs",
+          localField: "_id",
+          foreignField: "company",
+          as: "jobs",
+        },
+      },
+
+      // 🔹 get applications
+      {
+        $lookup: {
+          from: "applications",
+          localField: "jobs._id",
+          foreignField: "job",
+          as: "applications",
+        },
+      },
+      {
+        $addFields: {
+          totalJobs: { $size: "$jobs" },
+          totalApplicants: { $size: "$applications" },
+
+          accepted: {
+            $size: {
+              $filter: {
+                input: "$applications",
+                as: "app",
+                cond: { $eq: ["$$app.status", "accepted"] },
+              },
+            },
+          },
+
+          pending: {
+            $size: {
+              $filter: {
+                input: "$applications",
+                as: "app",
+                cond: { $eq: ["$$app.status", "pending"] },
+              },
+            },
+          },
+        },
+      },
+      // 🔹 clean
+      {
+        $project: {
+          jobs: 0,
+          applications: 0,
+          __v: 0,
+        },
+      },
+
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+    ]);
+  } catch (error) {}
 };
