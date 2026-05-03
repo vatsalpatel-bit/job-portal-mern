@@ -13,7 +13,7 @@ const CompanyDetialPage = () => {
     useEffect(() => {
         const fetchCompanyApi = async () => {
             const data = await getCompanyById(companyId);
-            // console.log(data);
+            console.log(data);
             dispatch(setSingleCompany(data.company))
         }
         fetchCompanyApi();
