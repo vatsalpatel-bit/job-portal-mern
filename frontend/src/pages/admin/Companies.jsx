@@ -157,12 +157,9 @@ const Companies = () => {
                       Edit
                     </button>
 
-                    <div className="my-1 border-t" />
+                    <div />
 
-                    <button className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md text-red-600 hover:bg-red-50">
-                      <Trash2 className="w-4 h-4 text-red-500" />
-                      Delete
-                    </button>
+
                   </PopoverContent>
                 </Popover>
 

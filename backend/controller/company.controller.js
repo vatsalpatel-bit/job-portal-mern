@@ -298,3 +298,34 @@ export const getCompanyStatus = async (req, res) => {
     });
   }
 };
+
+export const deleteCompany = async (req, res) => {
+  try {
+    const companyId = new mongoose.Types.ObjectId(req.params.id);
+    const userId = new mongoose.Types.ObjectId(req.userId);
+    const company = await Company.findById(companyId);
+    if (!company) {
+      return res.status(404).json({
+        message: "Company not found",
+        success: false,
+      });
+    }
+    if (company.userId.toString() !== userId) {
+      return res.status(403).json({
+        message: "Not authorized",
+        success: false,
+      });
+    }
+    await Company.findByIdAndDelete(companyId);
+
+    res.status(200).json({
+      message: "Company deleted successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Server error",
+      success: false,
+    });
+  }
+};
