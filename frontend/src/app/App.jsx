@@ -8,7 +8,6 @@ import Jobs from "@/pages/Jobs";
 import Browse from "@/pages/Browse";
 import ProfilePage from "@/pages/ProfilePage";
 import DetailPage from "@/pages/DetailPage";
-import companySetup from "@/pages/admin/companySetup";
 
 // Admin pages
 import Companies from "@/pages/admin/Companies";
@@ -24,6 +23,7 @@ import AdminJobCreate from "@/pages/admin/AdminJobCreate";
 import JobEditPage from "@/pages/admin/JobEditPage";
 import JobViewPage from "@/pages/admin/JobViewPage";
 import JobApplicantPage from "@/pages/admin/JobApplicantPage";
+import ApplicantDetailPage from "@/pages/admin/ApplicantDetailPage";
 
 const router = createBrowserRouter([
   {
@@ -92,6 +92,12 @@ const router = createBrowserRouter([
         path: "/admin/job/:id/applicant",
         element: (
           <JobApplicantPage />
+        )
+      },
+      {
+        path: "/applicant/:applicantId/:jobId/profile",
+        element: (
+          <ApplicantDetailPage />
         )
       }
 

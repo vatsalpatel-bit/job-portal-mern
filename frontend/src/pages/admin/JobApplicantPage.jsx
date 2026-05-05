@@ -116,7 +116,9 @@ const JobApplicantPage = () => {
                   {/* ACTIONS */}
                   <div className="flex items-center gap-2">
 
-                    <button className="px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100">
+                    <button
+                    onClick={()=>navigate(`/applicant/${a.applicant._id}/${jobId}/profile`)}
+                     className="px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100">
                       View
                     </button>
 

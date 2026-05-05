@@ -2,10 +2,10 @@ import axios from "axios";
 import { USER_API_END_PORT } from "@/utils/constant";
 
 // --------------------------------------------------
-// AXIOS INSTANCE 
+// AXIOS INSTANCE
 // --------------------------------------------------
 const API = axios.create({
-  baseURL: USER_API_END_PORT, 
+  baseURL: USER_API_END_PORT,
   withCredentials: true,
 });
 
@@ -66,3 +66,9 @@ export const uploadProfilePhotoApi = (file) => {
   return API.put("/profile/photo", formData);
 };
 
+export const getApplicantApi = async (applicantId, jobId) => {
+  const res = await axios.get(
+    `${USER_API_END_PORT}/get/${applicantId}/${jobId}/applicant`,
+  );
+  return res.data;
+};

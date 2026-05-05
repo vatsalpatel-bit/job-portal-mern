@@ -4,6 +4,8 @@ import { User } from "../utils/user.model.js";
 import cloudinary from "../utils/cloudinary.js";
 import streamifier from "streamifier";
 import { getPublicIdFromUrl } from "../utils/cloudinary.js";
+import mongoose from "mongoose";
+import { Application } from "../utils/application.model.js";
 
 const buildSafeUser = (user) => ({
   _id: user._id,
@@ -13,7 +15,6 @@ const buildSafeUser = (user) => ({
   role: user.role,
   profile: user.profile || null,
 });
-
 
 export const Register = async (req, res) => {
   try {
@@ -38,7 +39,7 @@ export const Register = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(
       password,
-      Number(process.env.SALT_ROUND)
+      Number(process.env.SALT_ROUND),
     );
 
     //  NEW: handle profile photo
@@ -54,7 +55,7 @@ export const Register = async (req, res) => {
           (error, result) => {
             if (error) reject(error);
             resolve(result);
-          }
+          },
         );
 
         streamifier.createReadStream(req.file.buffer).pipe(stream);
@@ -324,7 +325,6 @@ export const uploadUserResume = async (req, res) => {
   }
 };
 
-
 export const uploadProfilePhoto = async (req, res) => {
   try {
     const userId = req.userId;
@@ -360,7 +360,7 @@ export const uploadProfilePhoto = async (req, res) => {
         (error, result) => {
           if (error) reject(error);
           resolve(result);
-        }
+        },
       );
 
       streamifier.createReadStream(req.file.buffer).pipe(stream);
@@ -380,3 +380,41 @@ export const uploadProfilePhoto = async (req, res) => {
   }
 };
 
+// get applicant profile
+export const getApplicant = async (req, res) => {
+  try {
+    const applicantId = new mongoose.Types.ObjectId(req.params.applicantId);
+    const jobId = new mongoose.Types.ObjectId(req.params.jobId);
+    
+    const application = await Application.findOne({
+      applicant: applicantId,
+      job: jobId,
+    })
+      .populate({
+        path: "applicant",
+        select: "fullname email phoneNumber profile",
+      })
+      .lean();
+
+    if (!application) {
+      return res.status(404).json({
+        message: "Application not found",
+        success: false,
+      });
+    }
+    const response = {
+      status: application.status,
+      applicant: application.applicant,
+    };
+    return res.status(200).json({
+      success: true,
+      response,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      messgae: "server error",
+      success: false,
+    });
+  }
+};

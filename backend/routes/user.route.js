@@ -6,12 +6,12 @@ import {
   updateProfile,
   getProfile,
   uploadProfilePhoto,
+  getApplicant,
 } from "../controller/user.controller.js";
 import isAuthenticated from "../middleware/isAuthenticated.js";
 import { uploadResume } from "../middleware/multer.js";
 import { uploadUserResume } from "../controller/user.controller.js";
 import { upload } from "../middleware/multer.js";
-
 
 const router = express.Router();
 
@@ -38,12 +38,15 @@ router.get("/profile", isAuthenticated, getProfile);
 // Update profile (JSON)
 router.put("/profile", isAuthenticated, updateProfile);
 
-// resume 
+//Get Applicant(for Recruiter)
+router.get("/get/:applicantId/:jobId/applicant", isAuthenticated, getApplicant);
+
+// resume
 router.put(
   "/profile/resume",
   isAuthenticated,
   uploadResume.single("resume"),
-  uploadUserResume
+  uploadUserResume,
 );
 
 // profile photo
@@ -51,10 +54,7 @@ router.put(
   "/profile/photo",
   isAuthenticated,
   upload.single("photo"),
-  uploadProfilePhoto
+  uploadProfilePhoto,
 );
-
-
-
 
 export default router;

@@ -61,11 +61,20 @@ export const getJobByIdApi = async (jobId) => {
   return res.data;
 };
 
-export const updateJobApi = async (jobId,jobData) => {
+export const updateJobApi = async (jobId, jobData) => {
   try {
-    const res = await axios.put(`${JOB_API_END_PORT}/update/${jobId}`,{jobData});
+    const res = await axios.put(`${JOB_API_END_PORT}/update/${jobId}`, {
+      jobData,
+    });
     return res.data;
   } catch (error) {
     console.log(error);
   }
+};
+
+export const getCompanyStatus = async (companyId) => {
+  const res = await axios.get(
+    `${COMPANY_API_END_PORT}/get/${companyId}/status`,
+  );
+  return res.data;
 };

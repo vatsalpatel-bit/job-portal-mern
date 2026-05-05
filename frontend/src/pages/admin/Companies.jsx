@@ -8,7 +8,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import { Pencil } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { getAllCompanyApi } from "@/services/companyApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setAllCompanies } from "@/redux/slices/companiesSlice";
@@ -72,7 +72,7 @@ const Companies = () => {
           </Button>
         </div>
 
-        {/* 📦 Table */}
+        {/* Table */}
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden border">
 
           {/* Header */}
@@ -147,19 +147,25 @@ const Companies = () => {
 
                   <PopoverContent
                     align="end"
-                    className="w-32 p-1 rounded-lg shadow-md"
+                    className="w-40 p-1 rounded-lg shadow-lg border bg-white"
                   >
                     <button
-                      onClick={() =>
-                        navigate(`/admin/company/${company._id}/edit`)
-                      }
-                      className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md hover:bg-gray-100 transition"
+                      onClick={() => navigate(`/admin/job/${job._id}/edit`)}
+                      className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-100"
                     >
-                      <Pencil className="w-4 h-4" />
+                      <Pencil className="w-4 h-4 text-gray-500" />
                       Edit
+                    </button>
+
+                    <div className="my-1 border-t" />
+
+                    <button className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md text-red-600 hover:bg-red-50">
+                      <Trash2 className="w-4 h-4 text-red-500" />
+                      Delete
                     </button>
                   </PopoverContent>
                 </Popover>
+
               </div>
             </div>
           ))}
