@@ -13,7 +13,7 @@ const ApplicantDetailPage = () => {
   const application = useSelector((state) => state.auth.applicant)
   const resumeUrl = application?.applicant?.profile?.resume;
   console.log("resumeUrl:", resumeUrl);
-  const fixedUrl = resumeUrl?.replace("/raw/upload/", "/image/upload/");
+
   // console.log(application?.applicant?.profile?.resume)
   useEffect(() => {
     const fetchApplicantApi = async () => {
@@ -159,7 +159,7 @@ const ApplicantDetailPage = () => {
                 <>
                   {/* View Full */}
                   <a
-                    href={resumeUrl}
+                    href={`https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(resumeUrl)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-3 py-2 text-sm border rounded-md hover:bg-gray-100"
@@ -170,7 +170,8 @@ const ApplicantDetailPage = () => {
                   {/* Download */}
                   <a
                     href={resumeUrl}
-                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="px-3 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
                   >
                     Download
@@ -181,22 +182,14 @@ const ApplicantDetailPage = () => {
           </div>
 
           {/* Resume Preview */}
-
           <div className="border rounded-xl h-[420px] overflow-hidden bg-gray-100">
 
             {resumeUrl ? (
-              resumeUrl.toLowerCase().includes(".pdf") ? (
-                <iframe
-                  src={`https://docs.google.com/gview?url=${encodeURIComponent(resumeUrl)}&embedded=true`}
-                  className="w-full h-full"
-                />
-              ) : (
-                <img
-                  src={resumeUrl}
-                  alt="resume"
-                  className="w-full h-full object-contain"
-                />
-              )
+              <iframe
+                src={`https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(resumeUrl)}`}
+                title="Resume Preview"
+                className="w-full h-full"
+              />
             ) : (
               <div className="flex items-center justify-center h-full text-gray-400 text-sm">
                 No Resume Uploaded

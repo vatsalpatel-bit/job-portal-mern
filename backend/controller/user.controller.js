@@ -292,7 +292,9 @@ export const uploadUserResume = async (req, res) => {
         .upload_stream(
           {
             folder: "job-portal/resumes",
-            resource_type: "raw",
+            resource_type: "image",
+            format: "pdf",
+            public_id: req.file.originalname.split(".")[0],
             overwrite: true,
           },
           (error, result) => {
@@ -385,7 +387,7 @@ export const getApplicant = async (req, res) => {
   try {
     const applicantId = new mongoose.Types.ObjectId(req.params.applicantId);
     const jobId = new mongoose.Types.ObjectId(req.params.jobId);
-    
+
     const application = await Application.findOne({
       applicant: applicantId,
       job: jobId,
