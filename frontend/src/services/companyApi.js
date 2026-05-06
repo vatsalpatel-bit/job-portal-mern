@@ -78,3 +78,11 @@ export const getCompanyStatus = async (companyId) => {
   );
   return res.data;
 };
+
+export const deleteCompanyApi = async (companyId) => {
+  const res = await axios.delete(
+    `${COMPANY_API_END_PORT}/delete/${companyId}/company`,
+    { withCredentials: true },
+  );
+  return res.data;
+};

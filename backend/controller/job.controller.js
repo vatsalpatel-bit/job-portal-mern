@@ -1,5 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { Job } from "../utils/job.model.js";
+import { Application } from "../utils/application.model.js";
+import Company from "../utils/company.model.js";
 
 // for recruiter
 export const postJob = async (req, res) => {
@@ -260,6 +262,43 @@ export const getJobFilters = async (req, res) => {
     console.log(error);
     res.status(500).json({
       message: "Failed to fetch filters",
+    });
+  }
+};
+
+export const deleteJob = async (req, res) => {
+  try {
+    const jobId = new mongoose.Types.ObjectId(req.params.id);
+    const userId = new mongoose.Types.ObjectId(req.userId);
+
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return res.status(404).json({
+        message: "Job not found",
+        success: false,
+      });
+    }
+    const company = await Company.findById(job.company);
+    if (company.userId.toString() !== userId.toString()) {
+      return res.status(403).json({
+        message: "Not authorized",
+        success: false,
+      });
+    }
+    await Application.deleteMany({
+      job: jobId,
+    });
+
+    await Job.findByIdAndDelete(jobId);
+    return res.status(200).json({
+      message: "Job deleted successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false,
     });
   }
 };

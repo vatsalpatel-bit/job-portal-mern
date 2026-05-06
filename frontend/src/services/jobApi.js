@@ -13,9 +13,8 @@ export const getFilteredJobsApi = async (filters = {}) => {
     withCredentials: true,
   });
 
-  return res.data; 
+  return res.data;
 };
-
 
 export const getJobById = async (id) => {
   return axios.get(`${JOB_API_END_PORT}/get/${id}`, {
@@ -27,4 +26,11 @@ export const getJobFiltersApi = async () => {
   return axios.get(`${JOB_API_END_PORT}/filters`, {
     withCredentials: true,
   });
+};
+
+export const deleteJobApi = async (jobId) => {
+  const res = await axios.delete(`${JOB_API_END_PORT}/job/${jobId}/delete`, {
+    withCredentials: true,
+  });
+  return res.data;
 };

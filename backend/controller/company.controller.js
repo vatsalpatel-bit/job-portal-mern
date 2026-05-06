@@ -3,6 +3,8 @@ import Company from "../utils/company.model.js";
 import { uploadFromBuffer } from "../utils/cloudinaryUpload.js";
 import cloudinary from "../utils/cloudinary.js";
 import mongoose from "mongoose";
+import { Job } from "../utils/job.model.js";
+import { Application } from "../utils/application.model.js";
 
 export const registerCompany = async (req, res) => {
   try {
@@ -303,6 +305,7 @@ export const deleteCompany = async (req, res) => {
   try {
     const companyId = new mongoose.Types.ObjectId(req.params.id);
     const userId = new mongoose.Types.ObjectId(req.userId);
+
     const company = await Company.findById(companyId);
     if (!company) {
       return res.status(404).json({
@@ -310,20 +313,28 @@ export const deleteCompany = async (req, res) => {
         success: false,
       });
     }
-    if (company.userId.toString() !== userId) {
+    if (company.userId.toString() !== userId.toString()) {
       return res.status(403).json({
         message: "Not authorized",
         success: false,
       });
     }
+    const jobs = await Job.find({ company: companyId });
+    const jobId = jobs.map((job) => job._id);
+    await Application.deleteMany({
+      job: { $in: jobId },
+    });
+    await Job.deleteMany({ company: companyId });
+
     await Company.findByIdAndDelete(companyId);
 
-    res.status(200).json({
-      message: "Company deleted successfully",
+    return res.status(200).json({
+      message: "Company and related data deleted successfully",
+      success: true,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "Server error",
       success: false,
     });

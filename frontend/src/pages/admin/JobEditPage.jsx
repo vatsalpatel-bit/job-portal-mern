@@ -173,7 +173,7 @@ const jobEditPage = () => {
                             value={input.position}
                             onChange={changeHandler}
                             type="number"
-                            placeholder="2"
+                            placeholder="Enter the number of position"
                             name="position"
                             className="w-full mt-1 border px-4 py-2 rounded"
                         />

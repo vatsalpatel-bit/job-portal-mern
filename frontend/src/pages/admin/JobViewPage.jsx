@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/popover";
 import { MoreVertical } from "lucide-react";
 import { Pencil, Trash2 } from "lucide-react";
+import { deleteJobApi } from '@/services/jobApi';
 
 
 const JobViewPage = () => {
@@ -98,6 +99,13 @@ const JobViewPage = () => {
 
                                 {/* Delete */}
                                 <button
+                                    onClick={() => {
+                                        const confirmDelete = window.confirm("Delete job and related applications");
+                                        if (confirmDelete) {
+                                            deleteJobApi(jobId);
+                                            navigate(-1);
+                                        }
+                                    }}
                                     className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md text-red-600 hover:bg-red-50 transition"
                                 >
                                     <Trash2 className="w-4 h-4 text-red-500" />
