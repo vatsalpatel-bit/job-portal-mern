@@ -256,3 +256,33 @@ export const getAdminJobStatus = async (req, res) => {
   }
 };
 
+export const updateApplicantStatus = async (req, res) => {
+  try {
+    const applicantId = new mongoose.Types.ObjectId(req.params.applicantId);
+    const jobId = new mongoose.Types.ObjectId(req.params.jobId);
+    const { status } = req.body;
+    const application = await Application.findOne({
+      applicant: applicantId,
+      job: jobId,
+    });
+    if (!application) {
+      return res.status(404).json({
+        message: "Application not found",
+        success: false,
+      });
+    }
+    application.status = status.toLowerCase();
+    await application.save();
+
+    return res.status(200).json({
+      message: "Status update successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false,
+    });
+  }
+};

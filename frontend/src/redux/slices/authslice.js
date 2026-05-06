@@ -17,7 +17,12 @@ const authSlice = createSlice({
     setApplicant: (state, action) => {
       state.applicant = action.payload;
     },
+    changeApplicantStatus: (state, action) => {
+      const {status}=action.payload;
+
+      state.applicant.status=status;
+    },
   },
 });
-export const { setLoading, setUser, setApplicant } = authSlice.actions;
+export const { setLoading, setUser, setApplicant,changeApplicantStatus } = authSlice.actions;
 export default authSlice.reducer;

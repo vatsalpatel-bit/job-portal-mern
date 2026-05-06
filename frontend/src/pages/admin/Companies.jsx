@@ -22,6 +22,7 @@ const Companies = () => {
   const [debounceSearch, setDebounceSearch] = useState("");
   const allCompaies = useSelector((state) => state.company.allCompanies);
   console.log(allCompaies);
+  
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
@@ -55,7 +56,7 @@ const Companies = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-6 py-10 mt-16">
 
-        {/* 🔝 Top Section */}
+        {/* Top Section */}
         <div className="flex items-center justify-between mb-8">
           <Input
             value={search}
@@ -150,7 +151,7 @@ const Companies = () => {
                     className="w-40 p-1 rounded-lg shadow-lg border bg-white"
                   >
                     <button
-                      onClick={() => navigate(`/admin/job/${job._id}/edit`)}
+                      onClick={() => navigate(`/admin/company/${company._id}/edit`)}
                       className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-100"
                     >
                       <Pencil className="w-4 h-4 text-gray-500" />

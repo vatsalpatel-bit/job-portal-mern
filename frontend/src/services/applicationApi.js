@@ -39,3 +39,13 @@ export const updateApplicantStatus = async (id, newStatus) => {
   );
   return res.data;
 };
+
+export const updateApplicantStatusByIds = async (applicantId,jobId,newStatus) => {
+  const res = await axios.post(
+    `${APPLICATION_API_END_PORT}/status/${applicantId}/${jobId}/update`,
+    {
+      status: newStatus,
+    },
+  );
+  return res.data;
+};

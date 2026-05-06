@@ -3,8 +3,9 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getApplicantApi } from "@/services/authApi";
 import { useDispatch, useSelector } from "react-redux";
-import { setApplicant } from "@/redux/slices/authslice";
+import { changeApplicantStatus, setApplicant } from "@/redux/slices/authslice";
 import ResumeViewer from "@/components/resume/ResumeViewer";
+import { updateApplicantStatus, updateApplicantStatusByIds } from "@/services/applicationApi";
 
 const ApplicantDetailPage = () => {
   const navigate = useNavigate();
@@ -12,9 +13,9 @@ const ApplicantDetailPage = () => {
   const dispatch = useDispatch();
   const application = useSelector((state) => state.auth.applicant)
   const resumeUrl = application?.applicant?.profile?.resume;
-  console.log("resumeUrl:", resumeUrl);
+  console.log(application)
 
-  // console.log(application?.applicant?.profile?.resume)
+
   useEffect(() => {
     const fetchApplicantApi = async () => {
       const data = await getApplicantApi(applicantId, jobId);
@@ -23,6 +24,16 @@ const ApplicantDetailPage = () => {
     }
     fetchApplicantApi();
   }, [applicantId, jobId, dispatch]);
+
+  const handleStatus = async (newStatus) => {
+    try {
+      await updateApplicantStatusByIds(applicantId, jobId, newStatus);
+      dispatch(changeApplicantStatus({ status: newStatus }));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 mt-16">
@@ -56,12 +67,22 @@ const ApplicantDetailPage = () => {
 
           {/* RIGHT → Actions */}
           <div className="flex gap-3">
-            <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-              Accept
-            </button>
-            <button className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
-              Reject
-            </button>
+            {application?.status === "pending" ? (<>
+              <button
+                onClick={() => handleStatus("accepted")}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                Accept
+              </button>
+              <button
+                onClick={() => handleStatus("rejected")}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                Reject
+              </button></>) : (
+              <button
+                onClick={() => handleStatus("pending")}
+                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
+                Undo
+              </button>)}
           </div>
 
         </div>
