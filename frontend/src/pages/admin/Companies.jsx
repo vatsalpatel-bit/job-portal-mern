@@ -20,21 +20,22 @@ const Companies = () => {
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [debounceSearch, setDebounceSearch] = useState("");
+  const [page, setPage] = useState(1);
   const allCompaies = useSelector((state) => state.company.allCompanies);
-  console.log(allCompaies);
-  
+  // console.log(allCompaies);
+
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const data = await getAllCompanyApi();
-        // console.log(data.companies);
-        dispatch(setAllCompanies(data.companies));
+        const data = await getAllCompanyApi(page);
+        // console.log(data);
+        dispatch(setAllCompanies(data));
       } catch (error) {
         console.log(error)
       }
     }
     fetchCompanies();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -45,7 +46,7 @@ const Companies = () => {
 
   const searchText = debounceSearch.trim().toLowerCase();
 
-  const filterCompanies = allCompaies?.filter((company) => {
+  const filterCompanies = allCompaies?.companies?.filter((company) => {
     const name = company?.name.toLowerCase() || "";
     return (
       name.includes(searchText)
@@ -75,6 +76,76 @@ const Companies = () => {
 
         {/* Table */}
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden border">
+
+          {/* Pagination */}
+          <div className="flex items-center justify-between px-6 py-4 border-t bg-gray-50">
+
+            {/* Left */}
+            <div className="text-sm text-gray-500">
+              Showing page{" "}
+              <span className="font-semibold text-gray-800">
+                {page}
+              </span>{" "}
+              of{" "}
+              <span className="font-semibold text-gray-800">
+                {allCompaies?.totalPage}
+              </span>
+            </div>
+
+            {/* Right */}
+            <div className="flex items-center gap-2">
+
+              {/* Previous */}
+              <button
+                disabled={page === 1}
+                onClick={() => setPage(page - 1)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium border transition-all
+        ${page === 1
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                  }`}
+              >
+                Previous
+              </button>
+
+              {/* Pages */}
+              <div className="flex items-center gap-1">
+
+                {[...Array(allCompaies?.totalPage)].map((_, index) => {
+                  const pageNumber = index + 1;
+
+                  return (
+                    <button
+                      key={pageNumber}
+                      onClick={() => setPage(pageNumber)}
+                      className={`w-10 h-10 rounded-lg text-sm font-semibold transition-all
+              ${page === pageNumber
+                          ? "bg-black text-white shadow-sm"
+                          : "bg-white border text-gray-700 hover:bg-gray-100"
+                        }`}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                })}
+
+              </div>
+
+              {/* Next */}
+              <button
+                disabled={page === allCompaies?.totalPage}
+                onClick={() => setPage(page + 1)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium border transition-all
+        ${page === allCompaies?.totalPages
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                  }`}
+              >
+                Next
+              </button>
+
+            </div>
+          </div>
 
           {/* Header */}
           <div className="grid grid-cols-[80px_1.5fr_1fr_120px_140px_60px] px-6 py-3 text-xs font-semibold text-gray-500 border-b uppercase tracking-wide">

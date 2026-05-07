@@ -23,10 +23,13 @@ export const getApplicantsApi = async (jobId) => {
   return res.data;
 };
 
-export const getAdminJobStatus = async () => {
-  const res = await axios.get(`${APPLICATION_API_END_PORT}/status/get`, {
-    withCredentials: true,
-  });
+export const getAdminJobStatus = async (page) => {
+  const res = await axios.get(
+    `${APPLICATION_API_END_PORT}/status/get?page=${page}&limit=5`,
+    {
+      withCredentials: true,
+    },
+  );
   return res.data;
 };
 
@@ -40,7 +43,11 @@ export const updateApplicantStatus = async (id, newStatus) => {
   return res.data;
 };
 
-export const updateApplicantStatusByIds = async (applicantId,jobId,newStatus) => {
+export const updateApplicantStatusByIds = async (
+  applicantId,
+  jobId,
+  newStatus,
+) => {
   const res = await axios.post(
     `${APPLICATION_API_END_PORT}/status/${applicantId}/${jobId}/update`,
     {

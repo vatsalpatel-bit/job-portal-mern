@@ -53,6 +53,13 @@ export const registerCompany = async (req, res) => {
 export const getCompany = async (req, res) => {
   try {
     const userId = new mongoose.Types.ObjectId(req.userId);
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 1;
+    const skip = (page - 1) * limit;
+
+    const totalCompanies = await Company.countDocuments({
+      userId: userId,
+    });
 
     const companies = await Company.aggregate([
       {
@@ -61,7 +68,6 @@ export const getCompany = async (req, res) => {
         },
       },
 
-      // 🔹 get jobs
       {
         $lookup: {
           from: "jobs",
@@ -71,7 +77,6 @@ export const getCompany = async (req, res) => {
         },
       },
 
-      // 🔹 get applications
       {
         $lookup: {
           from: "applications",
@@ -81,7 +86,6 @@ export const getCompany = async (req, res) => {
         },
       },
 
-      // 🔹 counts
       {
         $addFields: {
           totalJobs: { $size: "$jobs" },
@@ -118,8 +122,6 @@ export const getCompany = async (req, res) => {
           },
         },
       },
-
-      // 🔹 clean
       {
         $project: {
           jobs: 0,
@@ -133,11 +135,20 @@ export const getCompany = async (req, res) => {
           createdAt: -1,
         },
       },
+      {
+        $skip: skip,
+      },
+      {
+        $limit: limit,
+      },
     ]);
 
     return res.status(200).json({
       success: true,
       companies,
+      currentPage: page,
+      totalPage: Math.ceil(totalCompanies / limit),
+      totalCompanies,
     });
   } catch (error) {
     console.error(error);

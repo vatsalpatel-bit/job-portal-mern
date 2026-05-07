@@ -309,7 +309,7 @@ export const uploadUserResume = async (req, res) => {
     user.profile.resume = uploadResult.secure_url;
     user.profile.resumeOringinalName = req.file.originalname;
 
-    await user.save(); // 🔥 REQUIRED
+    await user.save(); // 
 
     console.log("Resume saved:", user.profile.resume);
 
@@ -420,3 +420,5 @@ export const getApplicant = async (req, res) => {
     });
   }
 };
+
+

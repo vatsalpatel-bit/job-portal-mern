@@ -24,6 +24,7 @@ import JobEditPage from "@/pages/admin/JobEditPage";
 import JobViewPage from "@/pages/admin/JobViewPage";
 import JobApplicantPage from "@/pages/admin/JobApplicantPage";
 import ApplicantDetailPage from "@/pages/admin/ApplicantDetailPage";
+import AdminProfilePage from "@/pages/admin/AdminProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -98,6 +99,12 @@ const router = createBrowserRouter([
         path: "/applicant/:applicantId/:jobId/profile",
         element: (
           <ApplicantDetailPage />
+        )
+      },
+      {
+        path: "/admin/profile",
+        element: (
+          <AdminProfilePage />
         )
       }
 

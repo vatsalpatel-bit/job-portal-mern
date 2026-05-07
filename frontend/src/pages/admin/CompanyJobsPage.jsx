@@ -1,9 +1,9 @@
 import { setAllAdminJobs } from "@/redux/slices/companiesSlice";
 import { getAdminJobsApi } from "@/services/companyApi";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { MapPin, IndianRupee, Calendar } from "lucide-react";
+import { MapPin, IndianRupee, Calendar, Search } from "lucide-react";
 import {
     Popover,
     PopoverTrigger,
@@ -16,26 +16,48 @@ import { getAdminJobStatus } from "@/services/applicationApi";
 const CompanyJobsPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    const [search, setSearch] = useState("")
+    const [debounaceSearch, SetDebounaceSearch] = useState("")
+    const [page, setPage] = useState(1);
     const jobs = useSelector((state) => state.company.allAdminJobs);
+    console.log(jobs);
+    const jobsData = {}
     useEffect(() => {
         const fetchAdminJobsApi = async () => {
-            const data = await getAdminJobStatus();
-            console.log(data);
-            dispatch(setAllAdminJobs(data.jobs));
+            const data = await getAdminJobStatus(page);
+            // console.log(data);
+            dispatch(setAllAdminJobs(data));
         }
         fetchAdminJobsApi();
-    }, []);
+    }, [page,dispatch]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            SetDebounaceSearch(search);
+        }, 500);
+        return () => clearTimeout(timer);
+    })
+
+    const searchText = debounaceSearch.trim().toLowerCase();
+
+    const filterJobs = jobs?.jobs?.filter((job) => {
+        const title = job?.title.toLowerCase() || "";
+        return (
+            title.includes(searchText)
+        )
+    })
 
     return (
-        <div className="min-h-screen bg-gray-50 mt-16">
-            <div className="max-w-6xl mx-auto px-6 py-10">
+       <div className="h-screen overflow-hidden bg-gray-50 mt-16">
+            <div className="max-w-6xl mx-auto px-6 py-5">
 
                 {/*  Top Section */}
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center justify-between mb-5">
 
                     {/* Search */}
                     <input
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
                         type="text"
                         placeholder="Search jobs, companies..."
                         className="w-80 px-4 py-2 border rounded-lg shadow-sm focus:outline-none"
@@ -50,10 +72,11 @@ const CompanyJobsPage = () => {
                     </button>
                 </div>
 
+
                 {/*  Jobs List */}
                 <div className="space-y-4">
 
-                    {jobs?.map((job) => (
+                    {filterJobs?.map((job) => (
                         <div
                             key={job._id}
                             className="bg-white p-5 rounded-xl shadow-sm flex justify-between items-center hover:shadow-md transition"
@@ -177,11 +200,88 @@ const CompanyJobsPage = () => {
 
                     {/* Empty State */}
                     {jobs?.length === 0 && (
-                        <p className="text-center text-gray-500 py-10">
+                        <p className="text-center text-gray-500 py-10 mt-50">
                             No jobs found
                         </p>
                     )}
 
+                </div>
+                {/* Pagination */}
+                <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-6xl flex items-center justify-between bg-white border rounded-xl px-6 py-4 shadow-lg">
+
+                    {/* Left */}
+                    <div className="text-sm text-gray-500">
+                        Showing page{" "}
+                        <span className="font-semibold text-gray-800">
+                            {page}
+                        </span>{" "}
+                        of{" "}
+                        <span className="font-semibold text-gray-800">
+                            {jobs?.totalPages}
+                        </span>
+                    </div>
+
+                    {/* Right */}
+                    <div className="flex items-center gap-2">
+
+                        {/* Previous */}
+                        <button
+                            disabled={page === 1}
+                            onClick={() => {
+                                if (page > 1) {
+                                    setPage(page - 1);
+                                }
+                            }}
+                            className={`px-4 py-2 rounded-lg border text-sm font-medium transition
+            ${page === 1
+                                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                    : "bg-white text-gray-700 hover:bg-gray-100"
+                                }`}
+                        >
+                            Previous
+                        </button>
+
+                        {/* Page Numbers */}
+                        <div className="flex items-center gap-1">
+
+                            {[...Array(jobs?.totalPages || 1)].map((_, index) => {
+                                const pageNumber = index + 1;
+
+                                return (
+                                    <button
+                                        key={pageNumber}
+                                        onClick={() => setPage(pageNumber)}
+                                        className={`w-10 h-10 rounded-lg text-sm font-semibold transition
+                        ${page === pageNumber
+                                                ? "bg-black text-white shadow-sm"
+                                                : "bg-white border text-gray-700 hover:bg-gray-100"
+                                            }`}
+                                    >
+                                        {pageNumber}
+                                    </button>
+                                );
+                            })}
+
+                        </div>
+
+                        {/* Next */}
+                        <button
+                            disabled={page === jobs?.totalPages}
+                            onClick={() => {
+                                if (page < jobs?.totalPages) {
+                                    setPage(page + 1);
+                                }
+                            }}
+                            className={`px-4 py-2 rounded-lg border text-sm font-medium transition
+            ${page === jobs?.totalPages
+                                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                    : "bg-white text-gray-700 hover:bg-gray-100"
+                                }`}
+                        >
+                            Next
+                        </button>
+
+                    </div>
                 </div>
 
             </div>

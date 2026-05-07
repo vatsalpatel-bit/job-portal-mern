@@ -132,7 +132,7 @@ const Navbar = () => {
               <PopoverContent
                 align="end"
                 sideOffset={8}
-                className="z-[100] w-64 rounded-xl p-2 shadow-lg"
+                className=" w-64 rounded-xl p-2 shadow-lg bg-white"
               >
                 {/* User Info */}
                 <div className="flex items-center gap-3 px-3 py-3">
@@ -166,23 +166,32 @@ const Navbar = () => {
 
                 {/* Actions */}
                 <div className="flex flex-col p-1">
-                  {user?.role === 'student' && (
+                  {user?.role === 'student' ? (
                     <>
                       <Link
                         to="/profile"
                         className="flex items-center gap-3 rounded-md px-3 py-2 text-sm
-                               hover:bg-muted transition"
+                                hover:bg-muted transition"
                         onClick={() => setOpen(false)}
                       >
                         <User2 className="h-4 w-4 text-muted-foreground" />
                         View Profile
                       </Link></>
-                  )}
+                  ) : (<>
+                    <Link
+                      to="/admin/profile"
+                      className="flex items-center gap-3 rounded-md px-3 py-2 text-sm
+                                hover:bg-muted transition"
+                      onClick={() => setOpen(false)}
+                    >
+                      <User2 className="h-4 w-4 text-muted-foreground" />
+                      View Profile
+                    </Link></>)}
 
                   <button
                     onClick={handleLogout}
                     className="flex items-center gap-3 rounded-md px-3 py-2 text-sm
-                               text-red-500 hover:bg-red-50 dark:hover:bg-red-950 transition"
+                                text-red-500 hover:bg-red-50 dark:hover:bg-red-150 transition"
                   >
                     <LogOut className="h-4 w-4" />
                     Logout
