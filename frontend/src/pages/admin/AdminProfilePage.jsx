@@ -1,9 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { getAdminProfileApi } from '@/services/authApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAdmin } from '@/redux/slices/authslice';
 
 const AdminProfilePage = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.auth.admin)
+    console.log(user)
+    useEffect(() => {
+        const fetchAdminProfileApi = async () => {
+            const data = await getAdminProfileApi();
+            // console.log(data);
+            dispatch(setAdmin(data.profile))
+        };
+        fetchAdminProfileApi();
+    }, [dispatch])
 
     return (
         <div className="min-h-screen bg-gray-50 mt-16 py-10 px-6">
@@ -23,7 +37,7 @@ const AdminProfilePage = () => {
                 <div className="bg-white border rounded-3xl shadow-sm overflow-hidden">
 
                     {/* Top */}
-                    <div className="relative px-8 py-8 border-b bg-gradient-to-r from-slate-50 to-gray-100">
+                    <div className="relative px-8 py-8 border-b from-slate-50 to-gray-100">
 
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
@@ -31,9 +45,11 @@ const AdminProfilePage = () => {
                             <div className="flex items-center gap-5">
 
                                 {/* Avatar */}
-                                <div className="w-24 h-24 rounded-2xl bg-black text-white flex items-center justify-center text-3xl font-bold shadow-md">
-                                    MK
-                                </div>
+                                <img
+                                    src={user?.profile?.profilePhoto}
+                                    alt="profile"
+                                    className="w-24 h-24 rounded-full object-cover shadow-md border"
+                                />
 
                                 {/* Info */}
                                 <div>
@@ -41,7 +57,7 @@ const AdminProfilePage = () => {
                                     <div className="flex items-center gap-3 flex-wrap">
 
                                         <h1 className="text-3xl font-bold text-gray-900">
-                                            Mad Kind
+                                            {user?.fullname}
                                         </h1>
 
                                         <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
@@ -55,7 +71,10 @@ const AdminProfilePage = () => {
                                     </p>
 
                                     <p className="text-sm text-gray-400 mt-1">
-                                        Joined Jan 2026
+                                        Joined {new Date(user?.createdAt).toLocaleDateString("en-IN", {
+                                            month: "short",
+                                            year: "numeric"
+                                        })}
                                     </p>
 
                                 </div>
@@ -63,7 +82,9 @@ const AdminProfilePage = () => {
                             </div>
 
                             {/* Action */}
-                            <button className="h-11 px-5 rounded-xl bg-black text-white text-sm font-medium hover:bg-gray-800 transition">
+                            <button
+                                onClick={() => navigate("/admin/profile/edit")}
+                                className="h-11 px-5 rounded-xl bg-black text-white text-sm font-medium hover:bg-gray-800 transition">
                                 Edit Profile
                             </button>
 
@@ -80,7 +101,7 @@ const AdminProfilePage = () => {
                             </p>
 
                             <h2 className="text-3xl font-bold text-gray-900 mt-2">
-                                24
+                                {user?.totalCompanies}
                             </h2>
                         </div>
 
@@ -90,7 +111,7 @@ const AdminProfilePage = () => {
                             </p>
 
                             <h2 className="text-3xl font-bold text-gray-900 mt-2">
-                                138
+                                {user?.totalJobs}
                             </h2>
                         </div>
 
@@ -100,7 +121,7 @@ const AdminProfilePage = () => {
                             </p>
 
                             <h2 className="text-3xl font-bold text-gray-900 mt-2">
-                                91
+                                {user?.accepted}
                             </h2>
                         </div>
 
@@ -123,7 +144,7 @@ const AdminProfilePage = () => {
                                 </p>
 
                                 <h3 className="text-lg font-semibold text-gray-900 break-all">
-                                    madkind@gmail.com
+                                    {user?.email}
                                 </h3>
 
                             </div>
@@ -136,7 +157,7 @@ const AdminProfilePage = () => {
                                 </p>
 
                                 <h3 className="text-lg font-semibold text-gray-900">
-                                    +91 9876543210
+                                    +91 {user?.phoneNumber}
                                 </h3>
 
                             </div>

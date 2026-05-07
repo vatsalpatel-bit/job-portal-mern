@@ -15,7 +15,7 @@ const CompanyEdit = () => {
     const singleCompany = useSelector(
         (state) => state.company.singleCompany
     );
-    
+
     const [form, setForm] = useState({
         name: "",
         description: "",
@@ -44,7 +44,7 @@ const CompanyEdit = () => {
             dispatch(setSingleCompany(data.company))
         }
         fetchCompanyApi();
-    }, [])
+    }, [companyId, dispatch])
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -84,7 +84,7 @@ const CompanyEdit = () => {
                 navigate("/admin/companies");
             }
         } catch (error) {
-
+            console.log(error);
         }
     };
 
@@ -155,7 +155,7 @@ const CompanyEdit = () => {
                         />
                     </div>
 
-                    {/* Logo (Full width) */}
+                    {/* Logo  */}
                     <div className="space-y-2">
 
                         {/* Current Logo */}
@@ -185,16 +185,13 @@ const CompanyEdit = () => {
                                 Change Logo
                             </label>
 
-
                         </div>
-
 
                     </div>
                     {/* Button */}
                     <div className="md:col-span-2 flex justify-end">
                         <Button
                             onClick={handleSubmit}
-                            disabled={!handleSubmit}
                             className="w-full md:w-auto px-8"
                         >
                             Save

@@ -6,6 +6,7 @@ const authSlice = createSlice({
     loading: false,
     user: null,
     applicant: null,
+    admin: null,
   },
   reducers: {
     setLoading: (state, action) => {
@@ -18,11 +19,20 @@ const authSlice = createSlice({
       state.applicant = action.payload;
     },
     changeApplicantStatus: (state, action) => {
-      const {status}=action.payload;
+      const { status } = action.payload;
 
-      state.applicant.status=status;
+      state.applicant.status = status;
+    },
+    setAdmin: (state, action) => {
+      state.admin = action.payload;
     },
   },
 });
-export const { setLoading, setUser, setApplicant,changeApplicantStatus } = authSlice.actions;
+export const {
+  setLoading,
+  setUser,
+  setApplicant,
+  changeApplicantStatus,
+  setAdmin,
+} = authSlice.actions;
 export default authSlice.reducer;

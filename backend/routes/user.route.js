@@ -7,6 +7,7 @@ import {
   getProfile,
   uploadProfilePhoto,
   getApplicant,
+  getAdminProfile,
 } from "../controller/user.controller.js";
 import isAuthenticated from "../middleware/isAuthenticated.js";
 import { uploadResume } from "../middleware/multer.js";
@@ -40,6 +41,9 @@ router.put("/profile", isAuthenticated, updateProfile);
 
 //Get Applicant(for Recruiter)
 router.get("/get/:applicantId/:jobId/applicant", isAuthenticated, getApplicant);
+
+//admin profile
+router.get("/admin/profile", isAuthenticated, getAdminProfile);
 
 // resume
 router.put(

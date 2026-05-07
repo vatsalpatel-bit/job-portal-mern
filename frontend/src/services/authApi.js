@@ -72,3 +72,10 @@ export const getApplicantApi = async (applicantId, jobId) => {
   );
   return res.data;
 };
+
+export const getAdminProfileApi = async () => {
+  const res = await axios.get(`${USER_API_END_PORT}/admin/profile`, {
+    withCredentials: true,
+  });
+  return res.data;
+};

@@ -309,7 +309,7 @@ export const uploadUserResume = async (req, res) => {
     user.profile.resume = uploadResult.secure_url;
     user.profile.resumeOringinalName = req.file.originalname;
 
-    await user.save(); // 
+    await user.save(); //
 
     console.log("Resume saved:", user.profile.resume);
 
@@ -421,4 +421,77 @@ export const getApplicant = async (req, res) => {
   }
 };
 
-
+export const getAdminProfile = async (req, res) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.userId);
+    const [profile] = await User.aggregate([
+      {
+        $match: {
+          _id: userId,
+        },
+      },
+      {
+        $lookup: {
+          from: "companies",
+          localField: "_id",
+          foreignField: "userId",
+          as: "companies",
+        },
+      },
+      {
+        $lookup: {
+          from: "jobs",
+          localField: "companies._id",
+          foreignField: "company",
+          as: "jobs",
+        },
+      },
+      {
+        $lookup: {
+          from: "applications",
+          localField: "jobs._id",
+          foreignField: "job",
+          as: "applications",
+        },
+      },
+      {
+        $addFields: {
+          totalCompanies: {
+            $size: "$companies",
+          },
+          totalJobs: {
+            $size: "$jobs",
+          },
+          accepted: {
+            $size: {
+              $filter: {
+                input: "$applications",
+                as: "app",
+                cond: { $eq: ["$$app.status", "accepted"] },
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          jobs: 0,
+          applications: 0,
+          companies: 0,
+          password:0,
+          __v: 0,
+        },
+      },
+    ]);
+    return res.status(200).json({
+      profile,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false,
+    });
+  }
+};
