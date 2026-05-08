@@ -86,3 +86,23 @@ export const deleteCompanyApi = async (companyId) => {
   );
   return res.data;
 };
+
+export const searchCompanyApi = async (
+  debounceSearch,
+  page
+) => {
+
+  const res = await axios.get(
+    `${COMPANY_API_END_PORT}/search/company`,
+    {
+      params: {
+        keyword: debounceSearch,
+        page,
+        limit: 6,
+      },
+      withCredentials: true,
+    }
+  );
+
+  return res.data;
+};

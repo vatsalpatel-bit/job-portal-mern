@@ -67,13 +67,13 @@ const CompanySetup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 mt-16">
+    <div className="bg-gray-50 mt-16">
       <div className="max-w-4xl mx-auto px-6 py-12">
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/admin/companies")}
             className="flex items-center gap-1 text-gray-600 hover:text-black"
           >
             <ArrowLeft size={18} />

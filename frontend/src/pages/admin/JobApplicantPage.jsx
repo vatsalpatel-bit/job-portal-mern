@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getApplicantsApi, updateApplicantStatus } from '@/services/applicationApi';
@@ -9,15 +9,10 @@ const JobApplicantPage = () => {
   const navigate = useNavigate();
   const { id: jobId } = useParams();
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
   const applicant = useSelector((state) => state.application.allApplicant);
   console.log(applicant);
-  useEffect(() => {
-    const fetchApplicantApi = async () => {
-      const data = await getApplicantsApi(jobId);
-      dispatch(setAllApplicant(data.job.application));
-    };
-    fetchApplicantApi();
-  }, [jobId, dispatch]);
+
 
   const handleStatus = async (id, newStatus) => {
     try {
@@ -27,9 +22,17 @@ const JobApplicantPage = () => {
       console.log(error);
     }
   }
+  useEffect(() => {
+    const fetchApplicantApi = async () => {
+      const data = await getApplicantsApi(jobId, page);
+      // console.log(data)
+      dispatch(setAllApplicant(data));
+    };
+    fetchApplicantApi();
+  }, [jobId, dispatch, page]);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 mt-16">
+    <div className=" bg-gray-50 p-6 mt-16">
       <div className="max-w-6xl mx-auto space-y-6">
 
         {/* Header */}
@@ -49,13 +52,13 @@ const JobApplicantPage = () => {
           </div>
 
           <span className="text-xs bg-white border px-3 py-1 rounded-full text-gray-600">
-            {applicant?.length || 0} Applicants
+            {applicant?.job?.application?.length || 0} Applicants
           </span>
         </div>
 
         {/* Applicant List */}
-        <div className="space-y-4">
-          {applicant?.map((a) => (
+        <div className="space-y-5 pt-5">
+          {applicant?.job?.application?.map((a) => (
             <div
               key={a?.applicant?._id}
               className="bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition"
@@ -117,8 +120,8 @@ const JobApplicantPage = () => {
                   <div className="flex items-center gap-2">
 
                     <button
-                    onClick={()=>navigate(`/applicant/${a.applicant._id}/${jobId}/profile`)}
-                     className="px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100">
+                      onClick={() => navigate(`/applicant/${a.applicant._id}/${jobId}/profile`)}
+                      className="px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100">
                       View
                     </button>
 
@@ -154,6 +157,83 @@ const JobApplicantPage = () => {
               </div>
             </div>
           ))}
+        </div>
+        {/* Pagination */}
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-6xl flex items-center justify-between bg-white border rounded-xl px-6 py-4 shadow-lg">
+
+          {/* Left */}
+          <div className="text-sm text-gray-500">
+            Showing page{" "}
+            <span className="font-semibold text-gray-800">
+              {page}
+            </span>{" "}
+            of{" "}
+            <span className="font-semibold text-gray-800">
+              {applicant?.totalPages}
+            </span>
+          </div>
+
+          {/* Right */}
+          <div className="flex items-center gap-2">
+
+            {/* Previous */}
+            <button
+              disabled={page === 1}
+              onClick={() => {
+                if (page > 1) {
+                  setPage(page - 1);
+                }
+              }}
+              className={`px-4 py-2 rounded-lg border text-sm font-medium transition
+            ${page === 1
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-white text-gray-700 hover:bg-gray-100"
+                }`}
+            >
+              Previous
+            </button>
+
+            {/* Page Numbers */}
+            <div className="flex items-center gap-1">
+
+              {[...Array(applicant?.totalPages || 1)].map((_, index) => {
+                const pageNumber = index + 1;
+
+                return (
+                  <button
+                    key={pageNumber}
+                    onClick={() => setPage(pageNumber)}
+                    className={`w-10 h-10 rounded-lg text-sm font-semibold transition
+                        ${page === pageNumber
+                        ? "bg-black text-white shadow-sm"
+                        : "bg-white border text-gray-700 hover:bg-gray-100"
+                      }`}
+                  >
+                    {pageNumber}
+                  </button>
+                );
+              })}
+
+            </div>
+
+            {/* Next */}
+            <button
+              disabled={page === applicant?.totalPages}
+              onClick={() => {
+                if (page < applicant?.totalPages) {
+                  setPage(page + 1);
+                }
+              }}
+              className={`px-4 py-2 rounded-lg border text-sm font-medium transition
+            ${page === applicant?.totalPages
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-white text-gray-700 hover:bg-gray-100"
+                }`}
+            >
+              Next
+            </button>
+
+          </div>
         </div>
 
       </div>

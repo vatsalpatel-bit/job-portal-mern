@@ -72,7 +72,7 @@ const CreateCompany = () => {
           <div className="flex justify-end gap-3">
             <Button
               variant="outline"
-              onClick={() => navigate(-1)}   // TRy
+              onClick={() => navigate("/admin/companies")}   
             >
               Cancel
             </Button>

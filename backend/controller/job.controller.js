@@ -302,3 +302,39 @@ export const deleteJob = async (req, res) => {
     });
   }
 };
+
+export const searchJob = async (req, res) => {
+  try {
+
+    const keyword = req.query.keyword || "";
+
+    const jobs = await Job.find({
+      $or: [
+        {
+          title: {
+            $regex: keyword,
+            $options: "i",
+          },
+        },
+        {
+          location: {
+            $regex: keyword,
+            $options: "i",
+          },
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      success: true,
+      jobs,
+    });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false,
+    });
+  }
+};

@@ -13,7 +13,7 @@ const applicationSlice = createSlice({
     updateApplicationStatus: (state, action) => {
       const { id, status } = action.payload;
 
-      state.allApplicant = state.allApplicant.map((app) =>
+      state.allApplicant.job.application = state.allApplicant?.job?.application?.map((app) =>
         app._id === id ? { ...app, status } : app,
       );
     },

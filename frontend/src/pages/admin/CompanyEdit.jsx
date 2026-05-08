@@ -64,10 +64,8 @@ const CompanyEdit = () => {
     const handleSubmit = async () => {
         try {
             const formData = new FormData();
-            if (form.name) {
-                formData.append("name", form.name);
-            }
 
+            formData.append("name", form.name);
             formData.append("description", form.description);
             formData.append("website", form.website);
             formData.append("location", form.location);
@@ -89,7 +87,7 @@ const CompanyEdit = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 mt-16">
+        <div className="bg-gray-50 mt-16">
             <div className="max-w-4xl mx-auto px-6 py-12">
 
                 {/* Header */}
@@ -170,7 +168,7 @@ const CompanyEdit = () => {
 
                             {/* Hidden file input */}
                             <input
-                                type="file"
+                                type="file"    //return files like file1 file2 in array 
                                 name="logo"
                                 id="logoUpload"
                                 className="hidden"

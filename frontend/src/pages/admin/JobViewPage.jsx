@@ -40,7 +40,7 @@ const JobViewPage = () => {
     }, [job?.application]);
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6 mt-16">
+        <div className="bg-gray-50 p-6 mt-16">
 
             <div className="max-w-6xl mx-auto space-y-6">
 
@@ -49,7 +49,7 @@ const JobViewPage = () => {
                     {/* LEFT */}
                     <div className="flex items-center gap-4">
                         <button
-                            onClick={() => navigate(-1)}
+                            onClick={() => navigate("/admin/jobs")}
                             className="flex items-center gap-1 text-sm text-gray-500 hover:text-black"
                         >
                             <ArrowLeft size={16} />

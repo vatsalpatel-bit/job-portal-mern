@@ -20,7 +20,7 @@ const AdminProfilePage = () => {
     }, [dispatch])
 
     return (
-        <div className="min-h-screen bg-gray-50 mt-16 py-10 px-6">
+        <div className="bg-gray-50 mt-16 py-10 px-6">
 
             <div className="max-w-5xl mx-auto">
                 <div className="flex items-center text-2xl mb-7 gap-4">

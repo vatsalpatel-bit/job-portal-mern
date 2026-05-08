@@ -46,7 +46,7 @@ const Jobs = () => {
     try {
       const res = await getAppliedJobsApi();
 
-      // ✅ extract job IDs
+      // extract job IDs
       const jobIds = res.applications.map(
         (app) => app.job._id || app.job
       );

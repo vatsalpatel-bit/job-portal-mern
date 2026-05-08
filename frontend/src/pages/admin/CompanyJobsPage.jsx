@@ -12,43 +12,59 @@ import {
 import { MoreVertical } from "lucide-react";
 import { Pencil, Trash2 } from "lucide-react";
 import { getAdminJobStatus } from "@/services/applicationApi";
+import { searchJobApi } from "@/services/jobApi";
 
 const CompanyJobsPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [search, setSearch] = useState("")
-    const [debounaceSearch, SetDebounaceSearch] = useState("")
+    const [debounceSearch, setDebounceSearch] = useState("")
     const [page, setPage] = useState(1);
     const jobs = useSelector((state) => state.company.allAdminJobs);
     console.log(jobs);
-    const jobsData = {}
-    useEffect(() => {
-        const fetchAdminJobsApi = async () => {
-            const data = await getAdminJobStatus(page);
-            // console.log(data);
-            dispatch(setAllAdminJobs(data));
-        }
-        fetchAdminJobsApi();
-    }, [page,dispatch]);
 
     useEffect(() => {
+
+        const fetchJobs = async () => {
+
+            try {
+
+                let data;
+
+                if (debounceSearch) {
+                    data = await searchJobApi(
+                        debounceSearch,
+                        page
+                    );
+
+                } else {
+
+                    data = await getAdminJobStatus(page);
+                }
+
+                dispatch(setAllAdminJobs(data));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchJobs();
+
+    }, [page, debounceSearch]);
+
+    useEffect(() => {
+
         const timer = setTimeout(() => {
-            SetDebounaceSearch(search);
+            setDebounceSearch(search);
+            setPage(1);
         }, 500);
+
         return () => clearTimeout(timer);
-    })
 
-    const searchText = debounaceSearch.trim().toLowerCase();
-
-    const filterJobs = jobs?.jobs?.filter((job) => {
-        const title = job?.title.toLowerCase() || "";
-        return (
-            title.includes(searchText)
-        )
-    })
+    }, [search]);
 
     return (
-       <div className="h-screen overflow-hidden bg-gray-50 mt-16">
+        <div className="overflow-hidden bg-gray-50 mt-16">
             <div className="max-w-6xl mx-auto px-6 py-5">
 
                 {/*  Top Section */}
@@ -76,7 +92,7 @@ const CompanyJobsPage = () => {
                 {/*  Jobs List */}
                 <div className="space-y-4">
 
-                    {filterJobs?.map((job) => (
+                    {jobs?.jobs?.map((job) => (
                         <div
                             key={job._id}
                             className="bg-white p-5 rounded-xl shadow-sm flex justify-between items-center hover:shadow-md transition"

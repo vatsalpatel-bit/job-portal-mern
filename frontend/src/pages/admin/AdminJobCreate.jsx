@@ -76,7 +76,7 @@ const AdminJobCreate = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 mt-16">
+        <div className="bg-gray-50 mt-16">
             <div className="max-w-3xl mx-auto px-6 py-10">
                 {/* Header */}
                 <div className="flex items-center gap-3 mb-8">

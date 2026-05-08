@@ -80,7 +80,11 @@ export const getAppliedJobs = async (req, res) => {
 // admin get job aplication
 export const jobApplicant = async (req, res) => {
   try {
-    const jobId = req.params.id;
+    const jobId = new mongoose.Types.ObjectId(req.params.id);
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 4;
+    const skip = (page - 1) * limit;
+
     const job = await Job.findById(jobId).populate({
       path: "application",
       options: { sort: { createdAt: -1 } },
@@ -88,14 +92,20 @@ export const jobApplicant = async (req, res) => {
         path: "applicant",
       },
     });
+
     if (!job) {
       return res.status(400).json({
         message: "Job not found",
         success: false,
       });
     }
+    const totalApplicant = job?.application?.length;
+    const paginatedApplications = job?.application?.slice(skip, skip + limit);
+    job.application = paginatedApplications;
     return res.status(200).json({
       job,
+      currentPage: page,
+      totalPages: Math.ceil(totalApplicant / limit),
       success: true,
     });
   } catch (error) {

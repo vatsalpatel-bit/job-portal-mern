@@ -36,7 +36,7 @@ const ApplicantDetailPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 mt-16">
+    <div className="bg-gray-50 p-6 mt-16">
       <div className="max-w-6xl mx-auto space-y-6">
 
         <div className="flex items-center justify-between mb-6">
@@ -203,7 +203,7 @@ const ApplicantDetailPage = () => {
           </div>
 
           {/* Resume Preview */}
-          <div className="border rounded-xl h-[420px] overflow-hidden bg-gray-100">
+          <div className="border rounded-xl overflow-hidden bg-gray-100">
 
             {resumeUrl ? (
               <iframe

@@ -34,3 +34,24 @@ export const deleteJobApi = async (jobId) => {
   });
   return res.data;
 };
+
+export const searchJobApi = async (
+  debounceSearch,
+  page
+) => {
+
+  const res = await axios.get(
+    `${JOB_API_END_PORT}/search/jobs`,
+    {
+      params: {
+        keyword: debounceSearch,
+        page,
+        limit: 6,
+      },
+      withCredentials: true,
+    }
+  );
+
+  return res.data;
+};
+

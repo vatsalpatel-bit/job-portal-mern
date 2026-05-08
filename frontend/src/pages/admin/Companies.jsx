@@ -9,7 +9,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Pencil, Trash2 } from "lucide-react";
-import { getAllCompanyApi } from "@/services/companyApi";
+import { getAllCompanyApi, searchCompanyApi } from "@/services/companyApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setAllCompanies } from "@/redux/slices/companiesSlice";
 import { Briefcase } from "lucide-react";
@@ -22,39 +22,53 @@ const Companies = () => {
   const [debounceSearch, setDebounceSearch] = useState("");
   const [page, setPage] = useState(1);
   const allCompaies = useSelector((state) => state.company.allCompanies);
-  // console.log(allCompaies);
 
   useEffect(() => {
+
     const fetchCompanies = async () => {
+
       try {
-        const data = await getAllCompanyApi(page);
-        // console.log(data);
+
+        let data;
+
+        if (debounceSearch) {
+
+          data = await searchCompanyApi(
+            // data=await serachJobApi(
+            debounceSearch,
+            page
+          );
+
+        } else {
+
+          data = await getAllCompanyApi(page);
+//        data = await getAdminJobStatus(page);
+        }
+
         dispatch(setAllCompanies(data));
+//      dispatch(setAllAdminJobs(data));
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
+    };
+
     fetchCompanies();
-  }, [page]);
+
+  }, [page, debounceSearch]);
 
   useEffect(() => {
+
     const timer = setTimeout(() => {
       setDebounceSearch(search);
-    }, 500);                                         //0.5s delay 
+      setPage(1);
+    }, 500);
+
     return () => clearTimeout(timer);
+
   }, [search]);
 
-  const searchText = debounceSearch.trim().toLowerCase();
-
-  const filterCompanies = allCompaies?.companies?.filter((company) => {
-    const name = company?.name.toLowerCase() || "";
-    return (
-      name.includes(searchText)
-    );
-  });
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="bg-gray-50">
       <div className="max-w-6xl mx-auto px-6 py-10 mt-16">
 
         {/* Top Section */}
@@ -88,7 +102,7 @@ const Companies = () => {
               </span>{" "}
               of{" "}
               <span className="font-semibold text-gray-800">
-                {allCompaies?.totalPage}
+                {allCompaies?.totalPages}
               </span>
             </div>
 
@@ -111,7 +125,7 @@ const Companies = () => {
               {/* Pages */}
               <div className="flex items-center gap-1">
 
-                {[...Array(allCompaies?.totalPage)].map((_, index) => {
+                {[...Array(allCompaies?.totalPages)].map((_, index) => {
                   const pageNumber = index + 1;
 
                   return (
@@ -133,7 +147,7 @@ const Companies = () => {
 
               {/* Next */}
               <button
-                disabled={page === allCompaies?.totalPage}
+                disabled={page === allCompaies?.totalPages}
                 onClick={() => setPage(page + 1)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium border transition-all
         ${page === allCompaies?.totalPages
@@ -158,7 +172,7 @@ const Companies = () => {
           </div>
 
           {/* Body */}
-          {filterCompanies?.map((company) => (
+          {allCompaies?.companies?.map((company) => (
             <div
               key={company._id}
               onClick={() => navigate(`/admin/company/${company._id}`)}

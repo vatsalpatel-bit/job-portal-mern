@@ -6,6 +6,7 @@ import streamifier from "streamifier";
 import { getPublicIdFromUrl } from "../utils/cloudinary.js";
 import mongoose from "mongoose";
 import { Application } from "../utils/application.model.js";
+import { uploadFromBuffer } from "../utils/cloudinaryUpload.js";
 
 const buildSafeUser = (user) => ({
   _id: user._id,
@@ -478,7 +479,7 @@ export const getAdminProfile = async (req, res) => {
           jobs: 0,
           applications: 0,
           companies: 0,
-          password:0,
+          password: 0,
           __v: 0,
         },
       },
@@ -489,6 +490,66 @@ export const getAdminProfile = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false,
+    });
+  }
+};
+
+export const editAdminProfile = async (req, res) => {
+  try {
+    const { fullname, email, phoneNumber } = req.body;
+    console.log(fullname, email, phoneNumber);
+    const userId = new mongoose.Types.ObjectId(req.userId);
+    const file = req.file;
+
+    const existingUser = await User.findById(userId);
+
+    if (!existingUser) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+
+    const updateData = {
+      fullname,
+      email,
+      phoneNumber,
+    };
+
+    // Upload new profile image
+    if (file) {
+      // Delete old image
+      if (existingUser.profile?.profilePhotoPublicId) {
+        await cloudinary.uploader.destroy(
+          existingUser.profile.profilePhotoPublicId,
+        );
+      }
+
+      // Upload new image
+      const result = await uploadFromBuffer(file.buffer);
+
+      updateData.profile = {
+        ...existingUser.profile,
+        profilePhoto: result.secure_url,
+        profilePhotoPublicId: result.public_id,
+      };
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    }).select("-password");
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      success: true,
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+
     return res.status(500).json({
       message: "Server error",
       success: false,

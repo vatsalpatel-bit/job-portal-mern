@@ -147,7 +147,7 @@ export const getCompany = async (req, res) => {
       success: true,
       companies,
       currentPage: page,
-      totalPage: Math.ceil(totalCompanies / limit),
+      totalPages: Math.ceil(totalCompanies / limit),
       totalCompanies,
     });
   } catch (error) {
@@ -298,7 +298,6 @@ export const getCompanyStatus = async (req, res) => {
         },
       },
     ]);
-    console.log(companyStatus);
     return res.status(200).json({
       success: true,
       companyStatus,
@@ -343,6 +342,42 @@ export const deleteCompany = async (req, res) => {
       message: "Company and related data deleted successfully",
       success: true,
     });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false,
+    });
+  }
+};
+
+export const searchCompany = async (req, res) => {
+  try {
+
+    const keyword = req.query.keyword || "";
+
+    const companies = await Company.find({
+      $or: [
+        {
+          name: {
+            $regex: keyword,
+            $options: "i",
+          },
+        },
+        {
+          location: {
+            $regex: keyword,
+            $options: "i",
+          },
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      success: true,
+      companies,
+    });
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({

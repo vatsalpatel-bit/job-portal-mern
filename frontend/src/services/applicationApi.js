@@ -18,8 +18,10 @@ export const getAppliedJobsApi = async () => {
   return res.data;
 };
 
-export const getApplicantsApi = async (jobId) => {
-  const res = await axios.get(`${APPLICATION_API_END_PORT}/${jobId}/applicant`);
+export const getApplicantsApi = async (jobId,page) => {
+  const res = await axios.get(
+    `${APPLICATION_API_END_PORT}/${jobId}/applicant?page=${page}&limit=4`,
+  );
   return res.data;
 };
 

@@ -5,6 +5,7 @@ import {
   getCompanyById,
   getCompanyStatus,
   registerCompany,
+  searchCompany,
   updateCompany,
 } from "../controller/company.controller.js";
 import isAuthenticated from "../middleware/isAuthenticated.js";
@@ -17,6 +18,7 @@ router.get("/get", isAuthenticated, getCompany);
 router.get("/get/:id", isAuthenticated, getCompanyById);
 router.get("/get/:id/status", isAuthenticated, getCompanyStatus);
 router.delete("/delete/:id/company", isAuthenticated, deleteCompany);
+router.get("/search/company", isAuthenticated, searchCompany);
 router.put(
   "/update/:id",
   uploadImage.single("logo"),

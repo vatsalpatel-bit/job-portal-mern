@@ -8,6 +8,7 @@ import {
   getJobFilters,
   updateJob,
   deleteJob,
+  searchJob,
 } from "../controller/job.controller.js";
 
 const router = express.Router();
@@ -18,6 +19,7 @@ router.get("/", getAllJob);
 router.get("/get", isAuthenticated, getAdminJobs);
 router.get("/get/:id", getJobById);
 router.put("/update/:id", isAuthenticated, updateJob);
-router.delete("/job/:id/delete",isAuthenticated,deleteJob)
+router.delete("/job/:id/delete", isAuthenticated, deleteJob)
+router.get("/search/jobs", isAuthenticated, searchJob)
 
 export default router;

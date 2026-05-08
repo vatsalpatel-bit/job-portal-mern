@@ -8,6 +8,7 @@ import {
   uploadProfilePhoto,
   getApplicant,
   getAdminProfile,
+  editAdminProfile,
 } from "../controller/user.controller.js";
 import isAuthenticated from "../middleware/isAuthenticated.js";
 import { uploadResume } from "../middleware/multer.js";
@@ -59,6 +60,14 @@ router.put(
   isAuthenticated,
   upload.single("photo"),
   uploadProfilePhoto,
+);
+
+//update admin profile
+router.put(
+  "/admin/profile",
+  upload.single("logo"),
+  isAuthenticated,
+  editAdminProfile,
 );
 
 export default router;

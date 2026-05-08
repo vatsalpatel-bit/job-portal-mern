@@ -79,3 +79,14 @@ export const getAdminProfileApi = async () => {
   });
   return res.data;
 };
+
+export const editAdminProfileApi = async (formData) => {
+  const res = await axios.put(`${USER_API_END_PORT}/admin/profile`, formData, {
+    withCredentials: true,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return res.data;
+};
