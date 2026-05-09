@@ -33,7 +33,7 @@ import { uploadProfilePhotoApi } from "@/services/authApi";
 const Profile = () => {
   const dispatch = useDispatch();
   const photoInputRef = useRef(null);
-
+  const [open, setOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
 
 
@@ -81,10 +81,9 @@ const Profile = () => {
       }
     };
 
-    fetchProfile(); // ✅ only once
+    fetchProfile();
   }, [dispatch]);
 
-  // ✅ Only block page on INITIAL load
   if (!user && loading) {
     return (
       <>
@@ -130,7 +129,7 @@ const Profile = () => {
       });
 
       setSkills(user.profile?.skills || []);
-
+      setOpen(false);
       toast.success("Profile updated successfully ✅");
     } catch (error) {
       console.error("Update profile error:", error);
@@ -186,7 +185,7 @@ const Profile = () => {
       const user = res.data.user;
 
       dispatch(setUser(user));
-      setResume(user.profile.resume); // 🔥 immediate UI update
+      setResume(user.profile.resume);
 
       toast.success("Resume uploaded successfully 📄");
     } catch (error) {
@@ -241,8 +240,10 @@ const Profile = () => {
                       }
                       className="object-cover"
                     />
-                    <AvatarFallback>
-                      {user?.fullname?.charAt(0) || "U"}
+                    <AvatarFallback
+                      className="bg-blue-100 text-blue-700 font-bold text-base ring-2 ring-white shadow-sm"
+                    >
+                      {user?.fullname?.charAt(0)?.toUpperCase() || "U"}
                     </AvatarFallback>
                   </Avatar>
 
@@ -268,7 +269,7 @@ const Profile = () => {
               </div>
 
               {/* RIGHT: Edit button */}
-              <Dialog>
+              <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                   <Button variant="outline" size="icon">
                     <Pencil className="h-4 w-4" />
@@ -313,7 +314,9 @@ const Profile = () => {
                       placeholder="Phone"
                     />
 
-                    <Button className="w-full" onClick={handleUpdateProfile}>
+                    <Button
+
+                      className="w-full" onClick={handleUpdateProfile}>
                       Save Changes
                     </Button>
                   </div>

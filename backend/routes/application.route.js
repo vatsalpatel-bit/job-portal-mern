@@ -5,6 +5,7 @@ import {
   getAdminJobStatus,
   getAppliedJobs,
   jobApplicant,
+  undoApplication,
   updateApplicantStatus,
   updateStatus,
 } from "../controller/application.controller.js";
@@ -18,6 +19,7 @@ router.get("/:id/applicant", isAuthenticated, jobApplicant);
 router.post("/status/:id/update", isAuthenticated, updateStatus);
 router.get("/get", isAuthenticated, getAllJob);
 router.get("/status/get", isAuthenticated, getAdminJobStatus);
+router.delete("/application/:id/delete", isAuthenticated, undoApplication);
 router.post(
   "/status/:applicantId/:jobId/update",
   isAuthenticated,

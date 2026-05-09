@@ -2,7 +2,7 @@ import { Facebook, Twitter, Linkedin, Github } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-muted/40 mt-20">
+    <footer className="w-full bg-muted/40 ">
       <div className="mx-auto max-w-7xl px-6 py-14">
 
         {/* Top */}

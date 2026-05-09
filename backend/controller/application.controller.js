@@ -56,13 +56,14 @@ export const getAppliedJobs = async (req, res) => {
 
     const applications = await Application.find({
       applicant: userId,
-    }).populate({
-      path: "job",
-      populate: {
-        path: "company",
-      },
-    });
-
+    })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "job",
+        populate: {
+          path: "company",
+        },
+      });
     return res.status(200).json({
       success: true,
       applications,
@@ -311,3 +312,42 @@ export const updateApplicantStatus = async (req, res) => {
     });
   }
 };
+
+
+export const undoApplication = async (req, res) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.userId);
+    const jobId = new mongoose.Types.ObjectId(req.params.id);
+
+    const application = await Application.findOne({
+      job: jobId,
+      applicant: userId,
+    })
+
+    if (!application) {
+      return res.status(404).json({
+        message: "Application not found",
+        success: false,
+      })
+    }
+
+    await Application.findByIdAndDelete(application._id);
+
+    await Job.findByIdAndUpdate(jobId, {
+      $pull: {
+        application: application._id
+      }
+    })
+
+    return res.status(200).json({
+      message: "Application delete successfully",
+      success: true 
+    })
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false,
+    })
+  }
+}

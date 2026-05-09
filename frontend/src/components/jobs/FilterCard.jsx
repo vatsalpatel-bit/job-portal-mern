@@ -60,7 +60,7 @@ const FilterCard = ({ options, onFilterChange }) => {
         <div className="space-y-8">
 
           {/*  Location */}
-          <div>
+          {/* <div>
             <h2 className="text-sm font-medium mb-3 text-muted-foreground">
               Location
             </h2>
@@ -81,7 +81,7 @@ const FilterCard = ({ options, onFilterChange }) => {
                 </label>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/*  Industry */}
           <div>
@@ -114,7 +114,7 @@ const FilterCard = ({ options, onFilterChange }) => {
             </h2>
 
             <div className="space-y-2">
-              {["0–30k", "30k–60k", "60k–1L","1L–2L","2L+"].map((range) => (
+              {["0–1L", "1L–2L", "2L–3L","3L–5L","5L–10L","10L–20L","20L–30L","30L+"].map((range) => (
                 <label
                   key={range}
                   className="flex items-center gap-3 text-sm cursor-pointer"

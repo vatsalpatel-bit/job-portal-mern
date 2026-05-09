@@ -20,7 +20,7 @@ const Jobs = () => {
   });
 
   const [filterOptions, setFilterOptions] = useState({
-    locations: [],
+    // locations: [],
     industries: []
   });
 
@@ -29,7 +29,7 @@ const Jobs = () => {
       try {
         const res = await getJobFiltersApi();
         setFilterOptions({
-          locations: res.data.locations,
+          // locations: res.data.locations,
           industries: res.data.industries
         });
       } catch (error) {
@@ -100,7 +100,7 @@ const Jobs = () => {
             onFilterChange={setFilters}
           />
 
-          <div className="h-[calc(100vh-220px)] overflow-y-auto pr-1">
+          <div className="overflow-y-auto pr-1">
             {loading ? (
               <p>Loading jobs...</p>
             ) : !allJobs || allJobs.length === 0 ? (

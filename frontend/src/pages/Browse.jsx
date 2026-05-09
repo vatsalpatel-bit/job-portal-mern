@@ -2,36 +2,37 @@ import React, { useEffect } from "react";
 import Navbar from "@/components/shared/Navbar";
 import Job from "@/components/jobs/Job";
 import { useDispatch, useSelector } from "react-redux";
-import {  setSearchedJobs } from "@/redux/slices/jobSlice";
+import { setSearchedJobs } from "@/redux/slices/jobSlice";
 import { getFilteredJobsApi } from "@/services/jobApi";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { setLoading } from "@/redux/slices/authslice";
 
 const Browse = () => {
-  const location=useLocation();
+  const location = useLocation();
   const dispatch = useDispatch();
-  const { searchedJobs,loading } = useSelector((state) => state.job);
+  const navigate = useNavigate();
+  const { searchedJobs, loading } = useSelector((state) => state.job);
 
   //get keyword from url
-  const keyword= new URLSearchParams(location.search).get("keyword");
+  const keyword = new URLSearchParams(location.search).get("keyword");
   console.log(keyword);
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
         dispatch(setLoading(true));
-        const data = await getFilteredJobsApi({keyword}); 
+        const data = await getFilteredJobsApi({ keyword });
         dispatch(setSearchedJobs(data.jobs));
       } catch (error) {
         console.log(error);
       }
-      finally{
+      finally {
         dispatch(setLoading(false));
       };
-    
+
     };
 
-   if(keyword) fetchJobs();
+    if (keyword) fetchJobs();
   }, [keyword]);
 
   return (
@@ -39,8 +40,15 @@ const Browse = () => {
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-        
-        <div className="mb-8">
+        <div className="flex gap-8 mt-14 mb-7 items-start">
+           <button
+          onClick={() => navigate("/")}
+          className="text-gray-500 hover:text-black text-shadow-neutral-950 text-xl mt-1"
+
+        >
+          ← Back
+        </button>
+        <div>
           <h1 className="text-2xl sm:text-3xl font-bold">
             Search Results for "{keyword}"
             <span className="text-muted-foreground text-base sm:text-lg ml-2">
@@ -51,6 +59,9 @@ const Browse = () => {
             Jobs matching your search
           </p>
         </div>
+        </div>
+       
+
 
         {!searchedJobs || searchedJobs.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">

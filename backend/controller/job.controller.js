@@ -150,20 +150,29 @@ export const getAllJob = async (req, res) => {
       const salaryConditions = [];
 
       ranges.forEach((range) => {
-        if (range === "0–30k") {
-          salaryConditions.push({ salary: { $gte: 0, $lte: 30000 } });
-        }
-        if (range === "30k–60k") {
-          salaryConditions.push({ salary: { $gte: 30000, $lte: 60000 } });
-        }
-        if (range === "60k–1L") {
-          salaryConditions.push({ salary: { $gte: 60000, $lte: 100000 } });
+        if (range === "0–1L") {
+          salaryConditions.push({ salary: { $gte: 0, $lte: 100000 } });
         }
         if (range === "1L–2L") {
           salaryConditions.push({ salary: { $gte: 100000, $lte: 200000 } });
         }
-        if (range === "2L+") {
-          salaryConditions.push({ salary: { $gte: 200000 } });
+        if (range === "2L–3L") {
+          salaryConditions.push({ salary: { $gte: 200000, $lte: 300000 } });
+        }
+        if (range === "3L–5L") {
+          salaryConditions.push({ salary: { $gte: 300000, $lte: 500000 } });
+        }
+        if (range === "5L–10L") {
+          salaryConditions.push({ salary: { $gte: 500000, $lte: 1000000 } });
+        }
+        if (range === "10L–20L") {
+          salaryConditions.push({ salary: { $gte: 1000000, $lte: 2000000 } });
+        }
+        if (range === "20L–30L") {
+          salaryConditions.push({ salary: { $gte: 2000000, $lte: 3000000 } });
+        }
+        if (range === "30L+") {
+          salaryConditions.push({ salary: { $gte: 3000000 } });
         }
       });
 

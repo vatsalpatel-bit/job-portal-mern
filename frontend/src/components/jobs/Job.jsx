@@ -11,7 +11,7 @@ import { applyJobApi } from "@/services/applicationApi";
 
 const Job = ({ job }) => {
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const { appliedJobs=[] } = useSelector((state) => state.job);
   const [applying, setApplying] = useState(false);
@@ -60,7 +60,7 @@ const Job = ({ job }) => {
 
       const res = await applyJobApi(job._id);
 
-      // dispatch(setAppliedJobs([...appliedJobs, job._id]));
+      dispatch(setAppliedJobs([...appliedJobs, job._id]));
       toast.success("Applied Successfully ✅");
 
     } catch (error) {

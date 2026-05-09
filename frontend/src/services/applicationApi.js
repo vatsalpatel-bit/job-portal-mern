@@ -18,7 +18,7 @@ export const getAppliedJobsApi = async () => {
   return res.data;
 };
 
-export const getApplicantsApi = async (jobId,page) => {
+export const getApplicantsApi = async (jobId, page) => {
   const res = await axios.get(
     `${APPLICATION_API_END_PORT}/${jobId}/applicant?page=${page}&limit=4`,
   );
@@ -58,3 +58,10 @@ export const updateApplicantStatusByIds = async (
   );
   return res.data;
 };
+
+export const undoApplicationApi = async (id) => {
+  const res = await axios.delete(`${APPLICATION_API_END_PORT}/application/${id}/delete`, {
+    withCredentials: true,
+  });
+  return res.status
+}
