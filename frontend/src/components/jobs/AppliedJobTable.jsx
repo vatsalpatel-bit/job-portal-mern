@@ -19,7 +19,6 @@ const AppliedJobTable = () => {
   const dispatch = useDispatch();
   const appliedJobs = useSelector((state) => state.job.appliedJobs || [])
   const [page, setPage] = useState(1);
-
   const limit = 5;
 
   const totalPages = Math.ceil(appliedJobs.length / limit);

@@ -58,105 +58,121 @@ const JobApplicantPage = () => {
 
         {/* Applicant List */}
         <div className="space-y-5 pt-5">
-          {applicant?.job?.application?.map((a) => (
-            <div
-              key={a?.applicant?._id}
-              className="bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition"
-            >
-              <div className="flex items-center justify-between">
+          {applicant?.job?.application?.length === 0 ? (
 
-                {/* LEFT */}
-                <div className="flex items-center gap-4">
+            <div className="flex flex-col items-center justify-center py-24 text-center">
 
-                  {/* Avatar */}
-                  {a.applicant?.profile?.profilePhoto ? (
-                    <img
-                      src={a.applicant.profile.profilePhoto}
-                      alt="profile"
-                      className="w-12 h-12 rounded-full object-cover border"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
-                      {a.applicant?.fullname?.[0]}
-                    </div>
-                  )}
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                No Applicants Yet
+              </h2>
 
-                  {/* Info */}
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-800">
-                      {a.applicant.fullname}
-                    </h3>
+              <p className="text-sm text-gray-500">
+                No one has applied for this job yet.
+              </p>
 
-                    {/* FIXED */}
-                    <p className="text-xs text-gray-400">
-                      Applied for this job
-                    </p>
-
-                    <div className="flex gap-4 mt-2 text-xs text-gray-500">
-                      <span>📧 {a.applicant.email}</span>
-                      <span>📞 +91 {a.applicant.phoneNumber}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* RIGHT */}
-                <div className="flex items-center gap-4">
-
-                  {/* STATUS */}
-                  <span
-                    className={`px-3 py-1 text-xs font-medium rounded-full ${a?.status === "accepted"
-                      ? "bg-green-100 text-green-700"
-                      : a?.status === "rejected"
-                        ? "bg-red-100 text-red-700"
-                        : "bg-yellow-100 text-yellow-700"
-                      }`}
-                  >
-                    {a?.status === "accepted" ? "Accepted" :
-                      a?.status === "rejected" ? "Rejected" :
-                        "Pending"}
-                  </span>
-
-                  {/* ACTIONS */}
-                  <div className="flex items-center gap-2">
-
-                    <button
-                      onClick={() => navigate(`/applicant/${a.applicant._id}/${jobId}/profile`)}
-                      className="px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100">
-                      View
-                    </button>
-
-                    {/* Pending → show both */}
-                    {a?.status === "pending" && (
-                      <>
-                        <button
-                          onClick={() => handleStatus(a._id, "accepted")}
-                          className="px-3 py-1 text-xs bg-green-50 text-green-600 rounded-md hover:bg-green-100">
-                          Accept
-                        </button>
-
-                        <button
-                          onClick={() => handleStatus(a._id, "rejected")}
-                          className="px-3 py-1 text-xs bg-red-50 text-red-600 rounded-md hover:bg-red-100">
-                          Reject
-                        </button>
-                      </>
-                    )}
-
-                    {/* Accepted OR Rejected → only Undo */}
-                    {(a?.status === "accepted" || a?.status === "rejected") && (
-                      <button
-                        onClick={() => handleStatus(a._id, "pending")}
-                        className="px-3 py-1 text-xs bg-gray-50 text-gray-600 rounded-md hover:bg-gray-100">
-                        Undo
-                      </button>
-                    )}
-
-                  </div>
-                </div>
-
-              </div>
             </div>
-          ))}
+
+          ) : (
+
+            applicant?.job?.application?.map((a) => (
+              <div
+                key={a?.applicant?._id}
+                className="bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition"
+              >
+                <div className="flex items-center justify-between">
+
+                  {/* LEFT */}
+                  <div className="flex items-center gap-4">
+
+                    {/* Avatar */}
+                    {a.applicant?.profile?.profilePhoto ? (
+                      <img
+                        src={a.applicant.profile.profilePhoto}
+                        alt="profile"
+                        className="w-12 h-12 rounded-full object-cover border"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
+                        {a.applicant?.fullname?.[0]}
+                      </div>
+                    )}
+
+                    {/* Info */}
+                    <div>
+                      <h3 className="text-sm font-semibold text-gray-800">
+                        {a.applicant.fullname}
+                      </h3>
+
+                      {/* FIXED */}
+                      <p className="text-xs text-gray-400">
+                        Applied for this job
+                      </p>
+
+                      <div className="flex gap-4 mt-2 text-xs text-gray-500">
+                        <span>📧 {a.applicant.email}</span>
+                        <span>📞 +91 {a.applicant.phoneNumber}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* RIGHT */}
+                  <div className="flex items-center gap-4">
+
+                    {/* STATUS */}
+                    <span
+                      className={`px-3 py-1 text-xs font-medium rounded-full ${a?.status === "accepted"
+                        ? "bg-green-100 text-green-700"
+                        : a?.status === "rejected"
+                          ? "bg-red-100 text-red-700"
+                          : "bg-yellow-100 text-yellow-700"
+                        }`}
+                    >
+                      {a?.status === "accepted" ? "Accepted" :
+                        a?.status === "rejected" ? "Rejected" :
+                          "Pending"}
+                    </span>
+
+                    {/* ACTIONS */}
+                    <div className="flex items-center gap-2">
+
+                      <button
+                        onClick={() => navigate(`/applicant/${a.applicant._id}/${jobId}/profile`)}
+                        className="px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100">
+                        View
+                      </button>
+
+                      {/* Pending → show both */}
+                      {a?.status === "pending" && (
+                        <>
+                          <button
+                            onClick={() => handleStatus(a._id, "accepted")}
+                            className="px-3 py-1 text-xs bg-green-50 text-green-600 rounded-md hover:bg-green-100">
+                            Accept
+                          </button>
+
+                          <button
+                            onClick={() => handleStatus(a._id, "rejected")}
+                            className="px-3 py-1 text-xs bg-red-50 text-red-600 rounded-md hover:bg-red-100">
+                            Reject
+                          </button>
+                        </>
+                      )}
+
+                      {/* Accepted OR Rejected → only Undo */}
+                      {(a?.status === "accepted" || a?.status === "rejected") && (
+                        <button
+                          onClick={() => handleStatus(a._id, "pending")}
+                          className="px-3 py-1 text-xs bg-gray-50 text-gray-600 rounded-md hover:bg-gray-100">
+                          Undo
+                        </button>
+                      )}
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            )))}
         </div>
         {/* Pagination */}
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-6xl flex items-center justify-between bg-white border rounded-xl px-6 py-4 shadow-lg">

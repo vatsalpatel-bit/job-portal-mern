@@ -121,11 +121,11 @@ const Navbar = () => {
                       }
                       className="object-cover"
                     />
-                   <AvatarFallback
-  className="bg-gray-100 text-gray-700 font-bold border"
->
-  {user?.fullname?.charAt(0)?.toUpperCase() || "U"}
-</AvatarFallback>
+                    <AvatarFallback
+                      className="bg-gray-100 text-gray-700 font-bold border"
+                    >
+                      {user?.fullname?.charAt(0)?.toUpperCase() || "U"}
+                    </AvatarFallback>
                   </Avatar>
 
                 </button>

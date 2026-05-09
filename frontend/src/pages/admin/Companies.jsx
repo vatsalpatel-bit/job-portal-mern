@@ -42,11 +42,11 @@ const Companies = () => {
         } else {
 
           data = await getAllCompanyApi(page);
-//        data = await getAdminJobStatus(page);
+          //        data = await getAdminJobStatus(page);
         }
 
         dispatch(setAllCompanies(data));
-//      dispatch(setAllAdminJobs(data));
+        //      dispatch(setAllAdminJobs(data));
       } catch (error) {
         console.log(error);
       }
@@ -172,7 +172,28 @@ const Companies = () => {
           </div>
 
           {/* Body */}
-          {allCompaies?.companies?.map((company) => (
+          {allCompaies?.companies?.length === 0 ? (
+
+            <div className="flex flex-col items-center justify-center py-24 text-center">
+
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                No Companies Found
+              </h2>
+
+              <p className="text-sm text-gray-500 mb-6">
+                You haven't created any company yet.
+              </p>
+
+              <Button
+                onClick={() => navigate("/admin/company/create")}
+                className="rounded-xl px-5"
+              >
+                Create Company
+              </Button>
+
+            </div>
+
+          ) : (allCompaies?.companies?.map((company) => (
             <div
               key={company._id}
               onClick={() => navigate(`/admin/company/${company._id}`)}
@@ -251,7 +272,7 @@ const Companies = () => {
 
               </div>
             </div>
-          ))}
+          )))}
         </div>
       </div>
     </div>

@@ -13,7 +13,7 @@ import { MoreVertical } from "lucide-react";
 import { Pencil, Trash2 } from "lucide-react";
 import { getAdminJobStatus } from "@/services/applicationApi";
 import { searchJobApi } from "@/services/jobApi";
-
+import { Button } from "@/components/ui/button";
 const CompanyJobsPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -92,134 +92,150 @@ const CompanyJobsPage = () => {
                 {/*  Jobs List */}
                 <div className="space-y-4">
 
-                    {jobs?.jobs?.map((job) => (
-                        <div
-                            key={job._id}
-                            className="bg-white p-5 rounded-xl shadow-sm flex justify-between items-center hover:shadow-md transition"
-                        >
+                    {jobs?.jobs?.length === 0 ? (
 
-                            {/* Left Section */}
-                            <div className="flex items-center gap-4">
+                        <div className="flex flex-col items-center justify-center py-24 text-center">
 
-                                {/* Job Info */}
-                                <div>
-                                    <h2 className="text-lg font-semibold">
-                                        {job.title}
-                                    </h2>
+                            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                                No Jobs Found
+                            </h2>
 
-                                    <p className="text-sm text-gray-500">
-                                        {job.company?.name}
-                                    </p>
+                            <p className="text-sm text-gray-500 mb-6">
+                                You haven't posted any jobs yet.
+                            </p>
 
-                                    {/* Meta Info */}
-                                    <div className="flex gap-4 text-sm text-gray-500 mt-1">
-
-                                        <span className="flex items-center gap-1">
-                                            <MapPin size={14} />
-                                            {job.location}
-                                        </span>
-
-                                        <span className="flex items-center gap-1">
-                                            <IndianRupee size={14} />
-                                            {job.salary}
-                                        </span>
-
-                                        <span className="flex items-center gap-1">
-                                            <Calendar size={14} />
-                                            {new Date(job.createdAt).toLocaleDateString("en-IN", {
-                                                day: "numeric",
-                                                month: "short",
-                                            })}
-                                        </span>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Right Section */}
-                            <div className="flex items-center gap-6">
-
-                                {/* Stats */}
-                                <div className="flex items-center gap-5 text-sm">
-
-                                    <div className="text-center">
-                                        <p className="text-[10px] text-gray-400">Total</p>
-                                        <p className="font-semibold text-gray-800">{job.total}</p>
-                                    </div>
-
-                                    <div className="text-center">
-                                        <p className="text-[10px] text-gray-400">Accepted</p>
-                                        <p className="font-semibold text-green-600">{job.accepted}</p>
-                                    </div>
-
-                                    <div className="text-center">
-                                        <p className="text-[10px] text-gray-400">Pending</p>
-                                        <p className="font-semibold text-yellow-600">{job.pending}</p>
-                                    </div>
-                                    <div className="text-center">
-                                        <p className="text-[10px] text-gray-400">Rejected</p>
-                                        <p className="font-semibold text-red-600">{job.rejected}</p>
-                                    </div>
-
-                                </div>
-
-                                {/* Divider */}
-                                <div className="h-6 w-px bg-gray-200"></div>
-
-                                {/* Actions */}
-                                <div className="flex items-center gap-2">
-
-                                    <button
-                                        onClick={() => navigate(`/admin/job/${job._id}/view`)}
-                                        className="px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
-                                    >
-                                        View
-                                    </button>
-
-                                    <button
-                                        onClick={() => navigate(`/admin/job/${job._id}/applicant`)}
-                                        className="px-3 py-1.5 text-xs font-medium text-purple-600 bg-purple-50 rounded-md hover:bg-purple-100"
-                                    >
-                                        Applicants
-                                    </button>
-
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <button className="p-2 rounded-md hover:bg-gray-100 transition">
-                                                <MoreVertical className="text-gray-500 w-4 h-4" />
-                                            </button>
-                                        </PopoverTrigger>
-
-                                        <PopoverContent
-                                            align="end"
-                                            className="w-40 p-1 rounded-lg shadow-lg border bg-white"
-                                        >
-                                            <button
-                                                onClick={() => navigate(`/admin/job/${job._id}/edit`)}
-                                                className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-100"
-                                            >
-                                                <Pencil className="w-4 h-4 text-gray-500" />
-                                                Edit
-                                            </button>
-
-                                            <div />
-
-                                        </PopoverContent>
-                                    </Popover>
-
-                                </div>
-
-                            </div>
+                            <Button
+                                onClick={() => navigate("/admin/job/create")}
+                                className="rounded-xl px-5"
+                            >
+                                Create Job
+                            </Button>
 
                         </div>
-                    ))}
 
-                    {/* Empty State */}
-                    {jobs?.length === 0 && (
-                        <p className="text-center text-gray-500 py-10 mt-50">
-                            No jobs found
-                        </p>
-                    )}
+                    ) : (
+
+                        jobs?.jobs?.map((job) => (
+                            <div
+                                key={job._id}
+                                className="bg-white p-5 rounded-xl shadow-sm flex justify-between items-center hover:shadow-md transition"
+                            >
+
+                                {/* Left Section */}
+                                <div className="flex items-center gap-4">
+
+                                    {/* Job Info */}
+                                    <div>
+                                        <h2 className="text-lg font-semibold">
+                                            {job.title}
+                                        </h2>
+
+                                        <p className="text-sm text-gray-500">
+                                            {job.company?.name}
+                                        </p>
+
+                                        {/* Meta Info */}
+                                        <div className="flex gap-4 text-sm text-gray-500 mt-1">
+
+                                            <span className="flex items-center gap-1">
+                                                <MapPin size={14} />
+                                                {job.location}
+                                            </span>
+
+                                            <span className="flex items-center gap-1">
+                                                <IndianRupee size={14} />
+                                                {job.salary}
+                                            </span>
+
+                                            <span className="flex items-center gap-1">
+                                                <Calendar size={14} />
+                                                {new Date(job.createdAt).toLocaleDateString("en-IN", {
+                                                    day: "numeric",
+                                                    month: "short",
+                                                })}
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Right Section */}
+                                <div className="flex items-center gap-6">
+
+                                    {/* Stats */}
+                                    <div className="flex items-center gap-5 text-sm">
+
+                                        <div className="text-center">
+                                            <p className="text-[10px] text-gray-400">Total</p>
+                                            <p className="font-semibold text-gray-800">{job.total}</p>
+                                        </div>
+
+                                        <div className="text-center">
+                                            <p className="text-[10px] text-gray-400">Accepted</p>
+                                            <p className="font-semibold text-green-600">{job.accepted}</p>
+                                        </div>
+
+                                        <div className="text-center">
+                                            <p className="text-[10px] text-gray-400">Pending</p>
+                                            <p className="font-semibold text-yellow-600">{job.pending}</p>
+                                        </div>
+                                        <div className="text-center">
+                                            <p className="text-[10px] text-gray-400">Rejected</p>
+                                            <p className="font-semibold text-red-600">{job.rejected}</p>
+                                        </div>
+
+                                    </div>
+
+                                    {/* Divider */}
+                                    <div className="h-6 w-px bg-gray-200"></div>
+
+                                    {/* Actions */}
+                                    <div className="flex items-center gap-2">
+
+                                        <button
+                                            onClick={() => navigate(`/admin/job/${job._id}/view`)}
+                                            className="px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
+                                        >
+                                            View
+                                        </button>
+
+                                        <button
+                                            onClick={() => navigate(`/admin/job/${job._id}/applicant`)}
+                                            className="px-3 py-1.5 text-xs font-medium text-purple-600 bg-purple-50 rounded-md hover:bg-purple-100"
+                                        >
+                                            Applicants
+                                        </button>
+
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <button className="p-2 rounded-md hover:bg-gray-100 transition">
+                                                    <MoreVertical className="text-gray-500 w-4 h-4" />
+                                                </button>
+                                            </PopoverTrigger>
+
+                                            <PopoverContent
+                                                align="end"
+                                                className="w-40 p-1 rounded-lg shadow-lg border bg-white"
+                                            >
+                                                <button
+                                                    onClick={() => navigate(`/admin/job/${job._id}/edit`)}
+                                                    className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-100"
+                                                >
+                                                    <Pencil className="w-4 h-4 text-gray-500" />
+                                                    Edit
+                                                </button>
+
+                                                <div />
+
+                                            </PopoverContent>
+                                        </Popover>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        )))}
 
                 </div>
                 {/* Pagination */}

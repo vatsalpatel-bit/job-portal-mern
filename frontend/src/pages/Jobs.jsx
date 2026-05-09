@@ -18,7 +18,6 @@ const Jobs = () => {
     industry: [],
     salary: []
   });
-
   const [filterOptions, setFilterOptions] = useState({
     // locations: [],
     industries: []
@@ -42,26 +41,26 @@ const Jobs = () => {
 
 
   useEffect(() => {
-  const fetchAppliedJobs = async () => {
-    try {
-      const res = await getAppliedJobsApi();
+    const fetchAppliedJobs = async () => {
+      try {
+        const res = await getAppliedJobsApi();
 
-      // extract job IDs
-      const jobIds = res.applications.map(
-        (app) => app.job._id || app.job
-      );
+        // extract job IDs
+        const jobIds = res.applications.map(
+          (app) => app.job._id || app.job
+        );
 
-      dispatch(setAppliedJobs(jobIds));
-//  dispatch(setAppliedJobs(res.data.applications));
-      // console.log(jobIds);
+        dispatch(setAppliedJobs(jobIds));
+        //  dispatch(setAppliedJobs(res.data.applications));
+        // console.log(jobIds);
 
-    } catch (error) {
-      console.log(error);
-    }
-  };
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-  fetchAppliedJobs();
-}, []);
+    fetchAppliedJobs();
+  }, []);
 
   // Initial load
   useEffect(() => {
