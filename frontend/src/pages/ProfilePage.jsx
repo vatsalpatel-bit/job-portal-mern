@@ -28,10 +28,12 @@ import {
 
 import { setUser } from "@/redux/slices/authslice";
 import { uploadProfilePhotoApi } from "@/services/authApi";
-
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const photoInputRef = useRef(null);
   const [open, setOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
@@ -173,8 +175,6 @@ const Profile = () => {
     }
   };
 
-
-
   // ---------------- RESUME UPLOAD ----------------
   const handleResumeUpload = async (e) => {
     const file = e.target.files[0];
@@ -218,6 +218,13 @@ const Profile = () => {
 
       <div className="pt-20 pb-10">
         <div className="mx-auto max-w-4xl px-6">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-1 text-gray-600 hover:text-black"
+          >
+            <ArrowLeft size={18} />
+            Back
+          </button>
           <div className="rounded-2xl border bg-background p-8 shadow-sm">
             {/* HEADER */}
             <div className="flex items-center justify-between gap-6">

@@ -12,6 +12,7 @@ const CompanyEdit = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { id: companyId } = useParams();
+    const [loading, setLoading] = useState(true);
     const singleCompany = useSelector(
         (state) => state.company.singleCompany
     );
@@ -40,8 +41,16 @@ const CompanyEdit = () => {
 
     useEffect(() => {
         const fetchCompanyApi = async () => {
-            const data = await getCompanyById(companyId);
-            dispatch(setSingleCompany(data.company))
+            try {
+                setLoading(true);
+                const data = await getCompanyById(companyId);
+                dispatch(setSingleCompany(data.company))
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false)
+            }
+
         }
         fetchCompanyApi();
     }, [companyId, dispatch])
@@ -63,6 +72,7 @@ const CompanyEdit = () => {
 
     const handleSubmit = async () => {
         try {
+            setLoading(true);
             const formData = new FormData();
 
             formData.append("name", form.name);
@@ -83,9 +93,27 @@ const CompanyEdit = () => {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false)
         }
     };
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
 
+                <div className="flex flex-col items-center gap-4">
+
+                    <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+
+                    <p className="text-sm text-gray-500">
+                        Loading ...
+                    </p>
+
+                </div>
+
+            </div>
+        );
+    }
     return (
         <div className="bg-gray-50 mt-16">
             <div className="max-w-4xl mx-auto px-6 py-12">

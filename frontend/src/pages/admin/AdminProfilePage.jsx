@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getAdminProfileApi } from '@/services/authApi';
@@ -8,17 +8,42 @@ import { setAdmin } from '@/redux/slices/authslice';
 const AdminProfilePage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(true);
     const user = useSelector((state) => state.auth.admin)
     console.log(user)
     useEffect(() => {
         const fetchAdminProfileApi = async () => {
-            const data = await getAdminProfileApi();
-            // console.log(data);
-            dispatch(setAdmin(data.profile))
+            try {
+                setLoading(true);
+                const data = await getAdminProfileApi();
+                // console.log(data);
+                dispatch(setAdmin(data.profile))
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
         };
         fetchAdminProfileApi();
     }, [dispatch])
 
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+
+                <div className="flex flex-col items-center gap-4">
+
+                    <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+
+                    <p className="text-sm text-gray-500">
+                        Loading profile...
+                    </p>
+
+                </div>
+
+            </div>
+        );
+    }
     return (
         <div className="bg-gray-50 mt-16 py-10 px-6">
 

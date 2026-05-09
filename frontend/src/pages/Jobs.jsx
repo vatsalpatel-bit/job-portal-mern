@@ -101,7 +101,19 @@ const Jobs = () => {
 
           <div className="overflow-y-auto pr-1">
             {loading ? (
-              <p>Loading jobs...</p>
+              <div className="min-h-screen flex items-center justify-center bg-gray-50">
+
+                <div className="flex flex-col items-center gap-4">
+
+                  <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+
+                  <p className="text-sm text-gray-500">
+                    Loading jobs...
+                  </p>
+
+                </div>
+
+              </div>
             ) : !allJobs || allJobs.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center">
                 <h2 className="text-xl font-semibold mb-2">

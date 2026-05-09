@@ -1,6 +1,6 @@
 import { setSingleJob } from '@/redux/slices/companiesSlice';
 import { getJobByIdApi } from '@/services/companyApi';
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
@@ -18,13 +18,22 @@ const JobViewPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { id: jobId } = useParams();
+    const [loading, setLoading] = useState(true)
     const job = useSelector((state) => state?.company?.singleJob);
     console.log(job?.application)
     useEffect(() => {
         const fetchJobApi = async () => {
-            const data = await getJobByIdApi(jobId);
-            // console.log(data.job);
-            dispatch(setSingleJob(data.job))
+            try {
+                setLoading(true);
+                const data = await getJobByIdApi(jobId);
+                // console.log(data.job);
+                dispatch(setSingleJob(data.job))
+            } catch (error) {
+                console.log(error);
+            }finally{
+                setLoading(false)
+            }
+
         }
         fetchJobApi();
     }, [dispatch, jobId]);
@@ -39,6 +48,23 @@ const JobViewPage = () => {
         return result;
     }, [job?.application]);
 
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+
+                <div className="flex flex-col items-center gap-4">
+
+                    <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+
+                    <p className="text-sm text-gray-500">
+                        Loading ...
+                    </p>
+
+                </div>
+
+            </div>
+        );
+    }
     return (
         <div className="bg-gray-50 p-6 mt-16">
 

@@ -21,6 +21,7 @@ const Companies = () => {
   const [search, setSearch] = useState("");
   const [debounceSearch, setDebounceSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const allCompaies = useSelector((state) => state.company.allCompanies);
 
   useEffect(() => {
@@ -28,30 +29,23 @@ const Companies = () => {
     const fetchCompanies = async () => {
 
       try {
-
+        setLoading(true);
         let data;
-
         if (debounceSearch) {
-
           data = await searchCompanyApi(
-            // data=await serachJobApi(
             debounceSearch,
             page
           );
-
         } else {
-
           data = await getAllCompanyApi(page);
-          //        data = await getAdminJobStatus(page);
         }
-
         dispatch(setAllCompanies(data));
-        //      dispatch(setAllAdminJobs(data));
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false)
       }
     };
-
     fetchCompanies();
 
   }, [page, debounceSearch]);
@@ -66,10 +60,27 @@ const Companies = () => {
     return () => clearTimeout(timer);
 
   }, [search]);
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
 
+        <div className="flex flex-col items-center gap-4">
+
+          <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+
+          <p className="text-sm text-gray-500">
+            Loading companies...
+          </p>
+
+        </div>
+
+      </div>
+    );
+  }
   return (
     <div className="bg-gray-50">
       <div className="max-w-6xl mx-auto px-6 py-10 mt-16">
+
 
         {/* Top Section */}
         <div className="flex items-center justify-between mb-8">

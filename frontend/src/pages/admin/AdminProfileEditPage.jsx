@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { editAdminProfileApi, getAdminProfileApi } from '@/services/authApi';
 import { setAdmin } from '@/redux/slices/authslice';
+
 const AdminProfileEditPage = () => {
     const navigate = useNavigate();
-    const dispatch  = useDispatch();
+    const dispatch = useDispatch();
     const [preview, setPreview] = useState(null);
     const [form, setForm] = useState(
         {
@@ -16,18 +17,28 @@ const AdminProfileEditPage = () => {
             logo: null,
         }
     )
+    const [loading, setLoading] = useState(true);
+
+
     useEffect(() => {
         const fetchAdminProfileApi = async () => {
-            const data = await getAdminProfileApi();
-            // console.log(data);
-            dispatch(setAdmin(data.profile));
+            try {
+                setLoading(true);
+                const data = await getAdminProfileApi();
+                // console.log(data);
+                dispatch(setAdmin(data.profile));
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+
         };
         fetchAdminProfileApi();
     }, [dispatch])
 
-
     const user = useSelector((state) => state.auth.admin);
-    console.log(user)
+    // console.log(user)
     useEffect(() => {
         if (user) {
             setForm({
@@ -56,6 +67,7 @@ const AdminProfileEditPage = () => {
 
     const handleSubmit = async () => {
         try {
+            setLoading(true);
             const formData = new FormData();
             formData.append("fullname", form.fullname)
             formData.append("email", form.email)
@@ -72,9 +84,28 @@ const AdminProfileEditPage = () => {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false)
         }
     }
 
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+
+                <div className="flex flex-col items-center gap-4">
+
+                    <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+
+                    <p className="text-sm text-gray-500">
+                        Loading ...
+                    </p>
+
+                </div>
+
+            </div>
+        );
+    }
 
     return (
         <div className="bg-gray-50 mt-16 py-10 px-6">

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getApplicantApi } from "@/services/authApi";
@@ -11,6 +11,7 @@ const ApplicantDetailPage = () => {
   const navigate = useNavigate();
   const { applicantId, jobId } = useParams();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
   const application = useSelector((state) => state.auth.applicant)
   const resumeUrl = application?.applicant?.profile?.resume;
   console.log(application)
@@ -18,9 +19,17 @@ const ApplicantDetailPage = () => {
 
   useEffect(() => {
     const fetchApplicantApi = async () => {
-      const data = await getApplicantApi(applicantId, jobId);
-      // console.log(data.response);
-      dispatch(setApplicant(data.response))
+      try {
+        setLoading(true);
+        const data = await getApplicantApi(applicantId, jobId);
+        // console.log(data.response);
+        dispatch(setApplicant(data.response))
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+
     }
     fetchApplicantApi();
   }, [applicantId, jobId, dispatch]);
@@ -34,6 +43,23 @@ const ApplicantDetailPage = () => {
     }
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+
+        <div className="flex flex-col items-center gap-4">
+
+          <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+
+          <p className="text-sm text-gray-500">
+            Loading ...
+          </p>
+
+        </div>
+
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-50 p-6 mt-16">

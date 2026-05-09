@@ -20,23 +20,30 @@ const jobEditPage = () => {
         experienceLevel: "",
     });
     const [companyName, setCompanyName] = useState("");
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchJobApi = async () => {
-
-            const data = await getJobByIdApi(jobId);
-            const job = data.job;
-            setInput({
-                title: job.title || "",
-                description: job.description || "",
-                requirements: job.requirements.join(", ") || "",
-                salary: job.salary || "",
-                location: job.location || "",
-                position: job.position || "",
-                jobType: job.jobType || "",
-                experienceLevel: job.experienceLevel || "",
-            })
-            setCompanyName( job.company.name );
+            try {
+                setLoading(true);
+                const data = await getJobByIdApi(jobId);
+                const job = data.job;
+                setInput({
+                    title: job.title || "",
+                    description: job.description || "",
+                    requirements: job.requirements.join(", ") || "",
+                    salary: job.salary || "",
+                    location: job.location || "",
+                    position: job.position || "",
+                    jobType: job.jobType || "",
+                    experienceLevel: job.experienceLevel || "",
+                })
+                setCompanyName(job.company.name);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false)
+            }
         }
         fetchJobApi();
     }, [jobId])
@@ -64,6 +71,7 @@ const jobEditPage = () => {
                 alert("Please fill all fields");
                 return;
             }
+            setLoading(true);
             const jobData = {
                 ...input,
                 requirements: Array.isArray(input.requirements)
@@ -84,9 +92,27 @@ const jobEditPage = () => {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false)
         }
     }
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
 
+                <div className="flex flex-col items-center gap-4">
+
+                    <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+
+                    <p className="text-sm text-gray-500">
+                        Loading ...
+                    </p>
+
+                </div>
+
+            </div>
+        );
+    }
     return (
         <div className="min-h-screen bg-gray-50 mt-16">
             <div className="max-w-3xl mx-auto px-6 py-10">

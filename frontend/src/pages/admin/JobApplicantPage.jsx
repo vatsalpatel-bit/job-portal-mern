@@ -10,6 +10,7 @@ const JobApplicantPage = () => {
   const { id: jobId } = useParams();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const applicant = useSelector((state) => state.application.allApplicant);
   console.log(applicant);
 
@@ -24,13 +25,38 @@ const JobApplicantPage = () => {
   }
   useEffect(() => {
     const fetchApplicantApi = async () => {
-      const data = await getApplicantsApi(jobId, page);
-      // console.log(data)
-      dispatch(setAllApplicant(data));
+      try {
+        setLoading(true)
+        const data = await getApplicantsApi(jobId, page);
+        // console.log(data)
+        dispatch(setAllApplicant(data));
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false)
+      }
+
     };
     fetchApplicantApi();
   }, [jobId, dispatch, page]);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+
+        <div className="flex flex-col items-center gap-4">
+
+          <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+
+          <p className="text-sm text-gray-500">
+            Loading applicants...
+          </p>
+
+        </div>
+
+      </div>
+    );
+  }
   return (
     <div className=" bg-gray-50 p-6 mt-16">
       <div className="max-w-6xl mx-auto space-y-6">

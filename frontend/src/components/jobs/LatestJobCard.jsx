@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setAppliedJobs} from "@/redux/slices/jobSlice";
+import { setAppliedJobs } from "@/redux/slices/jobSlice";
 import { toast } from "sonner";
 import { applyJobApi } from "@/services/applicationApi";
 
@@ -17,7 +17,7 @@ const LatestJobs = ({ job }) => {
   const { user } = useSelector((state) => state.auth);
 
   const [applied, setApplied] = useState(appliedJobs.includes(job._id));
-const [applying, setApplying] = useState(false);
+  const [applying, setApplying] = useState(false);
 
   if (!job) return null;
 
@@ -48,29 +48,29 @@ const [applying, setApplying] = useState(false);
     job.createdAt &&
     (new Date() - new Date(job.createdAt)) / (1000 * 60 * 60 * 24) <= 3;
 
- const handleApply = async (e) => {
-  e.stopPropagation();
+  const handleApply = async (e) => {
+    e.stopPropagation();
 
-  if (applied) return;
+    if (applied) return;
 
-  try {
-    setApplying(true);
+    try {
+      setApplying(true);
 
-    await applyJobApi(job._id);
+      await applyJobApi(job._id);
 
-    dispatch(setAppliedJobs([...appliedJobs, job._id]));
+      dispatch(setAppliedJobs([...appliedJobs, job._id]));
 
-    setApplied(true);   //  this immediately disables button
+      setApplied(true);   //  this immediately disables button
 
-    toast.success("Applied Successfully");  
+      toast.success("Applied Successfully");
 
-  } catch (err) {
-    console.log(err);
-    toast.error("Application failed");
-  } finally {
-    setApplying(false);
-  }
-};
+    } catch (err) {
+      console.log(err);
+      toast.error("Application failed");
+    } finally {
+      setApplying(false);
+    }
+  };
 
   return (
     <div className="rounded-2xl border bg-background p-6 transition hover:shadow-xl hover:-translate-y-1 duration-200 relative">
@@ -152,8 +152,8 @@ const [applying, setApplying] = useState(false);
           {applying
             ? "Applying..."
             : isApplied
-            ? "Already Applied"
-            : "Apply Now"}
+              ? "Already Applied"
+              : "Apply Now"}
         </Button>
       </div>
     </div>
