@@ -220,8 +220,8 @@ const Profile = () => {
         <div className="mx-auto max-w-4xl px-6">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-1 text-gray-600 hover:text-black"
-          >
+            className="flex items-center gap-1 text-gray-600 hover:text-black "
+          > 
             <ArrowLeft size={18} />
             Back
           </button>
@@ -384,10 +384,6 @@ const Profile = () => {
 
               </div>
             </div>
-
-
-
-
 
             {/* RESUME */}
 
