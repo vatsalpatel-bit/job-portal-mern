@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import notFoundImage from "@/svg/404Page.jpg";
+import notFoundImage from "@/svg/404Page.webp";
 
 const NotFound = () => {
     return (
@@ -10,7 +10,7 @@ const NotFound = () => {
             <img
                 src={notFoundImage}
                 alt="404"
-                className="w-80 mb-8"
+                className=" mb-8 w-150 object-cover"
             />
 
             {/* Button */}

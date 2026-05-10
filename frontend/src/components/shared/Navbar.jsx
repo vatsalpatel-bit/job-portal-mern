@@ -11,6 +11,7 @@ import { User2, LogOut, Link2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "@/services/authApi";
 import { setUser } from "@/redux/slices/authslice";
+import brandLogo from "@/svg/brand-logo.png"
 
 
 const Navbar = () => {
@@ -58,9 +59,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3">
           <div className="h-8 w-8 bg-primary rounded-sm" />
-          <span className="text-xl font-bold tracking-wide">
-            Execoore
-          </span>
+          <img src={brandLogo} className="h-5 font-bold tracking-wide"/>
         </Link>
 
         {/* Right Side */}
