@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { editCompanyApi } from "@/services/companyApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setSingleCompany } from "@/redux/slices/companiesSlice";
+import { toast } from "sonner";
 
 const CompanySetup = () => {
   const navigate = useNavigate();
@@ -56,13 +57,18 @@ const CompanySetup = () => {
       // }
 
       const data = await editCompanyApi(companyId, formData)
-
+      console.log(data);
       dispatch(setSingleCompany(data.company))
       if (data?.success) {
+        toast.success(data?.message);
         navigate("/admin/companies");
       }
-    } catch (error) {
+    }  catch (error) {
       console.log(error);
+      toast.error(
+        error?.response?.data?.message ||
+        "Something went wrong"
+      );
     }
   };
 

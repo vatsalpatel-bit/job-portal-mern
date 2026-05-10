@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { getAllCompanyApi, postJobApi } from '@/services/companyApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllCompanies } from '@/redux/slices/companiesSlice';
+import { toast } from 'sonner';
 
 
 const AdminJobCreate = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(true);
     const [input, setInput] = useState({
         title: "",
         description: "",
@@ -24,8 +26,16 @@ const AdminJobCreate = () => {
 
     useEffect(() => {
         const fetchCompanyApi = async () => {
-            const data = await getAllCompanyApi();
-            dispatch(setAllCompanies(data.companies))
+            try {
+                setLoading(true);
+                const data = await getAllCompanyApi();
+                dispatch(setAllCompanies(data.companies))
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+
         }
         fetchCompanyApi();
 
@@ -54,7 +64,7 @@ const AdminJobCreate = () => {
             ) {
                 alert("Please fill all fields");
                 return;
-            }
+            } setLoading(true);
             const jobData = {
                 ...input,
                 requirements: input.requirements
@@ -68,13 +78,36 @@ const AdminJobCreate = () => {
             const data = await postJobApi(jobData);
             console.log(data)
             if (data.success) {
+                toast.success(data?.message || "New job created successfully")
                 navigate("/admin/jobs")
             }
         } catch (error) {
             console.log(error);
+            toast.error(
+                error?.response?.data?.message ||
+                "Something went wrong"
+            );
+        } finally {
+            setLoading(false);
         }
     }
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center py-24">
 
+                <div className="flex flex-col items-center gap-3">
+
+                    <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+
+                    <p className="text-sm text-gray-500">
+                        Loading applicants...
+                    </p>
+
+                </div>
+
+            </div>
+        );
+    }
     return (
         <div className="bg-gray-50 mt-16">
             <div className="max-w-3xl mx-auto px-6 py-10">
@@ -207,8 +240,8 @@ const AdminJobCreate = () => {
                             className="w-full mt-1 border px-4 py-2 rounded">
                             <option value="">Select Company</option>
                             {allCompanies?.map((company) => (
-                                <option key={company._id} value={company._id}>
-                                    {company.name}
+                                <option key={company?._id} value={company?._id}>
+                                    {company?.name}
                                 </option>
                             ))}
 
@@ -218,8 +251,8 @@ const AdminJobCreate = () => {
                     {/* Buttons */}
                     <div className="flex justify-end gap-3 pt-4">
                         <button
-                        onClick={()=>navigate(-1)}
-                         className="px-5 py-2 border rounded-md hover:bg-gray-100">
+                            onClick={() => navigate(-1)}
+                            className="px-5 py-2 border rounded-md hover:bg-gray-100">
                             Cancel
                         </button>
 

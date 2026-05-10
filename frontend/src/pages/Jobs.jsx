@@ -12,7 +12,7 @@ import { setAppliedJobs } from "@/redux/slices/jobSlice";
 
 const Jobs = () => {
   const dispatch = useDispatch();
-  const { allJobs, loading } = useSelector((state) => state.job);// jobs come from redux 
+  const { allJobs, loading } = useSelector((state) => state.job);
   const [filters, setFilters] = useState({
     location: [],
     industry: [],
@@ -44,8 +44,6 @@ const Jobs = () => {
     const fetchAppliedJobs = async () => {
       try {
         const res = await getAppliedJobsApi();
-
-        // extract job IDs
         const jobIds = res.applications.map(
           (app) => app.job._id || app.job
         );
@@ -62,7 +60,6 @@ const Jobs = () => {
     fetchAppliedJobs();
   }, []);
 
-  // Initial load
   useEffect(() => {
     const handleFilterChange = async () => {
       try {

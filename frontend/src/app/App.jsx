@@ -52,7 +52,7 @@ const router = createBrowserRouter([
         )
       },
       {
-        path: "admin/companies/create",
+        path: "admin/companies/:id",
         element: (
           <CompanySetUp />)
       },

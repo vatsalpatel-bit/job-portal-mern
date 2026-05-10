@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { editCompanyApi, getCompanyById } from "@/services/companyApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setSingleCompany } from "@/redux/slices/companiesSlice";
+import { toast } from "sonner";
 
 const CompanyEdit = () => {
     const navigate = useNavigate();
@@ -83,16 +84,22 @@ const CompanyEdit = () => {
             if (form.logo) {
                 formData.append("logo", form.logo);
             }
-            for (let pair of formData.entries()) {
-                console.log(pair[0], pair[1]);
-            }
+            // for (let pair of formData.entries()) {
+            //     console.log(pair[0], pair[1]);
+            // }
 
             const data = await editCompanyApi(companyId, formData);
+            console.log(data)
             if (data?.success) {
+                toast.success(data?.message)
                 navigate("/admin/companies");
             }
         } catch (error) {
             console.log(error);
+            toast.error(
+                error?.response?.data?.message ||
+                "Something went wrong"
+            );
         } finally {
             setLoading(false)
         }

@@ -51,7 +51,7 @@ export const postJob = async (req, res) => {
       created_by: userId,
     });
 
-    return res.status(201).json({
+    return res.status(200).json({
       message: "New job created successfully",
       job,
       success: true,
@@ -88,7 +88,7 @@ export const updateJob = async (req, res) => {
     });
 
     if (!job) {
-      return res.status(401).json({
+      return res.status(404).json({
         message: "Job is not found",
         success: false,
       });

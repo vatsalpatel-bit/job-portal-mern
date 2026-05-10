@@ -220,8 +220,8 @@ export const updateProfile = async (req, res) => {
       user.profile.skills = Array.isArray(skills)
         ? skills
         : String(skills)
-            .split(",")
-            .map((s) => s.trim());
+          .split(",")
+          .map((s) => s.trim());
     }
 
     await user.save();
@@ -288,24 +288,26 @@ export const uploadUserResume = async (req, res) => {
     if (!user.profile) user.profile = {};
 
     // Upload to Cloudinary
-    const uploadResult = await new Promise((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream(
-          {
-            folder: "job-portal/resumes",
-            resource_type: "image",
-            format: "pdf",
-            public_id: req.file.originalname.split(".")[0],
-            overwrite: true,
-          },
-          (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          },
-        )
-        .end(req.file.buffer);
-    });
+    const uploadResult = await new Promise(
+  (resolve, reject) => {
 
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "job-portal/resumes",
+        resource_type: "raw",
+      },
+
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+
+    streamifier
+      .createReadStream(req.file.buffer)
+      .pipe(stream);
+  }
+);
     // SAVE INTO MONGODB (THIS WAS MISSING)
     user.profile.resume = uploadResult.secure_url;
     user.profile.resumeOringinalName = req.file.originalname;

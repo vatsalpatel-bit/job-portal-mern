@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getAllCompanyApi, getJobByIdApi, postJobApi, updateJobApi } from '@/services/companyApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllCompanies, setSingleJob } from '@/redux/slices/companiesSlice';
-
+import { toast } from 'sonner';
 
 const jobEditPage = () => {
     const navigate = useNavigate();
@@ -88,10 +88,14 @@ const jobEditPage = () => {
             const data = await updateJobApi(jobId, jobData);
             console.log(data);
             if (data?.success) {
+                toast.success(data?.message)
                 navigate("/admin/jobs")
             }
         } catch (error) {
             console.log(error);
+            toast.error(
+                error?.response?.data?.message||"Something went wrong"
+            );
         } finally {
             setLoading(false)
         }
@@ -246,7 +250,9 @@ const jobEditPage = () => {
 
                     {/* Buttons */}
                     <div className="flex justify-end gap-3 pt-4">
-                        <button className="px-5 py-2 border rounded-md hover:bg-gray-100">
+                        <button 
+                        onClick={()=>navigate(-1)}
+                        className="px-5 py-2 border rounded-md hover:bg-gray-100">
                             Cancel
                         </button>
 

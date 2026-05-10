@@ -1,25 +1,73 @@
 import { setSingleCompany } from '@/redux/slices/companiesSlice';
 import { deleteCompanyApi, getCompanyById, getCompanyStatus } from '@/services/companyApi';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner';
 
 const CompanyDetialPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id: companyId } = useParams();
+  const [loading, setLoading] = useState(true);
   const company = useSelector((state) => state.company.singleCompany)
-  console.log(company);
+  // console.log(company);
 
   useEffect(() => {
     const fetchCompnayStatusApi = async () => {
-      const data = await getCompanyStatus(companyId);
-      // console.log(data.companyStatus);
-      dispatch(setSingleCompany(data.companyStatus));
+      try {
+        setLoading(true);
+        const data = await getCompanyStatus(companyId);
+        // console.log(data.companyStatus);
+        dispatch(setSingleCompany(data.companyStatus));
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+
     }
     fetchCompnayStatusApi();
   }, [companyId, dispatch]);
 
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      "Delete company and all related jobs/applications?"
+    );
+
+    if (confirmDelete) {
+      try {
+        setLoading(true);
+        const data = await deleteCompanyApi(company._id);
+        toast.success(data?.message || "Company deleted successfully");
+        navigate(-1);
+      } catch (error) {
+        console.log(error);
+        toast.error(error?.response?.data?.message)
+      } finally {
+        setLoading(false)
+      }
+
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-24">
+
+        <div className="flex flex-col items-center gap-3">
+
+          <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+
+          <p className="text-sm text-gray-500">
+            Loading applicants...
+          </p>
+
+        </div>
+
+      </div>
+    );
+  }
   return (
     <div className="bg-gray-50 mt-16">
       <div className="max-w-5xl mx-auto px-6 py-10">
@@ -42,16 +90,7 @@ const CompanyDetialPage = () => {
             </button>
 
             <button
-              onClick={() => {
-                const confirmDelete = window.confirm(
-                  "Delete company and all related jobs/applications?"
-                );
-
-                if (confirmDelete) {
-                  deleteCompanyApi(company._id);
-                  navigate(-1)
-                }
-              }}
+              onClick={handleDelete}
               className="bg-red-500 text-white px-3 py-1 rounded"
             >
               Delete

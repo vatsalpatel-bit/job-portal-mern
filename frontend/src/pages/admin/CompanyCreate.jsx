@@ -31,7 +31,7 @@ const CreateCompany = () => {
     } catch (error) {
       console.error(error);
       const errorMessage = error?.res?.data?.message;
-      toast.error(errorMessage);
+      toast.error(errorMessage||"Something went wrong");
     }
   }
 

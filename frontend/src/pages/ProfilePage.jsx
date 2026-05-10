@@ -397,9 +397,10 @@ const Profile = () => {
               <div className="flex items-center gap-4">
                 {resume ? (
                   <a
-                    href={`https://docs.google.com/gview?url=${encodeURIComponent(resume)}&embedded=true`}
+                    href={`https://docs.google.com/viewer?url=${resume}&embedded=true`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
                   >
                     View Resume
                   </a>

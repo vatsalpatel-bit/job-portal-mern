@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { editAdminProfileApi, getAdminProfileApi } from '@/services/authApi';
 import { setAdmin } from '@/redux/slices/authslice';
+import { toast } from 'sonner';
 
 const AdminProfileEditPage = () => {
     const navigate = useNavigate();
@@ -80,10 +81,14 @@ const AdminProfileEditPage = () => {
             const data = await editAdminProfileApi(formData);
             console.log(data);
             if (data?.success) {
+                toast.success(data?.message)
                 navigate("/admin/profile")
             }
         } catch (error) {
             console.log(error);
+            toast.error(
+                error?.response?.data?.message 
+            );
         } finally {
             setLoading(false)
         }
