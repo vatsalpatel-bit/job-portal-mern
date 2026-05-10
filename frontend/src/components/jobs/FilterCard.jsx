@@ -37,20 +37,28 @@ const FilterCard = ({ options, onFilterChange }) => {
     });
   };
   return (
-    <div className="sticky top-24 rounded-2xl border bg-background p-6 h-fit">
+   <div className="rounded-3xl  bg-white p-5 shadow-sm overflow-hidden  sticky top-24">
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-semibold">Filter Jobs</h1>
+      <div className="flex items-center justify-between mb-7 ">
+        <div>
+          <h1 className="text-xl font-bold text-gray-900 tracking-tight">
+            Filter Jobs
+          </h1>
+
+          {/* <p className="text-sm text-gray-500 mt-1">
+            Find jobs faster
+          </p> */}
+        </div>
 
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setOpen(!open)}
-          className="md:hidden"
+          className="md:hidden rounded-xl hover:bg-white/70"
         >
           <ChevronDown
-            className={`h-4 w-4 transition ${open ? "rotate-180" : ""
+            className={`h-4 w-4 transition duration-300 ${open ? "rotate-180" : ""
               }`}
           />
         </Button>
@@ -84,16 +92,16 @@ const FilterCard = ({ options, onFilterChange }) => {
           </div> */}
 
           {/*  Industry */}
-          <div>
-            <h2 className="text-sm font-medium mb-3 text-muted-foreground">
+          <div className="rounded-2xl  backdrop-blur-sm p-5 shadow-sm bg-[#fffbf7]">
+            <h2 className="text-sm font-semibold mb-4 text-gray-700 tracking-wide">
               Industry
             </h2>
 
-            <div className="space-y-2">
+            <div className="space-y-3">
               {options?.industries?.map((industry) => (
                 <label
                   key={industry}
-                  className="flex items-center gap-3 text-sm cursor-pointer"
+                  className="flex items-center gap-3 text-sm text-gray-700 cursor-pointer hover:translate-x-1 transition duration-200"
                 >
                   <Checkbox
                     checked={filters.industry.includes(industry)}
@@ -101,23 +109,26 @@ const FilterCard = ({ options, onFilterChange }) => {
                       toggleFilter("industry", industry)
                     }
                   />
-                  {industry}
+
+                  <span className="font-medium">
+                    {industry}
+                  </span>
                 </label>
               ))}
             </div>
           </div>
 
           {/* Salary (Static for now) */}
-          <div>
-            <h2 className="text-sm font-medium mb-3 text-muted-foreground">
+          <div className="rounded-2xl bg-[#f4fffa] p-5 shadow-sm">
+            <h2 className="text-sm font-semibold mb-4 text-gray-700 tracking-wide">
               Salary
             </h2>
 
-            <div className="space-y-2">
-              {["0–1L", "1L–2L", "2L–3L","3L–5L","5L–10L","10L–20L","20L–30L","30L+"].map((range) => (
+            <div className="space-y-3">
+              {["0–1L", "1L–2L", "2L–3L", "3L–5L", "5L–10L", "10L–20L", "20L–30L", "30L+"].map((range) => (
                 <label
                   key={range}
-                  className="flex items-center gap-3 text-sm cursor-pointer"
+                  className="flex items-center gap-3 text-sm text-gray-700 cursor-pointer hover:translate-x-1 transition duration-200"
                 >
                   <Checkbox
                     checked={filters.salary.includes(range)}
@@ -125,7 +136,10 @@ const FilterCard = ({ options, onFilterChange }) => {
                       toggleFilter("salary", range)
                     }
                   />
-                  {range}
+
+                  <span className="font-medium">
+                    {range}
+                  </span>
                 </label>
               ))}
             </div>
@@ -134,7 +148,7 @@ const FilterCard = ({ options, onFilterChange }) => {
           {/* Clear Button */}
           <Button
             variant="outline"
-            className="w-full"
+            className="w-full rounded-2xl border-0 bg-white hover:bg-black hover:text-white text-gray-800 shadow-sm h-11 font-medium transition-all duration-300"
             onClick={clearFilters}
           >
             Clear All Filters

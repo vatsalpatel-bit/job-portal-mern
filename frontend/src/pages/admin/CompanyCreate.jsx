@@ -8,6 +8,7 @@ import { createCompanyApi } from "@/services/companyApi";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { setSingleCompany } from "@/redux/slices/companiesSlice";
+import Footer from "@/components/shared/Footer";
 
 const CreateCompany = () => {
   const navigate = useNavigate();
@@ -31,63 +32,165 @@ const CreateCompany = () => {
     } catch (error) {
       console.error(error);
       const errorMessage = error?.res?.data?.message;
-      toast.error(errorMessage||"Something went wrong");
+      toast.error(errorMessage || "Something went wrong");
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
+    <>
+      <div className="min-h-screen bg-[#f8fbff] overflow-hidden relative pt-18">
 
-      <div className="max-w-xl mx-auto px-6 py-16">
+        {/* Background Blur */}
+        <div className="absolute top-[-120px] left-[-80px] h-[320px] w-[320px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
 
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-semibold">
-            Your Company Name
-          </h1>
-          <p className="text-gray-500 mt-2 text-sm">
-            What would you like to give your company name? You can change this later.
-          </p>
-        </div>
+        <div className="absolute right-[-120px] top-[120px] h-[280px] w-[280px] rounded-full bg-[#fff4db] blur-3xl opacity-70" />
 
-        {/* Form Card */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
+        <div className="max-w-2xl mx-auto px-6 py-24 relative z-10">
 
-          {/* Input */}
-          <div className="mb-6">
-            <Label className="text-sm font-medium">
-              Company Name
-            </Label>
-            <Input
-              type="text"
-              value={companyName}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="JobHunt, Microsoft etc."
-              className="mt-2"
-            />
+          {/* Hero Card */}
+          <div
+            className="
+        relative overflow-hidden
+        rounded-[40px]
+        border border-white/60
+        bg-white/80
+        backdrop-blur-xl
+        shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+        p-8 sm:p-10
+        "
+          >
+
+            {/* Glow */}
+            <div className="absolute top-[-100px] right-[-80px] h-[240px] w-[240px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
+
+            {/* Header */}
+            <div className="relative z-10 mb-10">
+
+              {/* Badge */}
+              <div
+                className="
+            inline-flex items-center
+            rounded-full
+            bg-[#eef4ff]
+            px-4 py-2
+            text-sm font-medium text-blue-700
+            mb-6
+            "
+              >
+                🏢 Company Setup
+              </div>
+
+              {/* Title */}
+              <h1
+                className="
+            text-4xl sm:text-5xl
+            font-extrabold
+            tracking-tight
+            text-gray-900
+            leading-tight
+            "
+              >
+                Your Company Name
+              </h1>
+
+              {/* Subtitle */}
+              <p className="text-gray-600 mt-5 text-base leading-8 max-w-lg">
+                What would you like to call your company?
+                You can always change this later.
+              </p>
+
+            </div>
+
+            {/* Form Card */}
+            <div
+              className="
+          relative z-10
+          rounded-[32px]
+          bg-[#f8fbff]
+          border border-[#edf2ff]
+          p-6 sm:p-7
+          "
+            >
+
+              {/* Input */}
+              <div className="mb-8">
+
+                <Label className="text-sm font-semibold text-gray-700">
+                  Company Name
+                </Label>
+
+                <Input
+                  type="text"
+                  value={companyName}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="JobHunt, Microsoft etc."
+                  className="
+              mt-3 h-14
+              rounded-2xl
+              border-0
+              bg-white
+              px-5
+              shadow-sm
+              focus-visible:ring-2 focus-visible:ring-blue-200
+              "
+                />
+
+              </div>
+
+              {/* Buttons */}
+              <div className="flex flex-col sm:flex-row justify-end gap-4">
+
+                {/* Cancel */}
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/admin/companies")}
+                  className="
+              h-12 px-6
+              rounded-2xl
+              border-0
+              bg-white
+              hover:bg-gray-100
+              text-gray-700
+              shadow-sm
+              "
+                >
+                  Cancel
+                </Button>
+
+                {/* Continue */}
+                <Button
+                  disabled={!companyName}
+                  onClick={handleCreateCompany}
+                  className="
+              h-12 px-7
+              rounded-2xl
+              bg-gradient-to-r from-blue-600 to-violet-600
+              hover:from-blue-700 hover:to-violet-700
+              text-white
+              font-medium
+              shadow-[0_10px_25px_rgba(59,130,246,0.25)]
+              transition-all duration-300
+              hover:-translate-y-0.5
+              disabled:opacity-50
+              disabled:pointer-events-none
+              "
+                >
+                  Continue
+                </Button>
+
+              </div>
+
+            </div>
+
           </div>
 
-          {/* Buttons */}
-          <div className="flex justify-end gap-3">
-            <Button
-              variant="outline"
-              onClick={() => navigate("/admin/companies")}   
-            >
-              Cancel
-            </Button>
-
-            <Button
-              disabled={!companyName}     // check 
-              onClick={handleCreateCompany}
-            >
-              Continue
-            </Button>
-          </div>
-
         </div>
+
       </div>
-    </div>
+
+      <Footer />
+
+    </>
   );
 };
 

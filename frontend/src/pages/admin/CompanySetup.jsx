@@ -8,6 +8,7 @@ import { editCompanyApi } from "@/services/companyApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setSingleCompany } from "@/redux/slices/companiesSlice";
 import { toast } from "sonner";
+import Footer from "@/components/shared/Footer";
 
 const CompanySetup = () => {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ const CompanySetup = () => {
         toast.success(data?.message);
         navigate("/admin/companies");
       }
-    }  catch (error) {
+    } catch (error) {
       console.log(error);
       toast.error(
         error?.response?.data?.message ||
@@ -73,96 +74,310 @@ const CompanySetup = () => {
   };
 
   return (
-    <div className="bg-gray-50 mt-16">
-      <div className="max-w-4xl mx-auto px-6 py-12">
+    <>
+      <div className="min-h-screen bg-[#f8fbff] overflow-hidden relative pt-24">
 
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-8">
-          <button
-            onClick={() => navigate("/admin/companies")}
-            className="flex items-center gap-1 text-gray-600 hover:text-black"
+        {/* Background Blur */}
+        <div className="absolute top-[-120px] left-[-80px] h-[320px] w-[320px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
+
+        <div className="absolute right-[-120px] top-[120px] h-[280px] w-[280px] rounded-full bg-[#fff4db] blur-3xl opacity-70" />
+
+        <div className="max-w-5xl mx-auto px-6 py-16 relative z-10">
+
+          {/* Top Header */}
+          <div
+            className="
+        flex flex-col sm:flex-row
+        sm:items-center sm:justify-between
+        gap-5
+        mb-10
+        "
           >
-            <ArrowLeft size={18} />
-            Back
-          </button>
-          <h1 className="text-2xl font-semibold">Company Setup</h1>
-        </div>
 
-        {/* Form */}
-        <div className="bg-white p-8 rounded-2xl shadow-sm border grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Left */}
+            <div>
 
-          {/* Company Name */}
-          <div>
-            <Label>Company Name</Label>
-            <Input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder={singleCompany?.name}
-              className="mt-2 placeholder-gray-900"
-            />
+              {/* Back */}
+              <button
+                onClick={() => navigate("/admin/companies")}
+                className="
+            inline-flex items-center gap-2
+            rounded-full
+            bg-white/80
+            backdrop-blur-md
+            border border-white/60
+            px-5 py-2
+            text-sm font-medium text-gray-700
+            shadow-sm
+            hover:bg-white
+            transition-all duration-300
+            mb-5
+            "
+              >
+                <ArrowLeft size={16} />
+                Back
+              </button>
+
+              {/* Heading */}
+              <h1
+                className="
+            text-4xl sm:text-5xl
+            font-extrabold
+            tracking-tight
+            text-gray-900
+            "
+              >
+                Company Setup
+              </h1>
+
+              <p className="mt-4 text-gray-600 text-base leading-7 max-w-2xl">
+                Configure your company details, branding and public information.
+              </p>
+
+            </div>
+
           </div>
 
-          {/* Description */}
-          <div>
-            <Label>Description</Label>
-            <Input
-              name="description"
-              value={form.description}
-              onChange={handleChange}
-              placeholder="Enter description"
-              className="mt-2"
-            />
-          </div>
+          {/* Main Form Card */}
+          <div
+            className="
+        relative overflow-hidden
+        rounded-[40px]
+        border border-white/60
+        bg-white/80
+        backdrop-blur-xl
+        shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+        p-8 sm:p-10
+        "
+          >
 
-          {/* Website */}
-          <div>
-            <Label>Website</Label>
-            <Input
-              name="website"
-              value={form.website}
-              onChange={handleChange}
-              placeholder="Enter website"
-              className="mt-2"
-            />
-          </div>
+            {/* Glow */}
+            <div className="absolute top-[-100px] right-[-80px] h-[240px] w-[240px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
 
-          {/* Location */}
-          <div>
-            <Label>Location</Label>
-            <Input
-              name="location"
-              value={form.location}
-              onChange={handleChange}
-              placeholder="Enter location"
-              className="mt-2"
-            />
-          </div>
-
-          {/* Logo (Full width) */}
-          <div className="md:col-span-2">
-            <Label>Logo</Label>
-            <Input
-              type="file"
-              name="logo"
-              onChange={handleChange}
-              className="mt-2"
-            />
-          </div>
-
-          {/* Button */}
-          <div className="md:col-span-2 flex justify-end">
-            <Button
-              onClick={handleSubmit}
-              disabled={!handleSubmit}
-              className="w-full md:w-auto px-8"
+            {/* Badge */}
+            <div
+              className="
+          relative z-10
+          inline-flex items-center
+          rounded-full
+          bg-[#eef4ff]
+          px-4 py-2
+          text-sm font-medium text-blue-700
+          mb-8
+          "
             >
-              Done
-            </Button>
+              🏢 Company Information
+            </div>
+
+            {/* FORM GRID */}
+            <div
+              className="
+          relative z-10
+          grid grid-cols-1 md:grid-cols-2
+          gap-6
+          "
+            >
+
+              {/* Company Name */}
+              <div>
+
+                <Label className="text-sm font-semibold text-gray-700">
+                  Company Name
+                </Label>
+
+                <Input
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder={singleCompany?.name}
+                  className="
+              mt-3 h-14
+              rounded-2xl
+              border-0
+              bg-[#f8fbff]
+              px-5
+              placeholder:text-gray-400
+              shadow-none
+              focus-visible:ring-2 focus-visible:ring-blue-200
+              "
+                />
+
+              </div>
+
+              {/* Description */}
+              <div>
+
+                <Label className="text-sm font-semibold text-gray-700">
+                  Description
+                </Label>
+
+                <Input
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  placeholder="Enter description"
+                  className="
+              mt-3 h-14
+              rounded-2xl
+              border-0
+              bg-[#f8fbff]
+              px-5
+              shadow-none
+              focus-visible:ring-2 focus-visible:ring-blue-200
+              "
+                />
+
+              </div>
+
+              {/* Website */}
+              <div>
+
+                <Label className="text-sm font-semibold text-gray-700">
+                  Website
+                </Label>
+
+                <Input
+                  name="website"
+                  value={form.website}
+                  onChange={handleChange}
+                  placeholder="https://company.com"
+                  className="
+              mt-3 h-14
+              rounded-2xl
+              border-0
+              bg-[#f8fbff]
+              px-5
+              shadow-none
+              focus-visible:ring-2 focus-visible:ring-blue-200
+              "
+                />
+
+              </div>
+
+              {/* Location */}
+              <div>
+
+                <Label className="text-sm font-semibold text-gray-700">
+                  Location
+                </Label>
+
+                <Input
+                  name="location"
+                  value={form.location}
+                  onChange={handleChange}
+                  placeholder="Enter location"
+                  className="
+              mt-3 h-14
+              rounded-2xl
+              border-0
+              bg-[#f8fbff]
+              px-5
+              shadow-none
+              focus-visible:ring-2 focus-visible:ring-blue-200
+              "
+                />
+
+              </div>
+
+              {/* Logo Upload */}
+              <div className="md:col-span-2">
+
+                <div
+                  className="
+              rounded-[28px]
+              bg-[#f8fbff]
+              border border-[#edf2ff]
+              p-6
+              "
+                >
+
+                  <Label className="text-sm font-semibold text-gray-700">
+                    Company Logo
+                  </Label>
+
+                  <p className="text-sm text-gray-500 mt-2 mb-5">
+                    Upload your company logo to personalize your brand.
+                  </p>
+
+                  <Input
+                    type="file"
+                    name="logo"
+                    onChange={handleChange}
+                    className="
+                border-0
+                bg-white
+                rounded-2xl
+                h-14
+                px-4
+                shadow-sm
+                "
+                  />
+
+                </div>
+
+              </div>
+
+              {/* Action Buttons */}
+              <div
+                className="
+            md:col-span-2
+            flex flex-col sm:flex-row
+            justify-end gap-4
+            pt-4
+            "
+              >
+
+                {/* Cancel */}
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/admin/companies")}
+                  className="
+              h-12 px-6
+              rounded-2xl
+              border-0
+              bg-white
+              hover:bg-gray-100
+              text-gray-700
+              shadow-sm
+              "
+                >
+                  Cancel
+                </Button>
+
+                {/* Save */}
+                <Button
+                  onClick={handleSubmit}
+                  disabled={!handleSubmit}
+                  className="
+              h-12 px-8
+              rounded-2xl
+              bg-gradient-to-r from-blue-600 to-violet-600
+              hover:from-blue-700 hover:to-violet-700
+              text-white
+              font-medium
+              shadow-[0_10px_25px_rgba(59,130,246,0.25)]
+              transition-all duration-300
+              hover:-translate-y-0.5
+              disabled:opacity-50
+              disabled:pointer-events-none
+              "
+                >
+                  Save Changes
+                </Button>
+
+              </div>
+
+            </div>
+
           </div>
+
         </div>
+
       </div>
-    </div>
+
+      <Footer />
+
+    </>
   );
 };
 

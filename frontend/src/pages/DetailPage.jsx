@@ -8,6 +8,7 @@ import { applyJobApi, undoApplicationApi } from "@/services/applicationApi";
 import { useSelector, useDispatch } from "react-redux";
 import { setAppliedJobs } from "@/redux/slices/jobSlice";
 import { toast } from "sonner";
+import Footer from "@/components/shared/Footer";
 
 const DetailPage = () => {
   const { id } = useParams(); // get id from URL
@@ -81,111 +82,211 @@ const DetailPage = () => {
   }
 
   return (
-    <>
-      <Navbar />
+  <>
+  <Navbar />
 
-      <div className="min-h-screen bg-gray-50 pt-20 pb-12">
+  <div className="min-h-screen bg-[#f8fbff] pt-28 pb-16 overflow-hidden relative">
 
-        <div className="max-w-5xl mx-auto px-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="text-gray-500 hover:text-black text-shadow-neutral-950 text-xl mb-2.5 "
-          >
-            ← Back
-          </button>
+    {/* Background Blur */}
+    <div className="absolute top-[-120px] left-[-80px] h-[320px] w-[320px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
 
-          {/* OUTER LAYER */}
-          <div className="bg-white border rounded-3xl shadow-sm p-10">
+    <div className="absolute right-[-120px] top-[80px] h-[280px] w-[280px] rounded-full bg-[#fff4db] blur-3xl opacity-70" />
 
-            {/* Top Section */}
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
+    <div className="max-w-6xl mx-auto px-6 relative z-10">
 
-              {/* Left */}
-              <div className="flex-1">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="
+        mb-6
+        inline-flex items-center gap-2
+        rounded-full
+        bg-white/80
+        backdrop-blur-md
+        border border-white/60
+        px-5 py-2
+        text-sm font-medium text-gray-700
+        shadow-sm
+        hover:bg-white
+        transition-all duration-300
+        "
+      >
+        ← Back
+      </button>
 
-                {/* Company */}
-                <div className="flex items-center gap-4 mb-6">
+      {/* Main Card */}
+      <div
+        className="
+        rounded-[36px]
+        border border-white/60
+        bg-white/80
+        backdrop-blur-xl
+        shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+        p-8 sm:p-10 lg:p-12
+        "
+      >
 
-                  <div className="w-14 h-14 rounded-2xl border bg-white overflow-hidden flex items-center justify-center">
-                    <img
-                      src={job?.company?.logo}
-                      alt="logo"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
+        {/* TOP */}
+        <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-10">
 
-                  <div>
-                    <h2 className="text-lg font-semibold text-gray-900">
-                      {job?.company?.name}
-                    </h2>
+          {/* LEFT */}
+          <div className="flex-1">
 
-                    <p className="text-sm text-gray-500">
-                      {job?.location}
-                    </p>
-                  </div>
+            {/* Company */}
+            <div className="flex items-center gap-5 mb-8">
 
-                </div>
+              <div
+                className="
+                w-16 h-16
+                rounded-3xl
+                bg-[#f8fbff]
+                border border-[#edf2ff]
+                overflow-hidden
+                flex items-center justify-center
+                shadow-sm
+                "
+              >
+                <img
+                  src={job?.company?.logo}
+                  alt="logo"
+                  className="w-full h-full object-cover"
+                />
+              </div>
 
-                {/* Job Title */}
-                <h1 className="text-4xl font-bold tracking-tight text-gray-900 leading-tight">
-                  {job?.title}
-                </h1>
+              <div>
 
-                {/* Tags */}
-                <div className="flex flex-wrap items-center gap-3 mt-6">
+                <h2 className="text-xl font-bold text-gray-900 tracking-tight">
+                  {job?.company?.name}
+                </h2>
 
-                  <span className="px-4 py-1.5 rounded-full bg-gray-100 text-sm font-medium text-gray-700">
-                    {job?.position} Positions
-                  </span>
-
-                  <span className="px-4 py-1.5 rounded-full bg-orange-50 text-sm font-medium text-orange-700">
-                    {job?.jobType}
-                  </span>
-
-                  <span className="px-4 py-1.5 rounded-full bg-purple-50 text-sm font-medium text-purple-700">
-                    ₹ {job?.salary}
-                  </span>
-
-                  <span className="text-sm text-gray-500">
-                    {job?.experienceLevel} Years Experience
-                  </span>
-
-                </div>
+                <p className="text-sm text-gray-500 mt-1">
+                  {job?.location}
+                </p>
 
               </div>
 
-              {/* Right */}
-              <div className="flex flex-col items-end gap-3">
+            </div>
 
-                <div className="flex items-center gap-3">
+            {/* Title */}
+            <h1
+              className="
+              text-4xl sm:text-5xl
+              font-extrabold
+              tracking-tight
+              text-gray-900
+              leading-[1.1]
+              max-w-3xl
+              "
+            >
+              {job?.title}
+            </h1>
 
-                  {/* Apply */}
-                  <Button
-                    disabled={isApplied}
-                    onClick={handleApply}
-                    className={`h-12 px-8 rounded-xl text-sm font-medium
-      ${isApplied
-                        ? "bg-gray-300 hover:bg-gray-300 text-gray-600"
-                        : "bg-black hover:bg-gray-800 text-white"
-                      }`}
-                  >
-                    {isApplied ? "Already Applied" : "Apply Now"}
-                  </Button>
+            {/* Tags */}
+            <div className="flex flex-wrap items-center gap-3 mt-8">
 
-                  {/* Undo */}
-                  {isApplied && (
-                    <Button
-                      variant="outline"
-                      onClick={handleUndo}
-                      className="h-12 px-6 rounded-xl text-sm font-medium"
-                    >
-                      Undo
-                    </Button>
-                  )}
+              <span
+                className="
+                px-4 py-2 rounded-full
+                bg-[#eef4ff]
+                text-sm font-medium text-blue-700
+                shadow-sm
+                "
+              >
+                {job?.position} Positions
+              </span>
 
-                </div>
-                <p className="text-sm text-gray-400">
-                  Posted{" "}
+              <span
+                className="
+                px-4 py-2 rounded-full
+                bg-[#fff4db]
+                text-sm font-medium text-orange-700
+                shadow-sm
+                "
+              >
+                {job?.jobType}
+              </span>
+
+              <span
+                className="
+                px-4 py-2 rounded-full
+                bg-[#f3e8ff]
+                text-sm font-medium text-purple-700
+                shadow-sm
+                "
+              >
+                ₹ {job?.salary}
+              </span>
+
+              <span
+                className="
+                px-4 py-2 rounded-full
+                bg-[#ecfdf3]
+                text-sm font-medium text-green-700
+                shadow-sm
+                "
+              >
+                {job?.experienceLevel} Years Experience
+              </span>
+
+            </div>
+
+          </div>
+
+          {/* RIGHT */}
+          <div
+            className="
+            xl:min-w-[260px]
+            rounded-3xl
+            bg-[#f8fbff]
+            border border-[#edf2ff]
+            p-6
+            shadow-sm
+            "
+          >
+
+            <div className="flex flex-col gap-4">
+
+              {/* Apply */}
+              <Button
+                disabled={isApplied}
+                onClick={handleApply}
+                className={`
+                h-12 rounded-2xl text-sm font-medium shadow-md
+                ${isApplied
+                    ? "bg-gray-300 hover:bg-gray-300 text-gray-600"
+                    : "bg-black hover:bg-gray-900 text-white"
+                  }
+                `}
+              >
+                {isApplied ? "Already Applied" : "Apply Now"}
+              </Button>
+
+              {/* Undo */}
+              {isApplied && (
+                <Button
+                  variant="outline"
+                  onClick={handleUndo}
+                  className="
+                  h-12 rounded-2xl
+                  border-0
+                  bg-white
+                  hover:bg-gray-100
+                  text-sm font-medium
+                  shadow-sm
+                  "
+                >
+                  Undo Application
+                </Button>
+              )}
+
+              {/* Date */}
+              <div className="pt-2 text-center">
+
+                <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">
+                  Posted On
+                </p>
+
+                <p className="text-sm font-medium text-gray-700">
                   {new Date(job?.createdAt).toLocaleDateString("en-IN", {
                     day: "numeric",
                     month: "short",
@@ -197,65 +298,76 @@ const DetailPage = () => {
 
             </div>
 
-            {/* Divider */}
-            <div className="my-10 h-px bg-gray-200" />
+          </div>
 
-            {/* Description */}
-            <div>
+        </div>
 
-              <h2 className="text-xl font-semibold text-gray-900 mb-5">
-                Job Description
-              </h2>
+        {/* Divider */}
+        <div className="my-12 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
 
-              <p className="text-[15px] leading-8 text-gray-600">
-                {job?.description}
+        {/* Description */}
+        <div>
+
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Job Description
+          </h2>
+
+          <p className="text-[15px] leading-8 text-gray-600 max-w-4xl">
+            {job?.description}
+          </p>
+
+        </div>
+
+        {/* Divider */}
+        <div className="my-12 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+
+        {/* Details */}
+        <div>
+
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">
+            Job Details
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+            <div className="rounded-3xl bg-[#eef4ff] p-5 shadow-sm">
+              <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">
+                Role
               </p>
 
+              <h3 className="font-semibold text-gray-900">
+                {job?.title}
+              </h3>
             </div>
 
-            {/* Details */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-10 mt-10">
+            <div className="rounded-3xl bg-[#fff4db] p-5 shadow-sm">
+              <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">
+                Location
+              </p>
 
-              <div>
-                <p className="text-sm text-gray-500 mb-1">
-                  Role
-                </p>
+              <h3 className="font-semibold text-gray-900">
+                {job?.location}
+              </h3>
+            </div>
 
-                <h3 className="font-medium text-gray-900">
-                  {job?.title}
-                </h3>
-              </div>
+            <div className="rounded-3xl bg-[#f3e8ff] p-5 shadow-sm">
+              <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">
+                Experience
+              </p>
 
-              <div>
-                <p className="text-sm text-gray-500 mb-1">
-                  Location
-                </p>
+              <h3 className="font-semibold text-gray-900">
+                {job?.experienceLevel} Years
+              </h3>
+            </div>
 
-                <h3 className="font-medium text-gray-900">
-                  {job?.location}
-                </h3>
-              </div>
+            <div className="rounded-3xl bg-[#ecfdf3] p-5 shadow-sm">
+              <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">
+                Salary
+              </p>
 
-              <div>
-                <p className="text-sm text-gray-500 mb-1">
-                  Experience
-                </p>
-
-                <h3 className="font-medium text-gray-900">
-                  {job?.experienceLevel} Years
-                </h3>
-              </div>
-
-              <div>
-                <p className="text-sm text-gray-500 mb-1">
-                  Salary
-                </p>
-
-                <h3 className="font-medium text-gray-900">
-                  ₹ {job?.salary}
-                </h3>
-              </div>
-
+              <h3 className="font-semibold text-gray-900">
+                ₹ {job?.salary}
+              </h3>
             </div>
 
           </div>
@@ -263,7 +375,13 @@ const DetailPage = () => {
         </div>
 
       </div>
-    </>
+
+    </div>
+
+  </div>
+
+  <Footer />
+</>
   );
 };
 

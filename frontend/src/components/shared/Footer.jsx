@@ -1,96 +1,271 @@
-import { Facebook, Twitter, Linkedin, Github } from "lucide-react";
+import {
+  Facebook,
+  Twitter,
+  Linkedin,
+  Github
+} from "lucide-react";
+import brandLogo from "@/svg/brand-logo.png"
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-muted/40 ">
-      <div className="mx-auto max-w-7xl px-6 py-14">
 
-        {/* Top */}
-        <div className="grid grid-cols-4 gap-10 pb-10">
+    <footer className="relative w-full overflow-hidden bg-[#0b0f19]">
 
-          {/* Brand */}
-          <div className="col-span-1 space-y-4">
-            <h2 className="text-2xl font-bold text-foreground">
-              Execoore
-            </h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Helping you find your dream job or hire top talent with a
-              modern and powerful hiring platform.
+      {/* Gradient Blur */}
+      <div className="absolute top-0 left-0 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
+
+      <div className="mx-auto max-w-7xl px-6 py-20 relative z-10">
+
+        {/* Main Container */}
+        <div
+          className="
+          rounded-[36px]
+          border border-white/10
+          bg-white/[0.03]
+          backdrop-blur-xl
+          shadow-[0_10px_50px_rgba(0,0,0,0.35)]
+          p-10 lg:p-14
+          "
+        >
+          {/* TOP */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1px_2fr] gap-14 pb-14">
+
+            {/* LEFT SIDE */}
+            <div className="space-y-8">
+
+              {/* Logo */}
+              <div className="flex items-center gap-3">
+
+
+                <img
+                  src={brandLogo}
+                  className="h-5 tracking-wide transition duration-300 group-hover:opacity-80"
+                />
+
+              </div>
+
+              {/* Description */}
+              <p className="text-sm leading-7 text-gray-400 max-w-sm">
+                Helping candidates discover dream jobs and empowering recruiters
+                with a modern hiring experience built for the future of hiring.
+              </p>
+
+
+
+              {/* Social */}
+              <div className="flex items-center gap-3 pt-2">
+
+                <a
+                  className="
+        rounded-2xl p-3
+        bg-white/5
+        border border-white/10
+        text-gray-400
+        hover:bg-white
+        hover:text-black
+        transition-all duration-300
+        "
+                  href="#"
+                >
+                  <Facebook className="h-4 w-4" />
+                </a>
+
+                <a
+                  className="
+        rounded-2xl p-3
+        bg-white/5
+        border border-white/10
+        text-gray-400
+        hover:bg-white
+        hover:text-black
+        transition-all duration-300
+        "
+                  href="#"
+                >
+                  <Twitter className="h-4 w-4" />
+                </a>
+
+                <a
+                  className="
+        rounded-2xl p-3
+        bg-white/5
+        border border-white/10
+        text-gray-400
+        hover:bg-white
+        hover:text-black
+        transition-all duration-300
+        "
+                  href="#"
+                >
+                  <Linkedin className="h-4 w-4" />
+                </a>
+
+                <a
+                  className="
+        rounded-2xl p-3
+        bg-white/5
+        border border-white/10
+        text-gray-400
+        hover:bg-white
+        hover:text-black
+        transition-all duration-300
+        "
+                  href="#"
+                >
+                  <Github className="h-4 w-4" />
+                </a>
+
+              </div>
+
+            </div>
+
+            {/* CENTER SEPARATOR */}
+            <div className="hidden lg:block w-px bg-white/10" />
+
+            {/* RIGHT SIDE */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
+
+              {/* Candidates */}
+              <div>
+
+                <h4
+                  className="
+        mb-6 text-sm font-semibold
+        uppercase tracking-[0.2em]
+        text-white
+        "
+                >
+                  Candidates
+                </h4>
+
+                <ul className="space-y-4 text-sm text-gray-400">
+
+                  <li className="hover:text-white transition cursor-pointer">
+                    Browse
+                  </li>
+                  <li className="hover:text-white transition cursor-pointer">
+                    Jobs
+                  </li>
+
+                  <li className="hover:text-white transition cursor-pointer">
+                    Profile
+                  </li>
+
+
+                </ul>
+
+              </div>
+
+              {/* Recruiters */}
+              <div>
+
+                <h4
+                  className="
+        mb-6 text-sm font-semibold
+        uppercase tracking-[0.2em]
+        text-white
+        "
+                >
+                  Recruiters
+                </h4>
+
+                <ul className="space-y-4 text-sm text-gray-400">
+
+                  <li className="hover:text-white transition cursor-pointer">
+                    Companies
+                  </li>
+
+                  <li className="hover:text-white transition cursor-pointer">
+                    Jobs
+                  </li>
+
+                  <li className="hover:text-white transition cursor-pointer">
+                    Applicants
+                  </li>
+                </ul>
+
+              </div>
+
+              {/* Resources */}
+              <div>
+
+                <h4
+                  className="
+        mb-6 text-sm font-semibold
+        uppercase tracking-[0.2em]
+        text-white
+        "
+                >
+                  Resources
+                </h4>
+
+                <ul className="space-y-4 text-sm text-gray-400">
+
+                  <li className="hover:text-white transition cursor-pointer">
+                    About
+                  </li>
+
+                  <li className="hover:text-white transition cursor-pointer">
+                    Help Center
+                  </li>
+
+                  <li className="hover:text-white transition cursor-pointer">
+                    Privacy Policy
+                  </li>
+
+                  <li className="hover:text-white transition cursor-pointer">
+                    Terms & Conditions
+                  </li>
+
+                </ul>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* Separator */}
+          <div className="h-px bg-white/10" />
+
+          {/* Bottom */}
+          <div
+            className="
+            flex flex-col md:flex-row
+            items-center justify-between
+            gap-5 pt-7
+            "
+          >
+
+            <p className="text-sm text-gray-500">
+              © {new Date().getFullYear()} NextWork. All rights reserved.
             </p>
 
-            {/* Social */}
-            <div className="flex items-center gap-4 pt-2">
-              <a className="rounded-full p-2 bg-background hover:bg-primary/10 transition" href="#">
-                <Facebook className="h-4 w-4 text-muted-foreground hover:text-primary" />
-              </a>
-              <a className="rounded-full p-2 bg-background hover:bg-primary/10 transition" href="#">
-                <Twitter className="h-4 w-4 text-muted-foreground hover:text-primary" />
-              </a>
-              <a className="rounded-full p-2 bg-background hover:bg-primary/10 transition" href="#">
-                <Linkedin className="h-4 w-4 text-muted-foreground hover:text-primary" />
-              </a>
-              <a className="rounded-full p-2 bg-background hover:bg-primary/10 transition" href="#">
-                <Github className="h-4 w-4 text-muted-foreground hover:text-primary" />
-              </a>
+            <div className="flex items-center gap-6 text-sm text-gray-500">
+
+              <span className="hover:text-white cursor-pointer transition">
+                Privacy
+              </span>
+
+              <span className="hover:text-white cursor-pointer transition">
+                Terms
+              </span>
+
+              <span className="hover:text-white cursor-pointer transition">
+                Security
+              </span>
+
             </div>
+
           </div>
 
-          {/* Links */}
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-foreground">
-              Company
-            </h4>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li className="hover:text-primary cursor-pointer">About Us</li>
-              <li className="hover:text-primary cursor-pointer">Careers</li>
-              <li className="hover:text-primary cursor-pointer">Blog</li>
-              <li className="hover:text-primary cursor-pointer">Contact</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-foreground">
-              Candidates
-            </h4>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li className="hover:text-primary cursor-pointer">Browse Jobs</li>
-              <li className="hover:text-primary cursor-pointer">Saved Jobs</li>
-              <li className="hover:text-primary cursor-pointer">Job Alerts</li>
-              <li className="hover:text-primary cursor-pointer">Profile</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-foreground">
-              Recruiters
-            </h4>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li className="hover:text-primary cursor-pointer">Post a Job</li>
-              <li className="hover:text-primary cursor-pointer">Browse Candidates</li>
-              <li className="hover:text-primary cursor-pointer">Pricing</li>
-              <li className="hover:text-primary cursor-pointer">Dashboard</li>
-            </ul>
-          </div>
-
-        </div>
-
-        {/* Bottom */}
-        <div className="flex items-center justify-between border-t border-border/40 pt-6 text-sm text-muted-foreground">
-          <p>
-            © {new Date().getFullYear()} Execoore. All rights reserved.
-          </p>
-
-          <div className="flex gap-6">
-            <span className="hover:text-primary cursor-pointer">Privacy</span>
-            <span className="hover:text-primary cursor-pointer">Terms</span>
-            <span className="hover:text-primary cursor-pointer">Security</span>
-          </div>
         </div>
 
       </div>
+
     </footer>
+
   );
 };
 
 export default Footer;
- 

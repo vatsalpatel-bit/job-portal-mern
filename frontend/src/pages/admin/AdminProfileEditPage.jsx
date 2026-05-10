@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { editAdminProfileApi, getAdminProfileApi } from '@/services/authApi';
 import { setAdmin } from '@/redux/slices/authslice';
 import { toast } from 'sonner';
+import Footer from '@/components/shared/Footer';
+import { ArrowLeft } from 'lucide-react';
 
 const AdminProfileEditPage = () => {
     const navigate = useNavigate();
@@ -113,155 +115,367 @@ const AdminProfileEditPage = () => {
     }
 
     return (
-        <div className="bg-gray-50 mt-16 py-10 px-6">
+      <>
+  <div className="min-h-screen bg-[#f7faff] overflow-hidden relative pt-24">
 
-            <div className="max-w-4xl mx-auto bg-white border rounded-3xl shadow-sm overflow-hidden">
+    {/* Background Effects */}
+    <div className="absolute top-[-140px] left-[-100px] h-[340px] w-[340px] rounded-full bg-[#e9f2ff] blur-3xl opacity-80" />
 
-                {/* Header */}
-                <div className="px-8 py-6 border-b from-slate-50 to-gray-100 flex items-center justify-between">
+    <div className="absolute right-[-120px] top-[120px] h-[320px] w-[320px] rounded-full bg-[#fff3d9] blur-3xl opacity-70" />
 
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900">
-                            Edit Profile
-                        </h1>
+    <div className="max-w-5xl mx-auto px-6 py-16 relative z-10">
 
-                        <p className="text-sm text-gray-500 mt-1">
-                            Update your recruiter information
-                        </p>
-                    </div>
+      {/* Main Card */}
+      <div
+        className="
+        relative overflow-hidden
+        rounded-[40px]
+        bg-white/80
+        backdrop-blur-2xl
+        border border-white/70
+        shadow-[0_20px_60px_rgba(15,23,42,0.06)]
+        "
+      >
 
+        {/* Top Gradient */}
+        <div
+          className="
+          h-40
+          bg-gradient-to-r
+          from-[#dfeeff]
+          via-[#eef5ff]
+          to-[#fff5df]
+          "
+        />
 
+        {/* Content */}
+        <div className="relative px-8 sm:px-10 pb-10">
+
+          {/* Header */}
+          <div
+            className="
+            -mt-16
+            flex flex-col xl:flex-row
+            xl:items-end xl:justify-between
+            gap-8
+            "
+          >
+
+            {/* Left */}
+            <div className="flex flex-col sm:flex-row sm:items-end gap-6">
+
+              {/* Avatar */}
+              <div className="relative">
+
+                <img
+                  src={preview || user?.profile?.profilePhoto}
+                  alt="profile"
+                  className="
+                  w-32 h-32
+                  rounded-full
+                  object-cover
+                  border-[6px] border-white
+                  shadow-xl
+                  "
+                />
+
+                {/* Status Dot */}
+                <div
+                  className="
+                  absolute bottom-3 right-3
+                  h-5 w-5
+                  rounded-full
+                  bg-green-500
+                  border-4 border-white
+                  "
+                />
+
+              </div>
+
+              {/* Info */}
+              <div className="pb-2">
+
+                {/* Badge */}
+                <div
+                  className="
+                  inline-flex items-center
+                  rounded-full
+                  bg-[#eef4ff]
+                  px-4 py-2
+                  text-sm font-medium text-blue-700
+                  mb-4
+                  "
+                >
+                  ✨ Edit Recruiter Profile
                 </div>
 
-                {/* Form */}
-                <div className="p-8">
+                {/* Title */}
+                <h1
+                  className="
+                  text-4xl sm:text-5xl
+                  font-black
+                  tracking-tight
+                  text-gray-900
+                  "
+                >
+                  Edit Profile
+                </h1>
 
-                    {/* Avatar */}
-                    <div className="flex items-center gap-5 mb-10">
+                <p className="text-gray-500 text-base mt-4 leading-7">
+                  Update your recruiter information and personal details.
+                </p>
 
-                        {/* Image Preview */}
-                        <img
-                            src={preview || user?.profile?.profilePhoto}
-                            alt="logo"
-                            className="w-24 h-24 rounded-2xl object-cover border shadow-md"
-                        />
-
-                        <div>
-
-                            {/* Upload Button */}
-                            <label
-                                htmlFor="logoUpload"
-                                className="inline-flex items-center justify-center h-11 px-5 rounded-xl border bg-white text-sm font-medium cursor-pointer hover:bg-gray-50 transition"
-                            >
-                                Change Logo
-                            </label>
-
-                            {/* Hidden Input */}
-                            <input
-                                type="file"
-                                name="logo"
-                                id="logoUpload"
-                                className="hidden"
-                                onChange={handleChange}
-                            />
-
-                            <p className="text-xs text-gray-400 mt-2">
-                                JPG, PNG up to 2MB
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    {/* Inputs */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                        {/* Full Name */}
-                        <div>
-                            <label className="text-sm font-medium text-gray-700 mb-2 block">
-                                Full Name
-                            </label>
-
-                            <input
-                                name='fullname'
-                                value={form.fullname}
-                                onChange={handleChange}
-                                type="text"
-                                placeholder="Enter full name"
-                                className="w-full h-12 rounded-xl border bg-gray-50 px-4 outline-none focus:ring-2 focus:ring-black"
-                            />
-                        </div>
-
-                        {/* Email */}
-                        <div>
-                            <label className="text-sm font-medium text-gray-700 mb-2 block">
-                                Email Address
-                            </label>
-
-                            <input
-                                name='email'
-                                value={form.email}
-                                onChange={handleChange}
-                                type="email"
-                                placeholder="Enter email"
-                                className="w-full h-12 rounded-xl border bg-gray-50 px-4 outline-none focus:ring-2 focus:ring-black"
-                            />
-                        </div>
-
-                        {/* Phone */}
-                        <div>
-                            <label className="text-sm font-medium text-gray-700 mb-2 block">
-                                Phone Number
-                            </label>
-
-                            <input
-                                name='phoneNumber'
-                                value={form.phoneNumber}
-                                onChange={handleChange}
-                                type="text"
-                                placeholder="Enter phone number"
-                                className="w-full h-12 rounded-xl border bg-gray-50 px-4 outline-none focus:ring-2 focus:ring-black"
-                            />
-                        </div>
-
-                        {/* Role */}
-                        <div>
-                            <label className="text-sm font-medium text-gray-700 mb-2 block">
-                                Role
-                            </label>
-
-                            <input
-                                type="text"
-                                value={user?.role}
-                                disabled
-                                className="w-full h-12 rounded-xl border bg-gray-100 px-4 text-black-500 cursor-not-allowed"
-                            />
-                        </div>
-
-                    </div>
-
-                    {/* Footer Buttons */}
-                    <div className="flex items-center justify-end gap-4 mt-10">
-
-                        <button
-                            onClick={() => navigate(-1)}
-                            className="h-11 px-5 rounded-xl border text-sm font-medium hover:bg-gray-50 transition">
-                            Cancel
-                        </button>
-
-                        <button
-                            onClick={handleSubmit}
-                            className="h-11 px-5 rounded-xl bg-black text-white text-sm font-medium hover:bg-gray-800 transition">
-                            Update Profile
-                        </button>
-
-                    </div>
-
-                </div>
+              </div>
 
             </div>
 
+          </div>
+
+          {/* Divider */}
+          <div className="my-10 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+
+          {/* Upload Section */}
+          <div
+            className="
+            rounded-[30px]
+            bg-[#f9fbff]
+            border border-[#edf2ff]
+            p-6
+            mb-10
+            "
+          >
+
+            <div
+              className="
+              flex flex-col sm:flex-row
+              sm:items-center sm:justify-between
+              gap-5
+              "
+            >
+
+              {/* Left */}
+              <div>
+
+                <h2 className="text-xl font-bold text-gray-900">
+                  Profile Picture
+                </h2>
+
+                <p className="text-sm text-gray-500 mt-2">
+                  Upload a professional profile image.
+                </p>
+
+              </div>
+
+              {/* Upload */}
+              <div>
+
+                <label
+                  htmlFor="logoUpload"
+                  className="
+                  inline-flex items-center justify-center
+                  h-12 px-6
+                  rounded-2xl
+                  bg-white
+                  hover:bg-gray-100
+                  border border-[#edf2ff]
+                  text-sm font-medium text-gray-700
+                  shadow-sm
+                  cursor-pointer
+                  transition-all duration-300
+                  "
+                >
+                  Change Photo
+                </label>
+
+                <input
+                  type="file"
+                  name="logo"
+                  id="logoUpload"
+                  className="hidden"
+                  onChange={handleChange}
+                />
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* FORM GRID */}
+          <div
+            className="
+            grid grid-cols-1 md:grid-cols-2
+            gap-7
+            "
+          >
+
+            {/* Full Name */}
+            <div>
+
+              <label className="text-sm font-semibold text-gray-700 mb-3 block">
+                Full Name
+              </label>
+
+              <input
+                name="fullname"
+                value={form.fullname}
+                onChange={handleChange}
+                type="text"
+                placeholder="Enter full name"
+                className="
+                w-full h-14
+                rounded-2xl
+                border border-[#edf2ff]
+                bg-[#f9fbff]
+                px-5
+                text-gray-900
+                outline-none
+                transition-all duration-300
+                focus:ring-4 focus:ring-blue-100
+                "
+              />
+
+            </div>
+
+            {/* Email */}
+            <div>
+
+              <label className="text-sm font-semibold text-gray-700 mb-3 block">
+                Email Address
+              </label>
+
+              <input
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                type="email"
+                placeholder="Enter email"
+                className="
+                w-full h-14
+                rounded-2xl
+                border border-[#edf2ff]
+                bg-[#f9fbff]
+                px-5
+                text-gray-900
+                outline-none
+                transition-all duration-300
+                focus:ring-4 focus:ring-blue-100
+                "
+              />
+
+            </div>
+
+            {/* Phone */}
+            <div>
+
+              <label className="text-sm font-semibold text-gray-700 mb-3 block">
+                Phone Number
+              </label>
+
+              <input
+                name="phoneNumber"
+                value={form.phoneNumber}
+                onChange={handleChange}
+                type="text"
+                placeholder="Enter phone number"
+                className="
+                w-full h-14
+                rounded-2xl
+                border border-[#edf2ff]
+                bg-[#f9fbff]
+                px-5
+                text-gray-900
+                outline-none
+                transition-all duration-300
+                focus:ring-4 focus:ring-blue-100
+                "
+              />
+
+            </div>
+
+            {/* Role */}
+            <div>
+
+              <label className="text-sm font-semibold text-gray-700 mb-3 block">
+                Role
+              </label>
+
+              <input
+                type="text"
+                value={user?.role}
+                disabled
+                className="
+                w-full h-14
+                rounded-2xl
+                border border-[#edf2ff]
+                bg-gray-100
+                px-5
+                text-gray-500
+                cursor-not-allowed
+                "
+              />
+
+            </div>
+
+          </div>
+
+          {/* Footer Buttons */}
+          <div
+            className="
+            flex flex-col sm:flex-row
+            items-center justify-end
+            gap-4
+            mt-12
+            "
+          >
+
+            {/* Cancel */}
+            <button
+              onClick={() => navigate(-1)}
+              className="
+              h-12 px-6
+              rounded-2xl
+              bg-white
+              hover:bg-gray-100
+              border border-[#edf2ff]
+              text-sm font-medium text-gray-700
+              shadow-sm
+              transition-all duration-300
+              "
+            >
+              Cancel
+            </button>
+
+            {/* Save */}
+            <button
+              onClick={handleSubmit}
+              className="
+              h-12 px-7
+              rounded-2xl
+              bg-gradient-to-r from-blue-600 to-violet-600
+              hover:from-blue-700 hover:to-violet-700
+              text-white
+              text-sm font-medium
+              shadow-[0_10px_25px_rgba(59,130,246,0.25)]
+              transition-all duration-300
+              hover:-translate-y-0.5
+              "
+            >
+              Update Profile
+            </button>
+
+          </div>
+
         </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <Footer />
+</>
     )
 }
 

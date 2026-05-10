@@ -48,53 +48,138 @@ const AppliedJobTable = () => {
   }, [dispatch]);
 
   return (
-    <div className="rounded-xl border bg-background">
+    <div
+      className="
+  overflow-hidden
+  rounded-[32px]
+  border border-white/60
+  bg-white/80
+  backdrop-blur-xl
+  shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+  "
+    >
+
       <Table>
 
+        {/* HEADER */}
         <TableHeader>
-          <TableRow>
-            <TableHead>Date</TableHead>
-            <TableHead>Job Role</TableHead>
-            <TableHead>Company</TableHead>
-            <TableHead className="text-right">Status</TableHead>
+
+          <TableRow className="border-b border-gray-100 bg-[#f8fbff] hover:bg-[#f8fbff]">
+
+            <TableHead className="h-14 px-6 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Date
+            </TableHead>
+
+            <TableHead className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Job Role
+            </TableHead>
+
+            <TableHead className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Company
+            </TableHead>
+
+            <TableHead className="text-right text-xs font-semibold uppercase tracking-wider text-gray-500 pr-6">
+              Status
+            </TableHead>
+
           </TableRow>
+
         </TableHeader>
+
+        {/* BODY */}
         <TableBody>
+
           {paginatedJobs.map((item) => (
-            <TableRow key={item._id}>
-              <TableCell>
+
+            <TableRow
+              key={item._id}
+              className="
+          border-b border-gray-100/80
+          hover:bg-[#f8fbff]/60
+          transition-colors
+          "
+            >
+
+              {/* Date */}
+              <TableCell className="px-6 py-5 text-sm text-gray-500">
                 {new Date(item.createdAt).toLocaleDateString()}
               </TableCell>
 
-              <TableCell className="font-medium">
+              {/* Job Role */}
+              <TableCell
+                className="
+            py-5
+            text-[15px]
+            font-semibold
+            text-gray-900
+            "
+              >
                 {item.job?.title}
               </TableCell>
 
-              <TableCell>
+              {/* Company */}
+              <TableCell className="py-5 text-sm text-gray-600">
                 {item.job?.company?.name}
               </TableCell>
 
-              <TableCell className="text-right">
-                <Badge className="rounded-full px-3">
+              {/* Status */}
+              <TableCell className="py-5 pr-6 text-right">
+
+                <Badge
+                  className={`
+              rounded-full px-4 py-1.5
+              text-xs font-semibold
+              border-0 shadow-sm
+
+              ${item.status === "accepted"
+                      ? "bg-[#ecfdf3] text-green-700"
+                      : item.status === "rejected"
+                        ? "bg-[#fef2f2] text-red-700"
+                        : "bg-[#eef4ff] text-blue-700"
+                    }
+              `}
+                >
                   {item.status}
                 </Badge>
+
               </TableCell>
+
             </TableRow>
+
           ))}
+
         </TableBody>
+
       </Table>
-      <div className="flex items-center justify-between px-4 py-4 border-t bg-white rounded-b-xl">
+
+      {/* PAGINATION */}
+      <div
+        className="
+    flex flex-col md:flex-row
+    items-center justify-between
+    gap-5
+    px-6 py-5
+    border-t border-gray-100
+    bg-white/60
+    backdrop-blur-xl
+    "
+      >
 
         {/* Left */}
         <p className="text-sm text-gray-500">
+
           Page{" "}
-          <span className="font-semibold text-black">
+
+          <span className="font-semibold text-gray-900">
             {page}
           </span>{" "}
+
           of{" "}
-          <span className="font-semibold text-black">
+
+          <span className="font-semibold text-gray-900">
             {totalPages}
           </span>
+
         </p>
 
         {/* Right */}
@@ -104,30 +189,42 @@ const AppliedJobTable = () => {
           <button
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
-            className={`px-4 py-2 rounded-lg border text-sm font-medium transition
+            className={`
+        h-11 px-5 rounded-2xl
+        text-sm font-medium
+        transition-all duration-300
+
         ${page === 1
                 ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                : "bg-white hover:bg-gray-100"
-              }`}
+                : "bg-white hover:bg-gray-100 shadow-sm"
+              }
+        `}
           >
             Previous
           </button>
 
           {/* Pages */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
 
             {[...Array(totalPages)].map((_, index) => {
+
               const pageNumber = index + 1;
 
               return (
                 <button
                   key={pageNumber}
                   onClick={() => setPage(pageNumber)}
-                  className={`w-10 h-10 rounded-lg text-sm font-semibold transition
+                  className={`
+              h-11 w-11
+              rounded-2xl
+              text-sm font-semibold
+              transition-all duration-300
+
               ${page === pageNumber
-                      ? "bg-black text-white"
-                      : "bg-white border hover:bg-gray-100"
-                    }`}
+                      ? "bg-black text-white shadow-md"
+                      : "bg-white hover:bg-gray-100 shadow-sm"
+                    }
+              `}
                 >
                   {pageNumber}
                 </button>
@@ -140,11 +237,16 @@ const AppliedJobTable = () => {
           <button
             disabled={page === totalPages}
             onClick={() => setPage(page + 1)}
-            className={`px-4 py-2 rounded-lg border text-sm font-medium transition
+            className={`
+        h-11 px-5 rounded-2xl
+        text-sm font-medium
+        transition-all duration-300
+
         ${page === totalPages
                 ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                : "bg-white hover:bg-gray-100"
-              }`}
+                : "bg-white hover:bg-gray-100 shadow-sm"
+              }
+        `}
           >
             Next
           </button>
@@ -152,6 +254,7 @@ const AppliedJobTable = () => {
         </div>
 
       </div>
+
     </div>
 
 

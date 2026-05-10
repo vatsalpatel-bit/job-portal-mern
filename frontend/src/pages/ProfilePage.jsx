@@ -30,6 +30,7 @@ import { setUser } from "@/redux/slices/authslice";
 import { uploadProfilePhotoApi } from "@/services/authApi";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Footer from "@/components/shared/Footer";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -213,237 +214,513 @@ const Profile = () => {
 
   // ---------------- UI ----------------
   return (
-    <>
-      <Navbar />
+  <>
+  <Navbar />
 
-      <div className="pt-20 pb-10">
-        <div className="mx-auto max-w-4xl px-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-1 text-gray-600 hover:text-black "
-          > 
-            <ArrowLeft size={18} />
-            Back
-          </button>
-          <div className="rounded-2xl border bg-background p-8 shadow-sm">
-            {/* HEADER */}
-            <div className="flex items-center justify-between gap-6">
-              {/* LEFT: Avatar + Name */}
-              <div className="flex items-center gap-5">
-                {/* PROFILE PHOTO */}
-                <div
-                  className="relative group cursor-pointer shrink-0"
-                  onClick={() => {
-                    if (!photoUploading) photoInputRef.current.click();
-                  }}
+  <div className="min-h-screen bg-[#f8fbff] pt-28 pb-16 overflow-hidden relative">
+
+    {/* Background Blur */}
+    <div className="absolute top-[-120px] left-[-80px] h-[320px] w-[320px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
+
+    <div className="absolute right-[-120px] top-[120px] h-[280px] w-[280px] rounded-full bg-[#fff4db] blur-3xl opacity-70" />
+
+    <div className="mx-auto max-w-5xl px-6 relative z-10">
+
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="
+        mb-6
+        inline-flex items-center gap-2
+        rounded-full
+        bg-white/80
+        backdrop-blur-md
+        border border-white/60
+        px-5 py-2
+        text-sm font-medium text-gray-700
+        shadow-sm
+        hover:bg-white
+        transition-all duration-300
+        "
+      >
+        <ArrowLeft size={16} />
+        Back
+      </button>
+
+      {/* MAIN PROFILE CARD */}
+      <div
+        className="
+        rounded-[36px]
+        border border-white/60
+        bg-white/80
+        backdrop-blur-xl
+        shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+        p-8 sm:p-10
+        "
+      >
+
+        {/* HEADER */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+
+          {/* LEFT */}
+          <div className="flex items-center gap-6">
+
+            {/* PROFILE PHOTO */}
+            <div
+              className="relative group cursor-pointer shrink-0"
+              onClick={() => {
+                if (!photoUploading) photoInputRef.current.click();
+              }}
+            >
+
+              <Avatar
+                className="
+                h-24 w-24
+                ring-4 ring-white
+                shadow-lg
+                "
+              >
+
+                <AvatarImage
+                  key={user?.profile?.profilePhoto}
+                  src={
+                    user?.profile?.profilePhoto
+                      ? `${user.profile.profilePhoto}?t=${Date.now()}`
+                      : ""
+                  }
+                  className="object-cover"
+                />
+
+                <AvatarFallback
+                  className="
+                  bg-[#eef4ff]
+                  text-blue-700
+                  font-bold text-2xl
+                  "
                 >
-                  <Avatar className="h-20 w-20">
-                    <AvatarImage
-                      key={user?.profile?.profilePhoto}
-                      src={
-                        user?.profile?.profilePhoto
-                          ? `${user.profile.profilePhoto}?t=${Date.now()}`
-                          : ""
-                      }
-                      className="object-cover"
-                    />
-                    <AvatarFallback
-                      className="bg-blue-100 text-blue-700 font-bold text-base ring-2 ring-white shadow-sm"
-                    >
-                      {user?.fullname?.charAt(0)?.toUpperCase() || "U"}
-                    </AvatarFallback>
-                  </Avatar>
+                  {user?.fullname?.charAt(0)?.toUpperCase() || "U"}
+                </AvatarFallback>
 
-                  {/* Hover overlay */}
-                  <div
-                    className="absolute inset-0 rounded-full bg-black/50 
-          flex items-center justify-center text-white text-xs
-          opacity-0 group-hover:opacity-100 transition"
-                  >
-                    {photoUploading ? "Uploading..." : "Change"}
-                  </div>
-                </div>
+              </Avatar>
 
-                {/* NAME + BIO */}
-                <div className="flex flex-col justify-center">
-                  <h2 className="text-xl font-semibold leading-tight">
-                    {profile.name}
-                  </h2>
-                  <p className="text-sm text-muted-foreground leading-snug">
-                    {profile.bio || "No bio added"}
-                  </p>
-                </div>
+              {/* Hover Overlay */}
+              <div
+                className="
+                absolute inset-0 rounded-full
+                bg-black/50
+                flex items-center justify-center
+                text-white text-xs font-medium
+                opacity-0 group-hover:opacity-100
+                transition
+                "
+              >
+                {photoUploading ? "Uploading..." : "Change"}
               </div>
 
-              {/* RIGHT: Edit button */}
-              <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                </DialogTrigger>
-                {/* dialog content stays same */}
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Edit Profile</DialogTitle>
-                  </DialogHeader>
-
-                  <div className="space-y-4 mt-4">
-                    <Input
-                      value={profile.name}
-                      onChange={(e) =>
-                        setProfile({ ...profile, name: e.target.value })
-                      }
-                      placeholder="Full Name"
-                    />
-
-                    <Input
-                      value={profile.bio}
-                      onChange={(e) =>
-                        setProfile({ ...profile, bio: e.target.value })
-                      }
-                      placeholder="Bio / Headline"
-                    />
-
-                    <Input
-                      value={profile.email}
-                      onChange={(e) =>
-                        setProfile({ ...profile, email: e.target.value })
-                      }
-                      placeholder="Email"
-                    />
-
-                    <Input
-                      value={profile.phone}
-                      onChange={(e) =>
-                        setProfile({ ...profile, phone: e.target.value })
-                      }
-                      placeholder="Phone"
-                    />
-
-                    <Button
-
-                      className="w-full" onClick={handleUpdateProfile}>
-                      Save Changes
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
             </div>
 
-            {photoError && (
-              <p className="mt-3 text-sm text-red-500">{photoError}</p>
-            )}
+            {/* NAME + BIO */}
+            <div>
 
-            <div className="my-6 h-px bg-muted" />
+              <div
+                className="
+                inline-flex items-center
+                rounded-full
+                bg-[#eef4ff]
+                px-4 py-1.5
+                text-xs font-medium text-blue-700
+                mb-4
+                "
+              >
+                Student Profile
+              </div>
 
-            {/* CONTACT INFO */}
-            <div className="space-y-3 text-sm">
+              <h2
+                className="
+                text-3xl sm:text-4xl
+                font-extrabold
+                tracking-tight
+                text-gray-900
+                "
+              >
+                {profile.name}
+              </h2>
+
+              <p
+                className="
+                mt-3
+                max-w-xl
+                text-gray-600
+                leading-7
+                "
+              >
+                {profile.bio || "No bio added"}
+              </p>
+
+            </div>
+
+          </div>
+
+          {/* EDIT BUTTON */}
+          <Dialog open={open} onOpenChange={setOpen}>
+
+            <DialogTrigger asChild>
+
+              <Button
+                variant="outline"
+                className="
+                h-12 w-12
+                rounded-2xl
+                border-0
+                bg-[#f8fbff]
+                hover:bg-black
+                hover:text-white
+                shadow-sm
+                "
+              >
+                <Pencil className="h-4 w-4" />
+              </Button>
+
+            </DialogTrigger>
+
+            {/* DIALOG */}
+            <DialogContent
+              className="
+              sm:max-w-md
+              rounded-[32px]
+              border-0
+              bg-white
+              shadow-[0_20px_60px_rgba(0,0,0,0.12)]
+              p-8
+              "
+            >
+
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold">
+                  Edit Profile
+                </DialogTitle>
+              </DialogHeader>
+
+              <div className="space-y-4 mt-6">
+
+                <Input
+                  value={profile.name}
+                  onChange={(e) =>
+                    setProfile({ ...profile, name: e.target.value })
+                  }
+                  placeholder="Full Name"
+                  className="h-12 rounded-2xl border-0 bg-[#f8fbff]"
+                />
+
+                <Input
+                  value={profile.bio}
+                  onChange={(e) =>
+                    setProfile({ ...profile, bio: e.target.value })
+                  }
+                  placeholder="Bio / Headline"
+                  className="h-12 rounded-2xl border-0 bg-[#f8fbff]"
+                />
+
+                <Input
+                  value={profile.email}
+                  onChange={(e) =>
+                    setProfile({ ...profile, email: e.target.value })
+                  }
+                  placeholder="Email"
+                  className="h-12 rounded-2xl border-0 bg-[#f8fbff]"
+                />
+
+                <Input
+                  value={profile.phone}
+                  onChange={(e) =>
+                    setProfile({ ...profile, phone: e.target.value })
+                  }
+                  placeholder="Phone"
+                  className="h-12 rounded-2xl border-0 bg-[#f8fbff]"
+                />
+
+               <Button
+  className="
+  w-full h-12
+  rounded-2xl
+  bg-black hover:bg-gray-900
+  text-white
+  font-medium
+  shadow-md
+  "
+  onClick={handleUpdateProfile}
+>
+  Save Changes
+</Button>
+
+              </div>
+
+            </DialogContent>
+
+          </Dialog>
+
+        </div>
+
+        {/* Error */}
+        {photoError && (
+          <p className="mt-5 text-sm text-red-500">
+            {photoError}
+          </p>
+        )}
+
+        {/* Divider */}
+        <div className="my-10 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+
+        {/* CONTACT + SKILLS */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+          {/* CONTACT INFO */}
+          <div>
+
+            <h4 className="text-xl font-bold text-gray-900 mb-6">
+              Contact Information
+            </h4>
+
+            <div className="space-y-4">
+
               {contacts.map((item, index) => {
+
                 const Icon = item.icon;
+
                 return (
-                  <div key={index} className="flex items-center gap-3">
-                    <Icon className="h-4 w-4 text-muted-foreground" />
-                    <span>{item.value}</span>
+                  <div
+                    key={index}
+                    className="
+                    flex items-center gap-4
+                    rounded-2xl
+                    bg-[#f8fbff]
+                    p-4
+                    "
+                  >
+
+                    <div
+                      className="
+                      h-10 w-10
+                      rounded-xl
+                      bg-white
+                      flex items-center justify-center
+                      shadow-sm
+                      "
+                    >
+                      <Icon className="h-4 w-4 text-gray-600" />
+                    </div>
+
+                    <span className="text-sm text-gray-700">
+                      {item.value}
+                    </span>
+
                   </div>
                 );
               })}
+
             </div>
 
-            {/* SKILLS */}
-            <div className="mt-6">
-              <h4 className="text-sm font-semibold mb-3">Skills</h4>
+          </div>
 
-              <div className="flex flex-wrap gap-2">
-                {skills.length === 0 && (
-                  <span className="text-sm text-muted-foreground">
-                    No skills added
-                  </span>
-                )}
+          {/* SKILLS */}
+          <div>
 
-                {skills.map((skill) => (
-                  <Badge key={skill} variant="secondary">
-                    {skill}
-                    <button
-                      onClick={() => removeSkill(skill)}
-                      className="ml-1 hover:text-red-500"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
+            <h4 className="text-xl font-bold text-gray-900 mb-6">
+              Skills
+            </h4>
 
-              <div className="mt-3 flex gap-2 max-w-sm">
-                <Input
-                  value={newSkill}
-                  onChange={(e) => setNewSkill(e.target.value)}
-                  placeholder="Add new skill"
-                />
-                <Button onClick={addSkill}>Add</Button>
+            <div className="flex flex-wrap gap-3">
 
-              </div>
-            </div>
+              {skills.length === 0 && (
+                <span className="text-sm text-gray-500">
+                  No skills added
+                </span>
+              )}
 
-            {/* RESUME */}
+              {skills.map((skill) => (
 
-            <div className="mt-6">
-              <h4 className="text-sm font-semibold mb-2">Resume</h4>
-
-              <div className="flex items-center gap-4">
-                {resume ? (
-                  <a
-                    href={`https://docs.google.com/viewer?url=${resume}&embedded=true`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    View Resume
-                  </a>
-
-                ) : (
-                  <span className="text-sm text-muted-foreground">
-                    No resume uploaded
-                  </span>
-                )}
-
-                <input
-                  type="file"
-                  id="resume-upload"
-                  accept=".pdf,.doc,.docx"
-                  hidden
-                  onChange={handleResumeUpload}
-                />
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    document.getElementById("resume-upload").click()
-                  }
+                <Badge
+                  key={skill}
+                  className="
+                  rounded-full
+                  border-0
+                  bg-[#eef4ff]
+                  text-blue-700
+                  px-4 py-2
+                  shadow-sm
+                  "
                 >
-                  Upload
-                </Button>
-              </div>
+                  {skill}
+
+                  <button
+                    onClick={() => removeSkill(skill)}
+                    className="ml-2 hover:text-red-500"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+
+                </Badge>
+
+              ))}
+
             </div>
 
-            <input
-              type="file"
-              accept="image/*"
-              hidden
-              ref={photoInputRef}
-              onChange={handlePhotoUpload}
-            />
+            {/* Add Skill */}
+            <div className="mt-5 flex gap-3 max-w-md">
+
+              <Input
+                value={newSkill}
+                onChange={(e) => setNewSkill(e.target.value)}
+                placeholder="Add new skill"
+                className="h-12 rounded-2xl border-0 bg-[#f8fbff]"
+              />
+
+             <Button
+  onClick={addSkill}
+  className="
+  h-12 px-6
+  rounded-2xl
+  bg-gradient-to-r from-blue-600 to-violet-600
+  hover:from-blue-700 hover:to-violet-700
+  text-white font-medium
+  shadow-[0_10px_25px_rgba(59,130,246,0.25)]
+  transition-all duration-300
+  hover:-translate-y-0.5
+  hover:shadow-[0_14px_35px_rgba(59,130,246,0.35)]
+  "
+>
+  Add Skill
+</Button>
+
+            </div>
 
           </div>
 
-          <div className="mt-10">
-            <h3 className="text-lg font-semibold mb-4">Applied Jobs</h3>
-            <AppliedJobTable />
-          </div>
         </div>
+
+        {/* Divider */}
+        <div className="my-10 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+
+        {/* RESUME */}
+        <div>
+
+          <h4 className="text-xl font-bold text-gray-900 mb-5">
+            Resume
+          </h4>
+
+          <div
+            className="
+            flex flex-col sm:flex-row
+            items-start sm:items-center
+            justify-between
+            gap-5
+            rounded-3xl
+            bg-[#f8fbff]
+            p-6
+            "
+          >
+
+            {/* Left */}
+            <div>
+
+              {resume ? (
+                <a
+                  href={`https://docs.google.com/viewer?url=${resume}&embedded=true`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+                  text-blue-600
+                  font-medium
+                  hover:underline
+                  "
+                >
+                  View Resume
+                </a>
+
+              ) : (
+                <span className="text-sm text-gray-500">
+                  No resume uploaded
+                </span>
+              )}
+
+            </div>
+
+            {/* Upload */}
+            <div>
+
+              <input
+                type="file"
+                id="resume-upload"
+                accept=".pdf,.doc,.docx"
+                hidden
+                onChange={handleResumeUpload}
+              />
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  document.getElementById("resume-upload").click()
+                }
+                className="
+                h-11 px-5
+                rounded-2xl
+                border-0
+                bg-white
+                hover:bg-black
+                hover:text-white
+                shadow-sm
+                "
+              >
+                Upload Resume
+              </Button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* Hidden Upload */}
+        <input
+          type="file"
+          accept="image/*"
+          hidden
+          ref={photoInputRef}
+          onChange={handlePhotoUpload}
+        />
+
       </div>
-    </>
+
+      {/* Applied Jobs */}
+      <div className="mt-10">
+
+        <div
+          className="
+          rounded-[36px]
+          border border-white/60
+          bg-white/80
+          backdrop-blur-xl
+          shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+          p-8
+          "
+        >
+
+          <h3 className="text-2xl font-bold text-gray-900 mb-8">
+            Applied Jobs
+          </h3>
+
+          <AppliedJobTable />
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <Footer/>
+</>
   );
 };
 

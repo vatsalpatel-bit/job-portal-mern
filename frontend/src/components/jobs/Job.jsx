@@ -13,12 +13,12 @@ const Job = ({ job }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { appliedJobs=[] } = useSelector((state) => state.job);
+  const { appliedJobs = [] } = useSelector((state) => state.job);
   const [applying, setApplying] = useState(false);
 
   if (!job) return null;
 
-   const isApplied = appliedJobs?.some(
+  const isApplied = appliedJobs?.some(
     (id) => id.toString() === job._id.toString()
   );
   // console.log(job._id)
@@ -78,80 +78,84 @@ const Job = ({ job }) => {
   };
 
   return (
-    <div className="rounded-2xl border bg-background p-6 transition hover:shadow-xl hover:-translate-y-1 duration-200 relative">
+    <div className="rounded-3xl bg-[#f8fbff] p-6 sm:p-7 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
 
       {/* NEW Badge */}
       {isNew && (
-        <Badge className="absolute top-4 right-4 bg-green-100 text-green-700 border-green-300">
+        <Badge className="absolute top-5 right-5 bg-[#effff7] text-green-700 border-0 rounded-full px-3 py-1 font-medium shadow-sm">
           New
         </Badge>
       )}
 
       {/* HEADER */}
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex items-center gap-3">
-          <Avatar className="h-11 w-11">
+      <div className="flex justify-between items-start mb-6">
+        <div className="flex items-center gap-4">
+          <Avatar className="h-12 w-12 shadow-sm ring-4 ring-white">
             <AvatarImage src={job.company?.logo} />
-            <AvatarFallback>
+            <AvatarFallback className="bg-[#f7efff] text-gray-700 font-semibold">
               {job.company?.name?.charAt(0) || "C"}
             </AvatarFallback>
           </Avatar>
 
-          <div>
-            <h3 className="font-semibold text-base">
+          <div className="space-y-1">
+            <h3 className="font-semibold text-[15px] sm:text-base text-gray-900 tracking-tight">
               {job.company?.name || "Company"}
             </h3>
-            <p className="text-xs text-muted-foreground">
+
+            <p className="text-xs text-gray-500 font-medium">
               {job.location}
             </p>
-            <p className="text-xs text-muted-foreground">
+
+            <p className="text-xs text-gray-400">
               {getDaysAgo(job.createdAt)}
             </p>
           </div>
         </div>
-
       </div>
 
       {/* TITLE */}
-      <h2 className="text-lg sm:text-xl font-semibold mb-2 line-clamp-2">
+      <h2 className="text-xl sm:text-[22px] font-bold text-gray-900 leading-snug mb-3 line-clamp-2">
         {job.title}
       </h2>
 
-      <p className="text-sm text-muted-foreground mb-5 line-clamp-3">
+      {/* DESCRIPTION */}
+      <p className="text-sm leading-6 text-gray-600 mb-6 line-clamp-3">
         {job.description}
       </p>
 
       {/* BADGES */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        <Badge variant="secondary">
+      <div className="flex flex-wrap gap-3 mb-7">
+
+        <Badge className="bg-[#f7efff] text-purple-700 border-0 rounded-full px-4 py-1.5 font-medium shadow-sm">
           {job.position} Openings
         </Badge>
 
-        <Badge variant="outline">
+        <Badge className="bg-[#fef5ec] text-orange-700 border-0 rounded-full px-4 py-1.5 font-medium shadow-sm">
           {job.jobType}
         </Badge>
 
-        <Badge variant="outline">
+        <Badge className="bg-[#effff7] text-green-700 border-0 rounded-full px-4 py-1.5 font-medium shadow-sm">
           {job.experienceLevel} Years Exp
         </Badge>
 
-        <Badge className="bg-primary/10 text-primary border-primary/20">
+        <Badge className="bg-white text-gray-800 border-0 rounded-full px-4 py-1.5 font-semibold shadow-sm">
           {formatSalary(job.salary)}
         </Badge>
       </div>
 
       {/* ACTIONS */}
-      <div className="flex gap-3">
+      <div className="flex gap-4">
+
         <Button
           variant="outline"
-          className="flex-1"
+          className="flex-1 rounded-2xl border-0 bg-white hover:bg-gray-100 text-gray-800 shadow-sm h-11 font-medium"
           onClick={() => navigate(`/job/${job._id}`)}
         >
           Details
         </Button>
 
         <Button
-          className="flex-1 rounded-full"
+          className="flex-1 rounded-2xl bg-black hover:bg-gray-900 text-white h-11 font-medium shadow-md"
           disabled={isApplied || applying}
           onClick={handleApply}
         >

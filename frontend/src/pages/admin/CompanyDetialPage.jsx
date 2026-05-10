@@ -1,9 +1,11 @@
+import Footer from '@/components/shared/Footer';
 import { setSingleCompany } from '@/redux/slices/companiesSlice';
 import { deleteCompanyApi, getCompanyById, getCompanyStatus } from '@/services/companyApi';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner';
+import { ArrowLeft } from 'lucide-react';
 
 const CompanyDetialPage = () => {
   const navigate = useNavigate();
@@ -69,144 +71,362 @@ const CompanyDetialPage = () => {
     );
   }
   return (
-    <div className="bg-gray-50 mt-16">
-      <div className="max-w-5xl mx-auto px-6 py-10">
+   <>
+  <div className="min-h-screen bg-[#f8fbff] overflow-hidden relative pt-20">
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+    {/* Background Blur */}
+    <div className="absolute top-[-120px] left-[-80px] h-[320px] w-[320px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
+
+    <div className="absolute right-[-120px] top-[120px] h-[280px] w-[280px] rounded-full bg-[#fff4db] blur-3xl opacity-70" />
+
+    <div className="max-w-6xl mx-auto px-6 py-16 relative z-10">
+
+      {/* Header */}
+      <div
+        className="
+        flex flex-col sm:flex-row
+        sm:items-center sm:justify-between
+        gap-4
+        mb-10
+        "
+      >
+
+        {/* Back */}
+       <button
+                       onClick={() => navigate("/admin/companies")}
+                       className="
+                   inline-flex items-center gap-2
+                   rounded-full
+                   bg-white/80
+                   backdrop-blur-md
+                   border border-white/60
+                   px-5 py-2
+                   text-sm font-medium text-gray-700
+                   shadow-sm
+                   hover:bg-white
+                   transition-all duration-300
+                   mb-5
+                   "
+                     >
+                       <ArrowLeft size={16} />
+                       Back
+                     </button>
+
+        {/* Actions */}
+        <div className="flex items-center gap-3">
+
           <button
-            onClick={() => navigate(-1)}
-            className="text-gray-500 hover:text-black text-sm"
+            onClick={() => navigate(`/admin/company/${company._id}/edit`)}
+            className="
+            h-11 px-5
+            rounded-2xl
+            bg-white
+            hover:bg-gray-100
+            text-sm font-medium text-gray-700
+            shadow-sm
+            transition-all duration-300
+            "
           >
-            ← Back
+            Edit
           </button>
 
-          <div className="flex gap-2">
-            <button
-              onClick={() => navigate(`/admin/company/${company._id}/edit`)}
-              className="px-4 py-2 border rounded-md text-sm hover:bg-gray-100"
-            >
-              Edit
-            </button>
-
-            <button
-              onClick={handleDelete}
-              className="bg-red-500 text-white px-3 py-1 rounded"
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-
-        {/* Card */}
-        <div className="bg-white p-8 rounded-2xl shadow-sm border">
-
-          {/* Top section */}
-          <div className="flex items-start justify-between mb-6">
-
-            {/* LEFT */}
-            <div className="flex items-start gap-5">
-
-              {/* Logo */}
-              {company?.logo ? (
-                <img
-                  src={company.logo}
-                  alt="logo"
-                  className="w-20 h-20 rounded-xl object-cover border"
-                />
-              ) : (
-                <div className="w-20 h-20 rounded-xl bg-gray-200 flex items-center justify-center text-xl font-semibold">
-                  {company?.name?.[0]}
-                </div>
-              )}
-
-              {/* Info */}
-              <div>
-                <h1 className="text-2xl font-semibold">
-                  {company?.name}
-                </h1>
-
-                <p className="text-gray-500 mt-2 max-w-lg">
-                  {company?.description || "No description available."}
-                </p>
-              </div>
-            </div>
-
-            {/* RIGHT → Total Applicants */}
-            <div className="bg-blue-50 border border-blue-100 px-5 py-3 rounded-xl text-right shadow-sm hover:shadow-md transition">
-              <p className="text-xs text-blue-500 tracking-wide">
-                👥 TOTAL APPLICANTS
-              </p>
-              <p className="text-2xl font-bold text-blue-700 mt-1">
-                {company?.totalApplicants || 0}
-              </p>
-            </div>
-
-          </div>
-
-          {/* Divider */}
-          <hr className="mb-6" />
-
-          {/* Info Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-
-            <div>
-              <p className="text-sm text-gray-500">🌐 Website</p>
-              <p className="font-medium">{company?.website || "—"}</p>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">📍 Location</p>
-              <p className="font-medium">{company?.location || "—"}</p>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-500">📅 Created</p>
-              <p className="font-medium">
-                {company?.createdAt
-                  ? new Date(company.createdAt).toLocaleDateString("en-IN", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  })
-                  : "—"}
-              </p>
-            </div>
-
-          </div>
-
-          {/*  Stats Section */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-
-            {/* Total Jobs */}
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 shadow-sm hover:shadow-md transition">
-              <p className="text-xs text-blue-600 mb-1">Total Jobs</p>
-              <p className="text-2xl font-semibold text-blue-700">
-                {company?.totalJobs || 0}
-              </p>
-            </div>
-
-            {/* Accepted */}
-            <div className="bg-green-50 border border-green-100 rounded-xl p-4 shadow-sm hover:shadow-md transition">
-              <p className="text-xs text-green-600 mb-1">Accepted</p>
-              <p className="text-2xl font-semibold text-green-700">
-                {company?.accepted || 0}
-              </p>
-            </div>
-
-            {/* Pending */}
-            <div className="bg-yellow-50 border border-yellow-100 rounded-xl p-4 shadow-sm hover:shadow-md transition">
-              <p className="text-xs text-yellow-600 mb-1">Pending</p>
-              <p className="text-2xl font-semibold text-yellow-700">
-                {company?.pending || 0}
-              </p>
-            </div>
-
-          </div>
+          <button
+            onClick={handleDelete}
+            className="
+            h-11 px-5
+            rounded-2xl
+            bg-red-500
+            hover:bg-red-600
+            text-sm font-medium text-white
+            shadow-sm
+            transition-all duration-300
+            "
+          >
+            Delete
+          </button>
 
         </div>
+
       </div>
+
+      {/* Main Card */}
+      <div
+        className="
+        rounded-[36px]
+        border border-white/60
+        bg-white/80
+        backdrop-blur-xl
+        shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+        p-8 sm:p-10 lg:p-12
+        "
+      >
+
+        {/* TOP SECTION */}
+        <div
+          className="
+          flex flex-col xl:flex-row
+          xl:items-start xl:justify-between
+          gap-10
+          "
+        >
+
+          {/* LEFT */}
+          <div className="flex items-start gap-6 flex-1 min-w-0">
+
+            {/* Logo */}
+            {company?.logo ? (
+
+              <img
+                src={company.logo}
+                alt="logo"
+                className="
+                w-24 h-24
+                rounded-[28px]
+                object-cover
+                border border-[#edf2ff]
+                shadow-sm
+                shrink-0
+                "
+              />
+
+            ) : (
+
+              <div
+                className="
+                w-24 h-24
+                rounded-[28px]
+                bg-[#eef4ff]
+                flex items-center justify-center
+                text-3xl font-bold text-blue-700
+                shrink-0
+                "
+              >
+                {company?.name?.[0]}
+              </div>
+
+            )}
+
+            {/* Info */}
+            <div className="flex-1 min-w-0 pt-1">
+
+              {/* Badge */}
+              <div
+                className="
+                inline-flex items-center
+                rounded-full
+                bg-[#eef4ff]
+                px-4 py-2
+                text-sm font-medium text-blue-700
+                mb-5
+                "
+              >
+                🏢 Company Profile
+              </div>
+
+              {/* Name */}
+              <h1
+                className="
+                text-4xl sm:text-5xl
+                font-extrabold
+                tracking-tight
+                text-gray-900
+                leading-tight
+                break-words
+                "
+              >
+                {company?.name}
+              </h1>
+
+              {/* Description */}
+              <p
+                className="
+                mt-5
+                text-gray-600
+                leading-8
+                max-w-2xl
+                "
+              >
+                {company?.description || "No description available."}
+              </p>
+
+            </div>
+
+          </div>
+
+          {/* RIGHT */}
+          <div
+            className="
+            flex flex-col
+            xl:items-end
+            justify-start
+            pt-2
+            min-w-[180px]
+            "
+          >
+
+            <p className="text-sm font-medium text-gray-500 mb-3">
+              Total Applicants
+            </p>
+
+            <h2
+              className="
+              text-5xl
+              font-extrabold
+              tracking-tight
+              text-gray-900
+              leading-none
+              "
+            >
+              {company?.totalApplicants || 0}
+            </h2>
+
+          </div>
+
+        </div>
+
+        {/* Divider */}
+        <div className="my-12 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+
+        {/* INFO GRID */}
+        <div
+          className="
+          grid grid-cols-1 md:grid-cols-3
+          gap-y-10 gap-x-8
+          "
+        >
+
+          {/* Website */}
+          <div>
+
+            <p className="text-sm font-medium text-gray-500 mb-3">
+              🌐 Website
+            </p>
+
+            <p className="font-semibold text-gray-900 break-all leading-7">
+              {company?.website || "—"}
+            </p>
+
+          </div>
+
+          {/* Location */}
+          <div>
+
+            <p className="text-sm font-medium text-gray-500 mb-3">
+              📍 Location
+            </p>
+
+            <p className="font-semibold text-gray-900 leading-7">
+              {company?.location || "—"}
+            </p>
+
+          </div>
+
+          {/* Created */}
+          <div>
+
+            <p className="text-sm font-medium text-gray-500 mb-3">
+              📅 Created
+            </p>
+
+            <p className="font-semibold text-gray-900 leading-7">
+
+              {company?.createdAt
+                ? new Date(company.createdAt).toLocaleDateString("en-IN", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })
+                : "—"}
+
+            </p>
+
+          </div>
+
+        </div>
+
+        {/* Bottom Divider */}
+        <div className="my-12 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+
+        {/* STATS */}
+        <div
+          className="
+          flex flex-wrap
+          items-center
+          gap-4
+          "
+        >
+
+          {/* Jobs */}
+          <div
+            className="
+            inline-flex items-center gap-3
+            rounded-2xl
+            bg-[#eef4ff]
+            px-5 py-3
+            "
+          >
+
+            <span className="text-sm font-medium text-blue-600">
+              Total Jobs
+            </span>
+
+            <span className="text-xl font-bold text-blue-700">
+              {company?.totalJobs || 0}
+            </span>
+
+          </div>
+
+          {/* Accepted */}
+          <div
+            className="
+            inline-flex items-center gap-3
+            rounded-2xl
+            bg-[#ecfdf3]
+            px-5 py-3
+            "
+          >
+
+            <span className="text-sm font-medium text-green-600">
+              Accepted
+            </span>
+
+            <span className="text-xl font-bold text-green-700">
+              {company?.accepted || 0}
+            </span>
+
+          </div>
+
+          {/* Pending */}
+          <div
+            className="
+            inline-flex items-center gap-3
+            rounded-2xl
+            bg-[#fff7ed]
+            px-5 py-3
+            "
+          >
+
+            <span className="text-sm font-medium text-orange-600">
+              Pending
+            </span>
+
+            <span className="text-xl font-bold text-orange-700">
+              {company?.pending || 0}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
+
+  </div>
+
+  <Footer />
+
+</>
   )
 }
 

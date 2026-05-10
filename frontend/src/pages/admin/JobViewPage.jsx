@@ -12,6 +12,7 @@ import {
 import { MoreVertical } from "lucide-react";
 import { Pencil, Trash2 } from "lucide-react";
 import { deleteJobApi } from '@/services/jobApi';
+import Footer from '@/components/shared/Footer';
 
 
 const JobViewPage = () => {
@@ -30,7 +31,7 @@ const JobViewPage = () => {
                 dispatch(setSingleJob(data.job))
             } catch (error) {
                 console.log(error);
-            }finally{
+            } finally {
                 setLoading(false)
             }
 
@@ -66,213 +67,495 @@ const JobViewPage = () => {
         );
     }
     return (
-        <div className="bg-gray-50 p-6 mt-16">
+        <>
+            <div className="min-h-screen bg-[#f8fbff] overflow-hidden relative pt-24">
 
-            <div className="max-w-6xl mx-auto space-y-6">
+                {/* Background Blur */}
+                <div className="absolute top-[-120px] left-[-80px] h-[320px] w-[320px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
 
-                <div className="flex items-center justify-between">
+                <div className="absolute right-[-120px] top-[120px] h-[280px] w-[280px] rounded-full bg-[#fff4db] blur-3xl opacity-70" />
 
-                    {/* LEFT */}
-                    <div className="flex items-center gap-4">
-                        <button
-                            onClick={() => navigate("/admin/jobs")}
-                            className="flex items-center gap-1 text-sm text-gray-500 hover:text-black"
-                        >
-                            <ArrowLeft size={16} />
-                            Back
-                        </button>
+                <div className="max-w-6xl mx-auto px-6 py-16 relative z-10 space-y-8">
 
-                        <h1 className="text-xl font-semibold text-gray-800">
-                            Job Details
-                        </h1>
+                    {/* HEADER */}
+                    <div
+                        className="
+        flex flex-col lg:flex-row
+        lg:items-center lg:justify-between
+        gap-5
+        "
+                    >
+
+                        {/* Left */}
+                        <div>
+
+                            {/* Back */}
+                            <button
+                                onClick={() => navigate("/admin/jobs")}
+                                className="
+                     inline-flex items-center gap-2
+                     rounded-full
+                     bg-white/80
+                     backdrop-blur-md
+                     border border-white/60
+                     px-5 py-2
+                     text-sm font-medium text-gray-700
+                     shadow-sm
+                     hover:bg-white
+                     transition-all duration-300
+                     mb-5
+                     "
+                            >
+                                <ArrowLeft size={16} />
+                                Back
+                            </button>
+
+                            {/* Badge */}
+                            <div
+                                className="
+
+            rounded-full
+            bg-[#eef4ff]
+            px-4 py-2
+            text-sm font-medium text-blue-700
+            mb-5
+            "
+                            >
+                                💼 Job Overview
+                            </div>
+
+                            {/* Title */}
+                            <h1
+                                className="
+            text-4xl sm:text-5xl
+            font-extrabold
+            tracking-tight
+            text-gray-900
+            leading-tight
+            "
+                            >
+                                Job Details
+                            </h1>
+
+                        </div>
+
+                        {/* Right */}
+                        <div className="flex items-center gap-3">
+
+                            {/* Applicants */}
+                            <button
+                                onClick={() => navigate(`/admin/job/${job._id}/applicant`)}
+                                className="
+            h-11 px-5
+            rounded-2xl
+            bg-[#f3e8ff]
+            hover:bg-purple-100
+            text-sm font-medium text-purple-700
+            transition-all duration-300
+            "
+                            >
+                                Applicants
+                            </button>
+
+                            {/* Popover */}
+                            <Popover>
+
+                                <PopoverTrigger asChild>
+
+                                    <button
+                                        className="
+                h-11 w-11
+                rounded-2xl
+                bg-white
+                hover:bg-gray-100
+                shadow-sm
+                flex items-center justify-center
+                transition-all duration-300
+                "
+                                    >
+                                        <MoreVertical className="text-gray-500 w-4 h-4" />
+                                    </button>
+
+                                </PopoverTrigger>
+
+                                <PopoverContent
+                                    align="end"
+                                    className="
+              w-44 p-2
+              rounded-2xl
+              border-0
+              bg-white
+              shadow-[0_10px_40px_rgba(0,0,0,0.08)]
+              "
+                                >
+
+                                    {/* Edit */}
+                                    <button
+                                        onClick={() => navigate(`/admin/job/${job._id}/edit`)}
+                                        className="
+                flex items-center gap-3
+                w-full px-3 py-3
+                text-sm font-medium
+                rounded-xl
+                text-gray-700
+                hover:bg-[#f8fbff]
+                transition
+                "
+                                    >
+                                        <Pencil className="w-4 h-4 text-gray-500" />
+                                        Edit Job
+                                    </button>
+
+                                    {/* Delete */}
+                                    <button
+                                        onClick={() => {
+                                            const confirmDelete = window.confirm("Delete job and related applications");
+
+                                            if (confirmDelete) {
+                                                deleteJobApi(jobId);
+                                                navigate(-1);
+                                            }
+                                        }}
+                                        className="
+                flex items-center gap-3
+                w-full px-3 py-3
+                text-sm font-medium
+                rounded-xl
+                text-red-600
+                hover:bg-red-50
+                transition
+                "
+                                    >
+                                        <Trash2 className="w-4 h-4 text-red-500" />
+                                        Delete
+                                    </button>
+
+                                </PopoverContent>
+
+                            </Popover>
+
+                        </div>
+
                     </div>
 
-                    {/* RIGHT */}
-                    <div className="flex items-center gap-2">
+                    {/* HERO CARD */}
+                    <div
+                        className="
+        rounded-[36px]
+        border border-white/60
+        bg-white/80
+        backdrop-blur-xl
+        shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+        p-8 sm:p-10
+        "
+                    >
 
-                        {/* Applicants */}
-                        <button
-                            onClick={() => navigate(`/admin/job/${job._id}/applicant`)}
-                            className="px-3 py-1.5 text-sm font-medium text-purple-600 bg-purple-50 rounded-md hover:bg-purple-100"
+                        <div
+                            className="
+          flex flex-col xl:flex-row
+          xl:items-start xl:justify-between
+          gap-10
+          "
                         >
-                            Applicants
-                        </button>
 
-                        {/* Popover */}
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <button className="p-2 rounded-md hover:bg-gray-100 transition">
-                                    <MoreVertical className="text-gray-500 w-4 h-4" />
-                                </button>
-                            </PopoverTrigger>
+                            {/* Left */}
+                            <div className="flex items-start gap-6 flex-1 min-w-0">
 
-                            <PopoverContent
-                                align="end"
-                                className="w-40 p-1 rounded-lg shadow-lg border bg-white"
+                                {/* Logo */}
+                                <img
+                                    src={
+                                        job?.company.logo &&
+                                            job?.company.logo.startsWith("http")
+                                            ? job?.company.logo
+                                            : "https://via.placeholder.com/40"
+                                    }
+                                    alt="logo"
+                                    className="
+              w-24 h-24
+              rounded-[28px]
+              object-cover
+              border border-[#edf2ff]
+              bg-white
+              shadow-sm
+              shrink-0
+              "
+                                />
+
+                                {/* Info */}
+                                <div className="flex-1 min-w-0">
+
+                                    <h2
+                                        className="
+                text-4xl
+                font-extrabold
+                tracking-tight
+                text-gray-900
+                leading-tight
+                "
+                                    >
+                                        {job?.title}
+                                    </h2>
+
+                                    <p className="text-gray-500 text-lg mt-3">
+                                        {job?.company?.name}
+                                    </p>
+
+                                    {/* Meta */}
+                                    <div
+                                        className="
+                flex flex-wrap items-center
+                gap-5
+                mt-6
+                text-sm text-gray-500
+                "
+                                    >
+
+                                        <span className="flex items-center gap-2">
+                                            📍 {job?.location}
+                                        </span>
+
+                                        <span className="flex items-center gap-2">
+                                            📅 Posted{" "}
+                                            {new Date(job?.createdAt).toLocaleDateString("en-IN", {
+                                                day: "numeric",
+                                                month: "short",
+                                            })}
+                                        </span>
+
+                                        <span className="flex items-center gap-2">
+                                            💼 {job?.jobType}
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            {/* Salary */}
+                            <div
+                                className="
+            rounded-[28px]
+            bg-[#ecfdf3]
+            px-8 py-6
+            min-w-[220px]
+            "
                             >
 
-                                {/* Edit */}
-                                <button
-                                    onClick={() => navigate(`/admin/job/${job._id}/edit`)}
-                                    className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-100 transition"
-                                >
-                                    <Pencil className="w-4 h-4 text-gray-500" />
-                                    Edit
-                                </button>
+                                <p className="text-sm font-medium text-green-600 mb-3">
+                                    Salary
+                                </p>
 
-                                {/* Divider */}
-                                <div className="my-1 border-t" />
+                                <h3 className="text-4xl font-extrabold text-green-700">
+                                    ₹ {job?.salary}
+                                </h3>
 
-                                {/* Delete */}
-                                <button
-                                    onClick={() => {
-                                        const confirmDelete = window.confirm("Delete job and related applications");
-                                        if (confirmDelete) {
-                                            deleteJobApi(jobId);
-                                            navigate(-1);
-                                        }
-                                    }}
-                                    className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md text-red-600 hover:bg-red-50 transition"
-                                >
-                                    <Trash2 className="w-4 h-4 text-red-500" />
-                                    Delete
-                                </button>
+                            </div>
 
-                            </PopoverContent>
-                        </Popover>
+                        </div>
 
                     </div>
-                </div>
 
-                <div className="bg-white p-6 rounded-xl shadow flex justify-between items-center">
+                    {/* STATS */}
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
 
-                    {/* LEFT: Logo + Info */}
-                    <div className="flex items-center gap-4">
+                        {/* Total */}
+                        <div className="rounded-[28px] bg-white/80 backdrop-blur-xl p-6 shadow-sm">
 
-                        {/* Logo */}
-                        <img
-                            src={
-                                job?.company.logo && job?.company.logo.startsWith("http")
-                                    ? job?.company.logo
-                                    : "https://via.placeholder.com/40"
-                            }
-                            alt="logo"
-                            className="w-12 h-12 rounded-lg object-cover border bg-gray-50"
-                        />
+                            <p className="text-sm text-gray-500 mb-3">
+                                Total Applicants
+                            </p>
 
-                        {/* Info */}
-                        <div className="flex flex-col">
-                            <h2 className="text-lg font-semibold text-gray-800 leading-tight">
-                                {job?.title}
+                            <h2 className="text-4xl font-extrabold text-gray-900">
+                                {job?.application?.length}
                             </h2>
 
-                            <p className="text-sm text-gray-500 leading-tight">
-                                {job?.location}
+                        </div>
+
+                        {/* Accepted */}
+                        <div className="rounded-[28px] bg-[#ecfdf3] p-6">
+
+                            <p className="text-sm text-green-600 mb-3">
+                                Accepted
                             </p>
 
-                            <p className="text-xs text-gray-400 leading-tight">
-                                Posted on{" "}
-                                {new Date(job?.createdAt).toLocaleDateString("en-IN", {
-                                    day: "numeric",
-                                    month: "short",
-                                })}
+                            <h2 className="text-4xl font-extrabold text-green-700">
+                                {status.accepted}
+                            </h2>
+
+                        </div>
+
+                        {/* Pending */}
+                        <div className="rounded-[28px] bg-[#fff7ed] p-6">
+
+                            <p className="text-sm text-orange-600 mb-3">
+                                Pending
                             </p>
+
+                            <h2 className="text-4xl font-extrabold text-orange-700">
+                                {status.pending}
+                            </h2>
+
+                        </div>
+
+                        {/* Rejected */}
+                        <div className="rounded-[28px] bg-[#fef2f2] p-6">
+
+                            <p className="text-sm text-red-600 mb-3">
+                                Rejected
+                            </p>
+
+                            <h2 className="text-4xl font-extrabold text-red-700">
+                                {status.rejected}
+                            </h2>
+
                         </div>
 
                     </div>
 
-                    {/* RIGHT: Stats + Salary */}
-                    <div className="flex items-center gap-5">
+                    {/* CONTENT */}
+                    <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
 
-                        {/* Stats */}
-                        <div className="flex items-center gap-4 text-sm">
+                        {/* LEFT */}
+                        <div className="space-y-8">
 
-                            <div className="text-center">
-                                <p className="text-[10px] text-gray-400">Total</p>
-                                <p className="font-semibold text-gray-800">{job?.application?.length}</p>
+                            {/* Description */}
+                            <div
+                                className="
+            rounded-[32px]
+            bg-white/80
+            backdrop-blur-xl
+            shadow-sm
+            p-8
+            "
+                            >
+
+                                <h3 className="text-2xl font-bold text-gray-900 mb-5">
+                                    Job Description
+                                </h3>
+
+                                <p className="text-gray-600 leading-8">
+                                    {job?.description}
+                                </p>
+
                             </div>
 
-                            <div className="text-center">
-                                <p className="text-[10px] text-gray-400">Accepted</p>
-                                <p className="font-semibold text-green-600">{status.accepted}</p>
-                            </div>
+                            {/* Requirements */}
+                            <div
+                                className="
+            rounded-[32px]
+            bg-white/80
+            backdrop-blur-xl
+            shadow-sm
+            p-8
+            "
+                            >
 
-                            <div className="text-center">
-                                <p className="text-[10px] text-gray-400">Pending</p>
-                                <p className="font-semibold text-yellow-600">{status.pending}</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="text-[10px] text-gray-400">Rejected</p>
-                                <p className="font-semibold text-red-600">{status.rejected}</p>
+                                <h3 className="text-2xl font-bold text-gray-900 mb-5">
+                                    Requirements
+                                </h3>
+
+                                <div className="flex flex-wrap gap-3">
+
+                                    {job?.requirements?.map((r, i) => (
+                                        <span
+                                            key={`${r}-${i}`}
+                                            className="
+                  rounded-full
+                  bg-[#eef4ff]
+                  px-4 py-2
+                  text-sm font-medium text-blue-700
+                  "
+                                        >
+                                            {r}
+                                        </span>
+                                    ))}
+
+                                </div>
+
                             </div>
 
                         </div>
 
-                        {/* Divider (optional but pro) */}
-                        <div className="h-6 w-px bg-gray-200"></div>
+                        {/* RIGHT */}
+                        <div
+                            className="
+          rounded-[32px]
+          bg-white/80
+          backdrop-blur-xl
+          shadow-sm
+          p-8
+          h-fit
+          "
+                        >
 
-                        {/* Salary */}
-                        <div className="bg-green-100 px-4 py-2 rounded-lg text-center">
-                            <p className="text-[10px] text-gray-600">Salary</p>
-                            <p className="text-sm font-semibold text-green-700">
-                                ₹ {job?.salary}
-                            </p>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-7">
+                                Overview
+                            </h3>
+
+                            <div className="space-y-6">
+
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-2">
+                                        Job Type
+                                    </p>
+
+                                    <p className="font-semibold text-gray-900">
+                                        {job?.jobType}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-2">
+                                        Position
+                                    </p>
+
+                                    <p className="font-semibold text-gray-900">
+                                        {job?.position}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-2">
+                                        Experience
+                                    </p>
+
+                                    <p className="font-semibold text-gray-900">
+                                        {job?.experienceLevel} Years
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-2">
+                                        Company
+                                    </p>
+
+                                    <p className="font-semibold text-gray-900">
+                                        {job?.company?.name}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-2">
+                                        Location
+                                    </p>
+
+                                    <p className="font-semibold text-gray-900">
+                                        {job?.location}
+                                    </p>
+                                </div>
+
+                            </div>
+
                         </div>
 
                     </div>
 
                 </div>
+            </div>
 
-                {/* Grid Section */}
-                <div className="grid grid-cols-2 gap-6">
-
-                    <div className="bg-white p-5 rounded-xl shadow">
-                        <h3 className="font-semibold mb-2">Job Description</h3>
-                        <p className="text-gray-600 text-sm leading-relaxed">
-                            {job?.description}
-                        </p>
-                    </div>
-
-                    <div className="bg-white p-5 rounded-xl shadow">
-                        <h3 className="font-semibold mb-3">Job Overview</h3>
-                        <div className="space-y-2 text-sm text-gray-600">
-                            <p><strong>Job Type:</strong> {job?.jobType}</p>
-                            <p><strong>Position:</strong> {job?.position}</p>
-                            <p><strong>Experience:</strong> {job?.experienceLevel}</p>
-                        </div>
-                    </div>
-
-                    <div className="bg-white p-5 rounded-xl shadow">
-                        <h3 className="font-semibold mb-3">Requirements</h3>
-                        <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
-                            {job?.requirements?.map((r, i) => { return (<li key={`${r}-${i}`}>{r}</li>) }
-                            )}
-
-                        </ul>
-                    </div>
-
-                    <div className="bg-white p-5 rounded-xl shadow">
-                        <h3 className="font-semibold mb-3">Additional Info</h3>
-                        <div className="text-sm text-gray-600 space-y-2">
-                            <p><strong>Posted By:</strong> {job?.company?.name}</p>
-                            <p><strong>Date:</strong> {new Date(job?.createdAt).toLocaleDateString("en-In", {
-                                day: "numeric",
-                                month: "short",
-                                year: "numeric"
-                            })}</p>
-                        </div>
-                    </div>
-
-                </div>
-
-                {/* Location */}
-                <div className="bg-white p-5 rounded-xl shadow">
-                    <h3 className="font-semibold mb-2">Location</h3>
-                    <p className="text-gray-600">{job?.location}</p>
-                </div>
-
-            </div >
-        </div >
+            <Footer />
+        </>
     )
 }
 

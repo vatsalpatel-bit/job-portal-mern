@@ -5,6 +5,7 @@ import { getAllCompanyApi, postJobApi } from '@/services/companyApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllCompanies } from '@/redux/slices/companiesSlice';
 import { toast } from 'sonner';
+import Footer from '@/components/shared/Footer';
 
 
 const AdminJobCreate = () => {
@@ -109,163 +110,416 @@ const AdminJobCreate = () => {
         );
     }
     return (
-        <div className="bg-gray-50 mt-16">
-            <div className="max-w-3xl mx-auto px-6 py-10">
-                {/* Header */}
-                <div className="flex items-center gap-3 mb-8">
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="flex items-center gap-1 text-gray-600 hover:text-black"
-                    >
-                        <ArrowLeft size={18} />
-                        Back
-                    </button>
-                    <h1 className="text-2xl font-semibold">Create Job</h1>
-                </div>
-                <div className="bg-white p-6 rounded-xl shadow space-y-5">
+        <>
+            <div className="min-h-screen bg-[#f8fbff] overflow-hidden relative pt-24">
 
-                    {/* Title */}
-                    <div>
-                        <label className="text-sm text-gray-600">Job Title</label>
-                        <input
-                            name="title"
-                            value={input.title}
-                            onChange={changeHandler}
-                            type="text"
-                            placeholder="Frontend Developer"
-                            className="w-full mt-1 border px-4 py-2 rounded"
-                        />
-                    </div>
+                {/* Background Blur */}
+                <div className="absolute top-[-120px] left-[-80px] h-[320px] w-[320px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
 
-                    {/* Description */}
-                    <div>
-                        <label className="text-sm text-gray-600">Description</label>
-                        <textarea
-                            name='description'
-                            value={input.description}
-                            onChange={changeHandler}
-                            placeholder="Write job description..."
-                            className="w-full mt-1 border px-4 py-2 rounded h-28"
-                        />
-                    </div>
+                <div className="absolute right-[-120px] top-[120px] h-[280px] w-[280px] rounded-full bg-[#fff4db] blur-3xl opacity-70" />
 
-                    {/* Requirements */}
-                    <div>
-                        <label className="text-sm text-gray-600">Requirements</label>
-                        <input
-                            name='requirements'
-                            value={input.requirements}
-                            onChange={changeHandler}
-                            type="text"
-                            placeholder="React, Node, MongoDB"
-                            className="w-full mt-1 border px-4 py-2 rounded"
-                        />
-                    </div>
+                <div className="max-w-4xl mx-auto px-6 py-16 relative z-10">
 
-                    {/* Salary + Location */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="text-sm text-gray-600">Salary</label>
-                            <input
-                                name='salary'
-                                value={input.salary}
-                                onChange={changeHandler}
-                                type="number"
-                                placeholder="500000"
-                                className="w-full mt-1 border px-4 py-2 rounded"
-                            />
-                        </div>
+                    {/* Header */}
+                    <div className="mb-10">
 
-                        <div>
-                            <label className="text-sm text-gray-600">Location</label>
-                            <input
-                                name='location'
-                                value={input.location}
-                                onChange={changeHandler}
-                                type="text"
-                                placeholder="Bangalore"
-                                className="w-full mt-1 border px-4 py-2 rounded"
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <label className="text-sm text-gray-600">Position</label>
-                        <input
-                            value={input.position}
-                            onChange={changeHandler}
-                            type="number"
-                            placeholder="2"
-                            name="position"
-                            className="w-full mt-1 border px-4 py-2 rounded"
-                        />
-                    </div>
-
-                    {/* Job Type + Experience */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="text-sm text-gray-600">Job Type</label>
-                            <select
-                                name='jobType'
-                                value={input.jobType}
-                                onChange={changeHandler}
-                                className="w-full mt-1 border px-4 py-2 rounded"
-                            >
-                                <option value="">Select Job Type</option>
-                                <option value="Full-Time">Full-Time</option>
-                                <option value="Part-Time">Part-Time</option>
-                                <option value="Internship">Internship</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="text-sm text-gray-600">Experience</label>
-                            <input
-                                name='experience'
-                                value={input.experience}
-                                onChange={changeHandler}
-                                type="number"
-                                placeholder="2 years"
-                                className="w-full mt-1 border px-4 py-2 rounded"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Company */}
-                    <div>
-                        <label className="text-sm text-gray-600">Company</label>
-                        <select
-                            name='companyId'
-                            value={input.companyId}
-                            onChange={changeHandler}
-                            className="w-full mt-1 border px-4 py-2 rounded">
-                            <option value="">Select Company</option>
-                            {allCompanies?.map((company) => (
-                                <option key={company?._id} value={company?._id}>
-                                    {company?.name}
-                                </option>
-                            ))}
-
-                        </select>
-                    </div>
-
-                    {/* Buttons */}
-                    <div className="flex justify-end gap-3 pt-4">
+                        {/* Back */}
                         <button
-                            onClick={() => navigate(-1)}
-                            className="px-5 py-2 border rounded-md hover:bg-gray-100">
-                            Cancel
+                            onClick={() => navigate("/admin/jobs")}
+                            className="
+                    inline-flex items-center gap-2
+                    rounded-full
+                    bg-white/80
+                    backdrop-blur-md
+                    border border-white/60
+                    px-5 py-2
+                    text-sm font-medium text-gray-700
+                    shadow-sm
+                    hover:bg-white
+                    transition-all duration-300
+                    mb-5
+                    "
+                        >
+                            <ArrowLeft size={16} />
+                            Back
                         </button>
 
-                        <button
-                            onClick={submitHandler}
-                            className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        {/* Badge */}
+                        <div
+                            className="
+          rounded-full
+          bg-[#eef4ff]
+          px-4 py-2
+          text-sm font-medium text-blue-700
+          mb-5
+          "
+                        >
+                            💼 New Opportunity
+                        </div>
+
+                        {/* Title */}
+                        <h1
+                            className="
+          text-4xl sm:text-5xl
+          font-extrabold
+          tracking-tight
+          text-gray-900
+          "
+                        >
                             Create Job
-                        </button>
+                        </h1>
+
+                        <p className="mt-4 text-gray-600 leading-7 max-w-2xl">
+                            Publish a new opportunity and start hiring top talent.
+                        </p>
+
+                    </div>
+
+                    {/* FORM CARD */}
+                    <div
+                        className="
+        rounded-[36px]
+        border border-white/60
+        bg-white/80
+        backdrop-blur-xl
+        shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+        p-7 sm:p-10
+        "
+                    >
+
+                        <div className="space-y-7">
+
+                            {/* Title */}
+                            <div>
+
+                                <label className="text-sm font-medium text-gray-700">
+                                    Job Title
+                                </label>
+
+                                <input
+                                    name="title"
+                                    value={input.title}
+                                    onChange={changeHandler}
+                                    type="text"
+                                    placeholder="Frontend Developer"
+                                    className="
+              w-full mt-3
+              h-14
+              rounded-2xl
+              border-0
+              bg-[#f8fbff]
+              px-5
+              text-gray-900
+              shadow-none
+              focus:outline-none
+              focus:ring-2 focus:ring-blue-200
+              "
+                                />
+
+                            </div>
+
+                            {/* Description */}
+                            <div>
+
+                                <label className="text-sm font-medium text-gray-700">
+                                    Description
+                                </label>
+
+                                <textarea
+                                    name="description"
+                                    value={input.description}
+                                    onChange={changeHandler}
+                                    placeholder="Write job description..."
+                                    className="
+              w-full mt-3
+              rounded-2xl
+              border-0
+              bg-[#f8fbff]
+              px-5 py-4
+              h-36
+              resize-none
+              text-gray-900
+              shadow-none
+              focus:outline-none
+              focus:ring-2 focus:ring-blue-200
+              "
+                                />
+
+                            </div>
+
+                            {/* Requirements */}
+                            <div>
+
+                                <label className="text-sm font-medium text-gray-700">
+                                    Requirements
+                                </label>
+
+                                <input
+                                    name="requirements"
+                                    value={input.requirements}
+                                    onChange={changeHandler}
+                                    type="text"
+                                    placeholder="React, Node, MongoDB"
+                                    className="
+              w-full mt-3
+              h-14
+              rounded-2xl
+              border-0
+              bg-[#f8fbff]
+              px-5
+              text-gray-900
+              focus:outline-none
+              focus:ring-2 focus:ring-blue-200
+              "
+                                />
+
+                            </div>
+
+                            {/* Salary + Location */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                {/* Salary */}
+                                <div>
+
+                                    <label className="text-sm font-medium text-gray-700">
+                                        Salary
+                                    </label>
+
+                                    <input
+                                        name="salary"
+                                        value={input.salary}
+                                        onChange={changeHandler}
+                                        type="number"
+                                        placeholder="500000"
+                                        className="
+                w-full mt-3
+                h-14
+                rounded-2xl
+                border-0
+                bg-[#f8fbff]
+                px-5
+                text-gray-900
+                focus:outline-none
+                focus:ring-2 focus:ring-blue-200
+                "
+                                    />
+
+                                </div>
+
+                                {/* Location */}
+                                <div>
+
+                                    <label className="text-sm font-medium text-gray-700">
+                                        Location
+                                    </label>
+
+                                    <input
+                                        name="location"
+                                        value={input.location}
+                                        onChange={changeHandler}
+                                        type="text"
+                                        placeholder="Bangalore"
+                                        className="
+                w-full mt-3
+                h-14
+                rounded-2xl
+                border-0
+                bg-[#f8fbff]
+                px-5
+                text-gray-900
+                focus:outline-none
+                focus:ring-2 focus:ring-blue-200
+                "
+                                    />
+
+                                </div>
+
+                            </div>
+
+                            {/* Position */}
+                            <div>
+
+                                <label className="text-sm font-medium text-gray-700">
+                                    Position
+                                </label>
+
+                                <input
+                                    value={input.position}
+                                    onChange={changeHandler}
+                                    type="number"
+                                    placeholder="2"
+                                    name="position"
+                                    className="
+              w-full mt-3
+              h-14
+              rounded-2xl
+              border-0
+              bg-[#f8fbff]
+              px-5
+              text-gray-900
+              focus:outline-none
+              focus:ring-2 focus:ring-blue-200
+              "
+                                />
+
+                            </div>
+
+                            {/* Job Type + Experience */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                {/* Job Type */}
+                                <div>
+
+                                    <label className="text-sm font-medium text-gray-700">
+                                        Job Type
+                                    </label>
+
+                                    <select
+                                        name="jobType"
+                                        value={input.jobType}
+                                        onChange={changeHandler}
+                                        className="
+                w-full mt-3
+                h-14
+                rounded-2xl
+                border-0
+                bg-[#f8fbff]
+                px-5
+                text-gray-900
+                focus:outline-none
+                focus:ring-2 focus:ring-blue-200
+                "
+                                    >
+                                        <option value="">Select Job Type</option>
+                                        <option value="Full-Time">Full-Time</option>
+                                        <option value="Part-Time">Part-Time</option>
+                                        <option value="Internship">Internship</option>
+                                    </select>
+
+                                </div>
+
+                                {/* Experience */}
+                                <div>
+
+                                    <label className="text-sm font-medium text-gray-700">
+                                        Experience
+                                    </label>
+
+                                    <input
+                                        name="experience"
+                                        value={input.experience}
+                                        onChange={changeHandler}
+                                        type="number"
+                                        placeholder="2 years"
+                                        className="
+                w-full mt-3
+                h-14
+                rounded-2xl
+                border-0
+                bg-[#f8fbff]
+                px-5
+                text-gray-900
+                focus:outline-none
+                focus:ring-2 focus:ring-blue-200
+                "
+                                    />
+
+                                </div>
+
+                            </div>
+
+                            {/* Company */}
+                            <div>
+
+                                <label className="text-sm font-medium text-gray-700">
+                                    Company
+                                </label>
+
+                                <select
+                                    name="companyId"
+                                    value={input.companyId}
+                                    onChange={changeHandler}
+                                    className="
+              w-full mt-3
+              h-14
+              rounded-2xl
+              border-0
+              bg-[#f8fbff]
+              px-5
+              text-gray-900
+              focus:outline-none
+              focus:ring-2 focus:ring-blue-200
+              "
+                                >
+
+                                    <option value="">Select Company</option>
+
+                                    {allCompanies?.map((company) => (
+                                        <option key={company?._id} value={company?._id}>
+                                            {company?.name}
+                                        </option>
+                                    ))}
+
+                                </select>
+
+                            </div>
+
+                            {/* Buttons */}
+                            <div
+                                className="
+            flex flex-col sm:flex-row
+            justify-end gap-4
+            pt-4
+            "
+                            >
+
+                                {/* Cancel */}
+                                <button
+                                    onClick={() => navigate(-1)}
+                                    className="
+              h-12 px-6
+              rounded-2xl
+              bg-white
+              hover:bg-gray-100
+              text-sm font-medium text-gray-700
+              shadow-sm
+              transition-all duration-300
+              "
+                                >
+                                    Cancel
+                                </button>
+
+                                {/* Create */}
+                                <button
+                                    onClick={submitHandler}
+                                    className="
+              h-12 px-7
+              rounded-2xl
+              bg-gradient-to-r from-blue-600 to-violet-600
+              hover:from-blue-700 hover:to-violet-700
+              text-white
+              text-sm font-medium
+              shadow-[0_10px_25px_rgba(59,130,246,0.25)]
+              transition-all duration-300
+              hover:-translate-y-0.5
+              "
+                                >
+                                    Create Job
+                                </button>
+
+                            </div>
+
+                        </div>
+
                     </div>
 
                 </div>
+
             </div>
-        </div>
+
+            <Footer />
+
+        </>
     )
 }
 

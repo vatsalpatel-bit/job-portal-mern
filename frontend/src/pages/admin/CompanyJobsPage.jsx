@@ -14,6 +14,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { getAdminJobStatus } from "@/services/applicationApi";
 import { searchJobApi } from "@/services/jobApi";
 import { Button } from "@/components/ui/button";
+import Footer from "@/components/shared/Footer";
 const CompanyJobsPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -83,260 +84,536 @@ const CompanyJobsPage = () => {
         );
     }
     return (
-        <div className="overflow-hidden bg-gray-50 mt-16">
-            <div className="max-w-6xl mx-auto px-6 py-5">
+     <>
+  <div className="min-h-screen bg-[#f8fbff] overflow-hidden relative pt-24">
 
-                {/*  Top Section */}
-                <div className="flex items-center justify-between mb-5">
+    {/* Background Blur */}
+    <div className="absolute top-[-120px] left-[-80px] h-[320px] w-[320px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
 
-                    {/* Search */}
-                    <input
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        type="text"
-                        placeholder="Search jobs, companies..."
-                        className="w-80 px-4 py-2 border rounded-lg shadow-sm focus:outline-none"
-                    />
+    <div className="absolute right-[-120px] top-[120px] h-[280px] w-[280px] rounded-full bg-[#fff4db] blur-3xl opacity-70" />
 
-                    {/* New Job Button */}
-                    <button
-                        onClick={() => navigate("/admin/job/create")}
-                        className="bg-red-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700"
+    <div className="max-w-6xl mx-auto px-6 py-10 relative z-10">
+
+      {/* TOP BAR */}
+      <div
+        className="
+        flex flex-col lg:flex-row
+        lg:items-center lg:justify-between
+        gap-5
+        mb-8
+        "
+      >
+
+        {/* Left */}
+        <div>
+
+          <div
+            className="
+            inline-flex items-center
+            rounded-full
+            bg-[#eef4ff]
+            px-4 py-2
+            text-sm font-medium text-blue-700
+            mb-4
+            "
+          >
+            💼 Job Management
+          </div>
+
+          <h1
+            className="
+            text-4xl sm:text-5xl
+            font-extrabold
+            tracking-tight
+            text-gray-900
+            "
+          >
+            Manage Jobs
+          </h1>
+
+          <p className="mt-3 text-gray-600 leading-7">
+            Track, manage and monitor all job postings.
+          </p>
+
+        </div>
+
+        {/* Right */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+
+          {/* Search */}
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            type="text"
+            placeholder="Search jobs, companies..."
+            className="
+            h-12 w-full sm:w-80
+            rounded-2xl
+            border-0
+            bg-white
+            px-5
+            shadow-sm
+            focus:outline-none
+            focus:ring-2 focus:ring-blue-200
+            "
+          />
+
+          {/* New Job */}
+          <button
+            onClick={() => navigate("/admin/job/create")}
+            className="
+            h-12 px-6
+            rounded-2xl
+            bg-gradient-to-r from-blue-600 to-violet-600
+            hover:from-blue-700 hover:to-violet-700
+            text-white
+            text-sm font-medium
+            shadow-[0_10px_25px_rgba(59,130,246,0.25)]
+            transition-all duration-300
+            hover:-translate-y-0.5
+            "
+          >
+            New Job
+          </button>
+
+        </div>
+
+      </div>
+
+      {/* JOBS LIST */}
+      <div className="space-y-5">
+
+        {jobs?.jobs?.length === 0 ? (
+
+          <div
+            className="
+            rounded-[36px]
+            border border-white/60
+            bg-white/80
+            backdrop-blur-xl
+            shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+            py-24 px-6
+            flex flex-col items-center text-center
+            "
+          >
+
+            <div
+              className="
+              h-24 w-24
+              rounded-full
+              bg-[#eef4ff]
+              flex items-center justify-center
+              text-4xl
+              mb-6
+              "
+            >
+              💼
+            </div>
+
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+              No Jobs Found
+            </h2>
+
+            <p className="text-gray-500 mb-8 max-w-md leading-7">
+              You haven&apos;t posted any jobs yet.
+            </p>
+
+            <Button
+              onClick={() => navigate("/admin/job/create")}
+              className="
+              h-12 px-6
+              rounded-2xl
+              bg-black hover:bg-gray-900
+              text-white
+              "
+            >
+              Create Job
+            </Button>
+
+          </div>
+
+        ) : (
+
+          jobs?.jobs?.map((job) => (
+
+            <div
+              key={job._id}
+              className="
+              rounded-[32px]
+              border border-white/60
+              bg-white/80
+              backdrop-blur-xl
+              shadow-[0_10px_35px_rgba(0,0,0,0.04)]
+              p-6 sm:p-7
+              transition-all duration-300
+              hover:shadow-[0_15px_45px_rgba(0,0,0,0.06)]
+              "
+            >
+
+              <div
+                className="
+                flex flex-col xl:flex-row
+                xl:items-center xl:justify-between
+                gap-8
+                "
+              >
+
+                {/* LEFT */}
+                <div className="flex-1 min-w-0">
+
+                  {/* Job Title */}
+                  <h2
+                    className="
+                    text-2xl
+                    font-bold
+                    tracking-tight
+                    text-gray-900
+                    "
+                  >
+                    {job.title}
+                  </h2>
+
+                  {/* Company */}
+                  <p className="text-gray-500 mt-2">
+                    {job.company?.name}
+                  </p>
+
+                  {/* Meta */}
+                  <div
+                    className="
+                    flex flex-wrap
+                    items-center gap-5
+                    mt-5
+                    text-sm text-gray-500
+                    "
+                  >
+
+                    <span className="flex items-center gap-2">
+                      <MapPin size={15} />
+                      {job.location}
+                    </span>
+
+                    <span className="flex items-center gap-2">
+                      <IndianRupee size={15} />
+                      {job.salary}
+                    </span>
+
+                    <span className="flex items-center gap-2">
+                      <Calendar size={15} />
+
+                      {new Date(job.createdAt).toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "short",
+                      })}
+
+                    </span>
+
+                  </div>
+
+                </div>
+
+                {/* RIGHT */}
+                <div
+                  className="
+                  flex flex-col lg:flex-row
+                  lg:items-center
+                  gap-7
+                  "
+                >
+
+                  {/* Stats */}
+                  <div
+                    className="
+                    flex flex-wrap
+                    items-center gap-4
+                    "
+                  >
+
+                    <div
+                      className="
+                      rounded-2xl
+                      bg-[#eef4ff]
+                      px-4 py-3
+                      min-w-[85px]
+                      "
                     >
-                        New Job
+                      <p className="text-[11px] text-blue-600 mb-1">
+                        Total
+                      </p>
+
+                      <p className="font-bold text-blue-700 text-lg">
+                        {job.total}
+                      </p>
+                    </div>
+
+                    <div
+                      className="
+                      rounded-2xl
+                      bg-[#ecfdf3]
+                      px-4 py-3
+                      min-w-[85px]
+                      "
+                    >
+                      <p className="text-[11px] text-green-600 mb-1">
+                        Accepted
+                      </p>
+
+                      <p className="font-bold text-green-700 text-lg">
+                        {job.accepted}
+                      </p>
+                    </div>
+
+                    <div
+                      className="
+                      rounded-2xl
+                      bg-[#fff7ed]
+                      px-4 py-3
+                      min-w-[85px]
+                      "
+                    >
+                      <p className="text-[11px] text-orange-600 mb-1">
+                        Pending
+                      </p>
+
+                      <p className="font-bold text-orange-700 text-lg">
+                        {job.pending}
+                      </p>
+                    </div>
+
+                    <div
+                      className="
+                      rounded-2xl
+                      bg-[#fef2f2]
+                      px-4 py-3
+                      min-w-[85px]
+                      "
+                    >
+                      <p className="text-[11px] text-red-600 mb-1">
+                        Rejected
+                      </p>
+
+                      <p className="font-bold text-red-700 text-lg">
+                        {job.rejected}
+                      </p>
+                    </div>
+
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center gap-3">
+
+                    <button
+                      onClick={() => navigate(`/admin/job/${job._id}/view`)}
+                      className="
+                      h-11 px-5
+                      rounded-2xl
+                      bg-[#eef4ff]
+                      hover:bg-blue-100
+                      text-sm font-medium text-blue-700
+                      transition
+                      "
+                    >
+                      View
                     </button>
-                </div>
 
+                    <button
+                      onClick={() => navigate(`/admin/job/${job._id}/applicant`)}
+                      className="
+                      h-11 px-5
+                      rounded-2xl
+                      bg-[#f3e8ff]
+                      hover:bg-purple-100
+                      text-sm font-medium text-purple-700
+                      transition
+                      "
+                    >
+                      Applicants
+                    </button>
 
-                {/*  Jobs List */}
-                <div className="space-y-4">
+                    {/* More */}
+                    <Popover>
 
-                    {jobs?.jobs?.length === 0 ? (
+                      <PopoverTrigger asChild>
 
-                        <div className="flex flex-col items-center justify-center py-24 text-center">
-
-                            <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                                No Jobs Found
-                            </h2>
-
-                            <p className="text-sm text-gray-500 mb-6">
-                                You haven't posted any jobs yet.
-                            </p>
-
-                            <Button
-                                onClick={() => navigate("/admin/job/create")}
-                                className="rounded-xl px-5"
-                            >
-                                Create Job
-                            </Button>
-
-                        </div>
-
-                    ) : (
-
-                        jobs?.jobs?.map((job) => (
-                            <div
-                                key={job._id}
-                                className="bg-white p-5 rounded-xl shadow-sm flex justify-between items-center hover:shadow-md transition"
-                            >
-
-                                {/* Left Section */}
-                                <div className="flex items-center gap-4">
-
-                                    {/* Job Info */}
-                                    <div>
-                                        <h2 className="text-lg font-semibold">
-                                            {job.title}
-                                        </h2>
-
-                                        <p className="text-sm text-gray-500">
-                                            {job.company?.name}
-                                        </p>
-
-                                        {/* Meta Info */}
-                                        <div className="flex gap-4 text-sm text-gray-500 mt-1">
-
-                                            <span className="flex items-center gap-1">
-                                                <MapPin size={14} />
-                                                {job.location}
-                                            </span>
-
-                                            <span className="flex items-center gap-1">
-                                                <IndianRupee size={14} />
-                                                {job.salary}
-                                            </span>
-
-                                            <span className="flex items-center gap-1">
-                                                <Calendar size={14} />
-                                                {new Date(job.createdAt).toLocaleDateString("en-IN", {
-                                                    day: "numeric",
-                                                    month: "short",
-                                                })}
-                                            </span>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Right Section */}
-                                <div className="flex items-center gap-6">
-
-                                    {/* Stats */}
-                                    <div className="flex items-center gap-5 text-sm">
-
-                                        <div className="text-center">
-                                            <p className="text-[10px] text-gray-400">Total</p>
-                                            <p className="font-semibold text-gray-800">{job.total}</p>
-                                        </div>
-
-                                        <div className="text-center">
-                                            <p className="text-[10px] text-gray-400">Accepted</p>
-                                            <p className="font-semibold text-green-600">{job.accepted}</p>
-                                        </div>
-
-                                        <div className="text-center">
-                                            <p className="text-[10px] text-gray-400">Pending</p>
-                                            <p className="font-semibold text-yellow-600">{job.pending}</p>
-                                        </div>
-                                        <div className="text-center">
-                                            <p className="text-[10px] text-gray-400">Rejected</p>
-                                            <p className="font-semibold text-red-600">{job.rejected}</p>
-                                        </div>
-
-                                    </div>
-
-                                    {/* Divider */}
-                                    <div className="h-6 w-px bg-gray-200"></div>
-
-                                    {/* Actions */}
-                                    <div className="flex items-center gap-2">
-
-                                        <button
-                                            onClick={() => navigate(`/admin/job/${job._id}/view`)}
-                                            className="px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
-                                        >
-                                            View
-                                        </button>
-
-                                        <button
-                                            onClick={() => navigate(`/admin/job/${job._id}/applicant`)}
-                                            className="px-3 py-1.5 text-xs font-medium text-purple-600 bg-purple-50 rounded-md hover:bg-purple-100"
-                                        >
-                                            Applicants
-                                        </button>
-
-                                        <Popover>
-                                            <PopoverTrigger asChild>
-                                                <button className="p-2 rounded-md hover:bg-gray-100 transition">
-                                                    <MoreVertical className="text-gray-500 w-4 h-4" />
-                                                </button>
-                                            </PopoverTrigger>
-
-                                            <PopoverContent
-                                                align="end"
-                                                className="w-40 p-1 rounded-lg shadow-lg border bg-white"
-                                            >
-                                                <button
-                                                    onClick={() => navigate(`/admin/job/${job._id}/edit`)}
-                                                    className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-100"
-                                                >
-                                                    <Pencil className="w-4 h-4 text-gray-500" />
-                                                    Edit
-                                                </button>
-
-                                                <div />
-
-                                            </PopoverContent>
-                                        </Popover>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        )))}
-
-                </div>
-                {/* Pagination */}
-                <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-6xl flex items-center justify-between bg-white border rounded-xl px-6 py-4 shadow-lg">
-
-                    {/* Left */}
-                    <div className="text-sm text-gray-500">
-                        Showing page{" "}
-                        <span className="font-semibold text-gray-800">
-                            {page}
-                        </span>{" "}
-                        of{" "}
-                        <span className="font-semibold text-gray-800">
-                            {jobs?.totalPages}
-                        </span>
-                    </div>
-
-                    {/* Right */}
-                    <div className="flex items-center gap-2">
-
-                        {/* Previous */}
                         <button
-                            disabled={page === 1}
-                            onClick={() => {
-                                if (page > 1) {
-                                    setPage(page - 1);
-                                }
-                            }}
-                            className={`px-4 py-2 rounded-lg border text-sm font-medium transition
-            ${page === 1
-                                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                    : "bg-white text-gray-700 hover:bg-gray-100"
-                                }`}
+                          className="
+                          h-11 w-11
+                          rounded-2xl
+                          bg-white
+                          hover:bg-gray-100
+                          shadow-sm
+                          flex items-center justify-center
+                          transition
+                          "
                         >
-                            Previous
+                          <MoreVertical className="text-gray-500 w-4 h-4" />
                         </button>
 
-                        {/* Page Numbers */}
-                        <div className="flex items-center gap-1">
+                      </PopoverTrigger>
 
-                            {[...Array(jobs?.totalPages || 1)].map((_, index) => {
-                                const pageNumber = index + 1;
+                      <PopoverContent
+                        align="end"
+                        className="
+                        w-44 p-2
+                        rounded-2xl
+                        border-0
+                        bg-white
+                        shadow-[0_10px_40px_rgba(0,0,0,0.08)]
+                        "
+                      >
 
-                                return (
-                                    <button
-                                        key={pageNumber}
-                                        onClick={() => setPage(pageNumber)}
-                                        className={`w-10 h-10 rounded-lg text-sm font-semibold transition
-                        ${page === pageNumber
-                                                ? "bg-black text-white shadow-sm"
-                                                : "bg-white border text-gray-700 hover:bg-gray-100"
-                                            }`}
-                                    >
-                                        {pageNumber}
-                                    </button>
-                                );
-                            })}
-
-                        </div>
-
-                        {/* Next */}
                         <button
-                            disabled={page === jobs?.totalPages}
-                            onClick={() => {
-                                if (page < jobs?.totalPages) {
-                                    setPage(page + 1);
-                                }
-                            }}
-                            className={`px-4 py-2 rounded-lg border text-sm font-medium transition
-            ${page === jobs?.totalPages
-                                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                    : "bg-white text-gray-700 hover:bg-gray-100"
-                                }`}
+                          onClick={() => navigate(`/admin/job/${job._id}/edit`)}
+                          className="
+                          flex items-center gap-3
+                          w-full px-3 py-3
+                          text-sm font-medium
+                          rounded-xl
+                          text-gray-700
+                          hover:bg-[#f8fbff]
+                          transition
+                          "
                         >
-                            Next
+                          <Pencil className="w-4 h-4 text-gray-500" />
+                          Edit Job
                         </button>
 
-                    </div>
+                      </PopoverContent>
+
+                    </Popover>
+
+                  </div>
+
                 </div>
+
+              </div>
 
             </div>
+
+          ))
+
+        )}
+
+      </div>
+
+      {/* PAGINATION */}
+      <div
+        className="
+        sticky bottom-4
+        mt-10
+        rounded-[28px]
+        border border-white/60
+        bg-white/80
+        backdrop-blur-xl
+        shadow-[0_10px_35px_rgba(0,0,0,0.05)]
+        px-6 py-5
+        flex flex-col lg:flex-row
+        items-center justify-between
+        gap-5
+        "
+      >
+
+        {/* Left */}
+        <div className="text-sm text-gray-500">
+
+          Showing page{" "}
+
+          <span className="font-semibold text-gray-900">
+            {page}
+          </span>{" "}
+
+          of{" "}
+
+          <span className="font-semibold text-gray-900">
+            {jobs?.totalPages}
+          </span>
+
         </div>
+
+        {/* Right */}
+        <div className="flex items-center gap-2">
+
+          {/* Previous */}
+          <button
+            disabled={page === 1}
+            onClick={() => {
+              if (page > 1) {
+                setPage(page - 1);
+              }
+            }}
+            className={`
+            h-11 px-5 rounded-2xl
+            text-sm font-medium transition-all duration-300
+
+            ${page === 1
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "bg-white text-gray-700 hover:bg-gray-100 shadow-sm"
+              }
+            `}
+          >
+            Previous
+          </button>
+
+          {/* Pages */}
+          <div className="flex items-center gap-2">
+
+            {[...Array(jobs?.totalPages || 1)].map((_, index) => {
+
+              const pageNumber = index + 1;
+
+              return (
+                <button
+                  key={pageNumber}
+                  onClick={() => setPage(pageNumber)}
+                  className={`
+                  h-11 w-11 rounded-2xl
+                  text-sm font-semibold transition-all duration-300
+
+                  ${page === pageNumber
+                      ? "bg-black text-white shadow-md"
+                      : "bg-white border border-gray-100 text-gray-700 hover:bg-gray-100"
+                    }
+                  `}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
+
+          </div>
+
+          {/* Next */}
+          <button
+            disabled={page === jobs?.totalPages}
+            onClick={() => {
+              if (page < jobs?.totalPages) {
+                setPage(page + 1);
+              }
+            }}
+            className={`
+            h-11 px-5 rounded-2xl
+            text-sm font-medium transition-all duration-300
+
+            ${page === jobs?.totalPages
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "bg-white text-gray-700 hover:bg-gray-100 shadow-sm"
+              }
+            `}
+          >
+            Next
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <Footer />
+
+</>
     );
 };
 
