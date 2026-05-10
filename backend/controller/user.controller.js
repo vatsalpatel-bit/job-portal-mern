@@ -242,7 +242,7 @@ export const updateProfile = async (req, res) => {
 
 export const getProfile = async (req, res) => {
   try {
-    const userId = req.userId;
+    const userId = new mongoose.Types.ObjectId(req.userId);
 
     const user = await User.findById(userId).select("-password");
 
@@ -289,25 +289,25 @@ export const uploadUserResume = async (req, res) => {
 
     // Upload to Cloudinary
     const uploadResult = await new Promise(
-  (resolve, reject) => {
+      (resolve, reject) => {
 
-    const stream = cloudinary.uploader.upload_stream(
-      {
-        folder: "job-portal/resumes",
-        resource_type: "raw",
-      },
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: "job-portal/resumes",
+            resource_type: "raw",
+          },
 
-      (error, result) => {
-        if (error) reject(error);
-        else resolve(result);
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+
+        streamifier
+          .createReadStream(req.file.buffer)
+          .pipe(stream);
       }
     );
-
-    streamifier
-      .createReadStream(req.file.buffer)
-      .pipe(stream);
-  }
-);
     // SAVE INTO MONGODB (THIS WAS MISSING)
     user.profile.resume = uploadResult.secure_url;
     user.profile.resumeOringinalName = req.file.originalname;

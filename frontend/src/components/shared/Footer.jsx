@@ -5,8 +5,12 @@ import {
   Github
 } from "lucide-react";
 import brandLogo from "@/svg/brand-logo.png"
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Footer = () => {
+  const user = useSelector((state) => state.auth.user);
+  console.log(user);
   return (
 
     <footer className="relative w-full overflow-hidden bg-[#0b0f19]">
@@ -124,67 +128,273 @@ const Footer = () => {
 
             {/* RIGHT SIDE */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
+              {
+                user?.role === "student" ? (<><div>
 
-              {/* Candidates */}
-              <div>
-
-                <h4
-                  className="
+                  <h4
+                    className="
         mb-6 text-sm font-semibold
         uppercase tracking-[0.2em]
         text-white
         "
-                >
-                  Candidates
-                </h4>
+                  >
+                    Candidates
+                  </h4>
 
-                <ul className="space-y-4 text-sm text-gray-400">
+                  <ul className="space-y-4 text-sm text-gray-400">
 
-                  <li className="hover:text-white transition cursor-pointer">
-                    Browse
-                  </li>
-                  <li className="hover:text-white transition cursor-pointer">
-                    Jobs
-                  </li>
+                    <li>
+                      <Link
+                        to="/jobs"
+                        className="hover:text-white transition cursor-pointer"
+                      >
+                        Jobs
+                      </Link>
+                    </li>
 
-                  <li className="hover:text-white transition cursor-pointer">
-                    Profile
-                  </li>
+                    <li>
+                      <Link
+                        to="/browse"
+                        className="hover:text-white transition cursor-pointer"
+                      >
+                        Browse
+                      </Link>
+                    </li>
 
+                    <li>
+                      <Link
+                        to="/profile"
+                        className="hover:text-white transition cursor-pointer"
+                      >
+                        Profile
+                      </Link>
+                    </li>
 
-                </ul>
+                  </ul>
 
-              </div>
+                </div>
+                  <div>
 
-              {/* Recruiters */}
-              <div>
-
-                <h4
-                  className="
+                    <h4
+                      className="
         mb-6 text-sm font-semibold
         uppercase tracking-[0.2em]
         text-white
         "
-                >
-                  Recruiters
-                </h4>
+                    >
+                      Recruiters
+                    </h4>
 
-                <ul className="space-y-4 text-sm text-gray-400">
+                    <ul className="space-y-4 text-sm text-gray-400">
 
-                  <li className="hover:text-white transition cursor-pointer">
-                    Companies
-                  </li>
+                      <li>
+                        <Link
+                          to="# "
+                          className="hover:text-white transition cursor-pointer"
+                        >
+                          Companies
+                        </Link>
+                      </li>
 
-                  <li className="hover:text-white transition cursor-pointer">
-                    Jobs
-                  </li>
+                      <li>
+                        <Link
+                          to="#"
+                          className="hover:text-white transition cursor-pointer"
+                        >
+                          Jobs
+                        </Link>
+                      </li>
 
-                  <li className="hover:text-white transition cursor-pointer">
-                    Applicants
-                  </li>
-                </ul>
+                      <li>
+                        <Link
+                          to="#"
+                          className="hover:text-white transition cursor-pointer"
+                        >
+                          Profile
+                        </Link>
+                      </li>
+                    </ul>
 
-              </div>
+                  </div>
+                </>) : user?.role === "recruiter" ? (<>
+                  <div>
+
+                    <h4
+                      className="
+        mb-6 text-sm font-semibold
+        uppercase tracking-[0.2em]
+        text-white
+        "
+                    >
+                      Candidates
+                    </h4>
+
+                    <ul className="space-y-4 text-sm text-gray-400">
+
+                      <li>
+                        <Link
+                          to="#"
+                          className="hover:text-white transition cursor-pointer"
+                        >
+                          Jobs
+                        </Link>
+                      </li>
+
+                      <li>
+                        <Link
+                          to="#"
+                          className="hover:text-white transition cursor-pointer"
+                        >
+                          Browse
+                        </Link>
+                      </li>
+
+                      <li>
+                        <Link
+                          to="#"
+                          className="hover:text-white transition cursor-pointer"
+                        >
+                          Profile
+                        </Link>
+                      </li>
+
+                    </ul>
+
+                  </div>
+                  <div>
+
+                    <h4
+                      className="
+        mb-6 text-sm font-semibold
+        uppercase tracking-[0.2em]
+        text-white
+        "
+                    >
+                      Recruiters
+                    </h4>
+
+                    <ul className="space-y-4 text-sm text-gray-400">
+
+                      <li>
+                        <Link
+                          to="/admin/companies"
+                          className="hover:text-white transition cursor-pointer"
+                        >
+                          Companies
+                        </Link>
+                      </li>
+
+                      <li>
+                        <Link
+                          to="/admin/jobs"
+                          className="hover:text-white transition cursor-pointer"
+                        >
+                          Jobs
+                        </Link>
+                      </li>
+
+                      <li>
+                        <Link
+                          to="/admin/profile"
+                          className="hover:text-white transition cursor-pointer"
+                        >
+                          Profile
+                        </Link>
+                      </li>
+                    </ul>
+
+                  </div></>) : (
+                  <>
+                    <div>
+
+                      <h4
+                        className="
+        mb-6 text-sm font-semibold
+        uppercase tracking-[0.2em]
+        text-white
+        "
+                      >
+                        Candidates
+                      </h4>
+
+                      <ul className="space-y-4 text-sm text-gray-400">
+
+                        <li>
+                          <Link
+                            to="#"
+                            className="hover:text-white transition cursor-pointer"
+                          >
+                            Jobs
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link
+                            to="#"
+                            className="hover:text-white transition cursor-pointer"
+                          >
+                            Browse
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link
+                            to="#"
+                            className="hover:text-white transition cursor-pointer"
+                          >
+                            Profile
+                          </Link>
+                        </li>
+
+                      </ul>
+
+                    </div>
+                    <div>
+
+                      <h4
+                        className="
+        mb-6 text-sm font-semibold
+        uppercase tracking-[0.2em]
+        text-white
+        "
+                      >
+                        Recruiters
+                      </h4>
+
+                      <ul className="space-y-4 text-sm text-gray-400">
+
+                        <li>
+                          <Link
+                            to="#"
+                            className="hover:text-white transition cursor-pointer"
+                          >
+                            Companies
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link
+                            to="#"
+                            className="hover:text-white transition cursor-pointer"
+                          >
+                            Jobs
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link
+                            to="#"
+                            className="hover:text-white transition cursor-pointer"
+                          >
+                            Profile
+                          </Link>
+                        </li>
+                      </ul>
+
+                    </div>
+                  </>
+                )
+              }
 
               {/* Resources */}
               <div>
