@@ -18,6 +18,7 @@ import {
   auth,
   provider
 } from "@/utils/firebase"
+import { googleAuthenticationApi } from "@/services/authApi";
 
 const Signup = () => {
   const navigate = useNavigate();

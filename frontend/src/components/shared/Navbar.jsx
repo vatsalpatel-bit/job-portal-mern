@@ -23,7 +23,7 @@ const Navbar = () => {
 
   // REAL AUTH STATE
   const user = useSelector((state) => state.auth.user);
-  console.log(user?.role) // const user=true;
+  // console.log(user?.role) // const user=true;
 
   useEffect(() => {
     const onScroll = () => {

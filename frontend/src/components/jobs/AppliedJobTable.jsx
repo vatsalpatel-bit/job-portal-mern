@@ -22,6 +22,7 @@ const AppliedJobTable = () => {
   const limit = 5;
 
   const totalPages = Math.ceil(appliedJobs.length / limit);
+  console.log(totalPages);
 
   const paginatedJobs = appliedJobs.slice(
     (page - 1) * limit,
@@ -234,7 +235,22 @@ const AppliedJobTable = () => {
           </div>
 
           {/* Next */}
-          <button
+
+          {totalPages == 0 ? (
+            <button
+              disabled
+              onClick={() => setPage(page + 1)}
+              className={`
+        h-11 px-5 rounded-2xl
+        text-sm font-medium
+        transition-all duration-300
+        bg-gray-100 text-gray-400 cursor-not-allowed
+
+        `}
+            >
+              Next
+            </button>
+          ) : (<button
             disabled={page === totalPages}
             onClick={() => setPage(page + 1)}
             className={`
@@ -249,7 +265,8 @@ const AppliedJobTable = () => {
         `}
           >
             Next
-          </button>
+          </button>)}
+
 
         </div>
 
