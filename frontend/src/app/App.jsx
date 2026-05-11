@@ -27,6 +27,11 @@ import ApplicantDetailPage from "@/pages/admin/ApplicantDetailPage";
 import AdminProfilePage from "@/pages/admin/AdminProfilePage";
 import AdminProfileEditPage from "@/pages/admin/AdminProfileEditPage";
 import NotFound from "@/pages/NotFound";
+import AboutUsPage from "@/components/shared/AboutUsPage";
+import HelpCenterPage from "@/components/shared/HelpCenterPage";
+import PrivacyPolicyPage from "@/components/shared/PrivacyPolicyPage";
+import TermAndConditionPage from "@/components/shared/TermAndConditionPage";
+import SecurityPage from "@/components/shared/SecurityPage";
 
 const router = createBrowserRouter([
   {
@@ -118,6 +123,32 @@ const router = createBrowserRouter([
         path: "*",
         element: (
           <NotFound />
+        )
+      },
+      {
+        path: "/about us",
+        element: (
+          <AboutUsPage />
+        )
+      }, {
+        path: "/help center",
+        element: (
+          <HelpCenterPage />
+        )
+      }, {
+        path: "/privacy policy",
+        element: (
+          <PrivacyPolicyPage />
+        )
+      }, {
+        path: "/term & condition",
+        element: (
+          <TermAndConditionPage />
+        )
+      }, {
+        path: "/security",
+        element: (
+          <SecurityPage />
         )
       }
 

@@ -411,20 +411,37 @@ const Footer = () => {
 
                 <ul className="space-y-4 text-sm text-gray-400">
 
-                  <li className="hover:text-white transition cursor-pointer">
-                    About
+                  <li>
+                    <Link
+                      to="/about us"
+                      className="hover:text-white transition cursor-pointer"
+                    >
+                      About us
+                    </Link>
                   </li>
-
-                  <li className="hover:text-white transition cursor-pointer">
-                    Help Center
+                  <li>
+                    <Link
+                      to="/help center"
+                      className="hover:text-white transition cursor-pointer"
+                    >
+                      Help Center
+                    </Link>
                   </li>
-
-                  <li className="hover:text-white transition cursor-pointer">
-                    Privacy Policy
+                  <li>
+                    <Link
+                      to="/privacy policy"
+                      className="hover:text-white transition cursor-pointer"
+                    >
+                      Privacy Policy
+                    </Link>
                   </li>
-
-                  <li className="hover:text-white transition cursor-pointer">
-                    Terms & Conditions
+                  <li>
+                    <Link
+                      to="/term & condition"
+                      className="hover:text-white transition cursor-pointer"
+                    >
+                      Terms & Conditions
+                    </Link>
                   </li>
 
                 </ul>
@@ -453,17 +470,24 @@ const Footer = () => {
 
             <div className="flex items-center gap-6 text-sm text-gray-500">
 
-              <span className="hover:text-white cursor-pointer transition">
+              <Link
+                to="/privacy policy"
+                className="hover:text-white cursor-pointer transition"
+              >
                 Privacy
-              </span>
-
-              <span className="hover:text-white cursor-pointer transition">
+              </Link>
+              <Link
+                to="/term & condition"
+                className="hover:text-white cursor-pointer transition"
+              >
                 Terms
-              </span>
-
-              <span className="hover:text-white cursor-pointer transition">
+              </Link>
+              <Link
+                to="/security"
+                className="hover:text-white cursor-pointer transition"
+              >
                 Security
-              </span>
+              </Link>
 
             </div>
 
