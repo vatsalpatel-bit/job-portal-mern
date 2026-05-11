@@ -7,11 +7,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setUser } from "@/redux/slices/authslice";
-
-// ✅ CORRECT API IMPORT
-import { loginUser, getProfileApi } from "@/services/authApi";
+import { loginUser, getProfileApi, googleAuthenticationApi } from "@/services/authApi";
 import Footer from "@/components/shared/Footer";
 import Navbar from "@/components/shared/Navbar";
+import {
+  signInWithPopup,
+} from "firebase/auth";
+
+import {
+  auth,
+  provider
+} from "@/utils/firebase"
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,6 +33,29 @@ const Login = () => {
   const changeEventeHandeler = (e) => {
     const { name, value } = e.target;
     setInput((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleGoogleLogin = async () => {
+
+    try {
+
+      const result =
+        await signInWithPopup(
+          auth,
+          provider
+        );
+
+      const user = result.user;
+      // console.log(user);
+      const data = await googleAuthenticationApi(user);
+      // console.log(data)
+      dispatch(setUser(data.user));
+      navigate("/")
+
+    } catch (error) {
+
+      console.log(error);
+    }
   };
 
   const submitHandler = async (e) => {
@@ -173,6 +202,22 @@ const Login = () => {
               />
 
             </div>
+            {/* Forgot Password */}
+            <div className="flex items-center justify-end -mt-1">
+
+              <Link
+                to="/forgot-password"
+                className="
+    text-sm font-medium
+    text-gray-500
+    hover:text-blue-600
+    transition-all duration-300
+    "
+              >
+                Forgot Password?
+              </Link>
+
+            </div>
 
             {/* Role */}
             <div className="space-y-4">
@@ -248,7 +293,134 @@ const Login = () => {
               </RadioGroup>
 
             </div>
+            {/* Divider */}
+            <div className="relative py-2">
 
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200" />
+              </div>
+
+              <div className="relative flex justify-center">
+                <span
+                  className="
+      bg-white
+      px-4
+      text-sm text-gray-400
+      "
+                >
+                  OR
+                </span>
+              </div>
+
+            </div>
+
+            {/* Google Auth */}
+            <div className="space-y-4">
+
+              {/* Info Message */}
+              <div
+                className="
+    flex items-start gap-3
+    rounded-2xl
+    bg-[#eef4ff]
+    border border-blue-100
+    px-5 py-4
+    "
+              >
+
+                <div className="text-lg">
+                  ℹ️
+                </div>
+
+                <div>
+
+                  <p className="text-sm font-semibold text-blue-900">
+                    Student Authentication Only
+                  </p>
+
+                  <p className="text-sm text-blue-700 mt-1 leading-6">
+                    Google login is currently available only for students.
+                    Recruiters must login using email and password.
+                  </p>
+
+                </div>
+
+              </div>
+
+              {/* Google Button */}
+              <Button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="
+    group
+    relative
+    w-full h-14
+    rounded-2xl
+    bg-white
+    hover:bg-gray-50
+    border border-gray-200
+    text-gray-800
+    shadow-sm
+    hover:shadow-md
+    transition-all duration-300
+    "
+              >
+
+                <div
+                  className="
+      flex items-center justify-center gap-4
+      "
+                >
+
+                  {/* Google Logo */}
+                  <div
+                    className="
+        h-9 w-9
+        rounded-full
+        bg-[#f8fbff]
+        flex items-center justify-center
+        border border-gray-100
+        "
+                  >
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 48 48"
+                      className="h-5 w-5"
+                    >
+                      <path
+                        fill="#FFC107"
+                        d="M43.6 20.5H42V20H24v8h11.3C33.6 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12S17.4 12 24 12c3 0 5.7 1.1 7.8 3l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"
+                      />
+
+                      <path
+                        fill="#FF3D00"
+                        d="M6.3 14.7l6.6 4.8C14.7 15.3 18.9 12 24 12c3 0 5.7 1.1 7.8 3l5.7-5.7C34.1 6.1 29.3 4 24 4c-7.7 0-14.3 4.3-17.7 10.7z"
+                      />
+
+                      <path
+                        fill="#4CAF50"
+                        d="M24 44c5.2 0 10-2 13.6-5.2l-6.3-5.3C29.3 35 26.8 36 24 36c-5.2 0-9.6-3.3-11.2-7.9l-6.5 5C9.5 39.5 16.2 44 24 44z"
+                      />
+
+                      <path
+                        fill="#1976D2"
+                        d="M43.6 20.5H42V20H24v8h11.3c-1.1 3-3.3 5.3-6 6.8l.1-.1 6.3 5.3C35.3 39.9 44 34 44 24c0-1.3-.1-2.3-.4-3.5z"
+                      />
+                    </svg>
+
+                  </div>
+
+                  {/* Text */}
+                  <span className="text-base font-semibold">
+                    Continue with Google
+                  </span>
+
+                </div>
+
+              </Button>
+
+            </div>
             {/* Submit */}
             <Button
               type="submit"

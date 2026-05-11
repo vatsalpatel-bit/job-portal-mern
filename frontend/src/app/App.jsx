@@ -32,6 +32,7 @@ import HelpCenterPage from "@/components/shared/HelpCenterPage";
 import PrivacyPolicyPage from "@/components/shared/PrivacyPolicyPage";
 import TermAndConditionPage from "@/components/shared/TermAndConditionPage";
 import SecurityPage from "@/components/shared/SecurityPage";
+import ForgotPasswordPage from "@/components/shared/ForgotPasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -149,6 +150,11 @@ const router = createBrowserRouter([
         path: "/security",
         element: (
           <SecurityPage />
+        )
+      }, {
+        path: "/forgot-password",
+        element: (
+          <ForgotPasswordPage />
         )
       }
 

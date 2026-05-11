@@ -69,6 +69,7 @@ const Footer = () => {
         hover:text-black
         transition-all duration-300
         "
+                  target="_blank"
                   href="https://www.facebook.com/profile.php?id=61589714964366"
                 >
                   <Facebook className="h-4 w-4" />
@@ -84,6 +85,7 @@ const Footer = () => {
         hover:text-black
         transition-all duration-300
         "
+                  target="_blank"
                   href="https://x.com/Knightcode013"
                 >
                   <Twitter className="h-4 w-4" />
@@ -99,6 +101,7 @@ const Footer = () => {
         hover:text-black
         transition-all duration-300
         "
+                  target="_blank"
                   href="https://www.linkedin.com/in/vatsal-patel-928b49407/"
                 >
                   <Linkedin className="h-4 w-4" />
@@ -114,6 +117,7 @@ const Footer = () => {
         hover:text-black
         transition-all duration-300
         "
+                  target="_blank"
                   href="https://github.com/vatsalpatel-bit"
                 >
                   <Github className="h-4 w-4" />

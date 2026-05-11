@@ -9,6 +9,7 @@ import {
   getApplicant,
   getAdminProfile,
   editAdminProfile,
+  googleAuthentication,
 } from "../controller/user.controller.js";
 import isAuthenticated from "../middleware/isAuthenticated.js";
 import { uploadResume } from "../middleware/multer.js";
@@ -45,6 +46,8 @@ router.get("/get/:applicantId/:jobId/applicant", isAuthenticated, getApplicant);
 
 //admin profile
 router.get("/admin/profile", isAuthenticated, getAdminProfile);
+
+router.post("/google-login", googleAuthentication);
 
 // resume
 router.put(

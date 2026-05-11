@@ -558,3 +558,70 @@ export const editAdminProfile = async (req, res) => {
     });
   }
 };
+
+export const googleAuthentication = async (
+  req,
+  res
+) => {
+
+  try {
+
+    console.log(req.body);
+
+    const {
+      fullname,
+      email,
+      profilePhoto,
+    } = req.body;
+
+    let user = await User.findOne({
+      email,
+    });
+
+    if (!user) {
+
+      user = await User.create({
+
+        fullname,
+
+        email,
+
+        role: "student",
+
+        profile: {
+          profilePhoto,
+        },
+      });
+    }
+
+    const token = jwt.sign(
+
+      { userId: user._id },
+
+      process.env.SECRET_KEY,
+
+      { expiresIn: "1d" }
+    );
+
+    return res
+      .cookie("token", token, {
+        httpOnly: true,
+      })
+
+      .status(200)
+
+      .json({
+        success: true,
+        user,
+      });
+
+  } catch (error) {
+
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
