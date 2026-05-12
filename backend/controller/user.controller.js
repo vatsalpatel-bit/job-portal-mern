@@ -7,6 +7,7 @@ import { getPublicIdFromUrl } from "../utils/cloudinary.js";
 import mongoose from "mongoose";
 import { Application } from "../utils/application.model.js";
 import { uploadFromBuffer } from "../utils/cloudinaryUpload.js";
+import { transporter } from "../utils/transporter.js";
 
 const buildSafeUser = (user) => ({
   _id: user._id,
@@ -625,3 +626,82 @@ export const googleAuthentication = async (
     });
   }
 };
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      })
+    }
+    if (!user.password) {
+
+      return res.status(400).json({
+        success: false,
+        message:
+          "Please login with Google",
+      });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.SECRET_KEY,
+      { expiresIn: "15min" }
+    )
+
+    const resetLink =
+      `http://localhost:5173/reset-password/${token}`;
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Reset password",
+
+        html: ` <div style=" background:#f6f9ff; padding:40px 20px; font-family:Arial,sans-serif; " > <div style=" max-width:600px; margin:auto; background:#ffffff; border-radius:24px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,0.06); " > <div style=" background:linear-gradient(135deg,#2563eb,#7c3aed); padding:50px 40px; text-align:center; " > <h1 style=" color:white; margin:0; font-size:34px; font-weight:800; " > NextWork </h1> <p style=" color:rgba(255,255,255,0.85); margin-top:14px; font-size:16px; " > Secure Password Reset </p> </div> <div style="padding:45px 40px;"> <div style=" display:inline-block; background:#eef4ff; color:#2563eb; padding:10px 18px; border-radius:999px; font-size:13px; font-weight:600; margin-bottom:24px; " > 🔐 Password Recovery </div> <h2 style=" margin:0; color:#111827; font-size:32px; font-weight:800; line-height:1.2; " > Reset Your Password </h2> <p style=" margin-top:22px; color:#4b5563; font-size:16px; line-height:1.8; " > We received a request to reset your password for your NextWork account. </p> <p style=" margin-top:16px; color:#4b5563; font-size:16px; line-height:1.8; " > Click the button below to create a new password. </p> <div style="margin-top:38px;"> <a href="${resetLink}" style=" display:inline-block; background:linear-gradient(135deg,#2563eb,#7c3aed); color:white; text-decoration:none; padding:16px 32px; border-radius:18px; font-size:16px; font-weight:700; " > Reset Password </a> </div> <div style=" margin-top:40px; padding:20px; background:#f8fbff; border-radius:18px; " > <p style=" margin:0 0 10px 0; color:#111827; font-size:14px; font-weight:600; " > Button not working? </p> <p style=" margin:0; color:#6b7280; font-size:13px; line-height:1.7; word-break:break-all; " > ${resetLink} </p> </div> <div style=" margin-top:28px; padding:18px; background:#fff7ed; border-radius:18px; " > <p style=" margin:0; color:#c2410c; font-size:14px; line-height:1.7; " > ⚠️ If you did not request a password reset, you can safely ignore this email. </p> </div> </div> <div style=" border-top:1px solid #eef2ff; padding:28px 40px; text-align:center; background:#fcfdff; " > <p style=" margin:0; color:#9ca3af; font-size:13px; " > © ${new Date().getFullYear()} NextWork. All rights reserved. </p> </div> </div> </div> `
+
+    })
+    return res.status(200).json({
+      success: true,
+      message: "Reset link sent",
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+}
+
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params
+    const { password } = req.body;
+    console.log(token, password)
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const hashedPassword = await bcrypt.hash(password, Number(process.env.SALT_ROUND));
+
+    await User.findByIdAndUpdate(decoded.userId, {
+      password: hashedPassword
+    })
+
+    return res.status(200).json({
+      message: "Password reset successful",
+      success: true
+    })
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false
+    })
+  }
+}

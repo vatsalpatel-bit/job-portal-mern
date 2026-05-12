@@ -1,29 +1,31 @@
 import React, { useState } from 'react'
 import Navbar from './Navbar'
 import Footer from './Footer'
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Link, useParams } from 'react-router-dom'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { resetPasswordApi } from '@/services/authApi'
+import { toast } from 'sonner'
+const ResetPasswordPage = () => {
+    const { token } = useParams();
+    const [password, setPassword] = useState("");
+    const [conformPassword, setConformPassword] = useState("");
+    console.log(token);
 
-import { Link } from "react-router-dom";
-import { forgotPasswordApi } from '@/services/authApi';
-import { toast } from 'sonner';
-
-const ForgotPasswordPage = () => {
-    const [email, setEmail] = useState("");
-    // console.log(email);
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = await forgotPasswordApi(email);
-            console.log(data);
-            toast.success(
-                data?.message ||
-                "Reset link sent successfully"
-            );
-
-
+            if (password === conformPassword) {
+                const data = await resetPasswordApi(token, password);
+                console.log(data);
+                toast.success(
+                    data?.message ||
+                    "Password reset successfully"
+                );
+            } else {
+                toast.error("password and conform password not match ");
+            }
         } catch (error) {
-            console.log(error);
             toast.error(
                 error?.response?.data?.message ||
                 "Something went wrong"
@@ -69,7 +71,7 @@ const ForgotPasswordPage = () => {
           mb-6
           "
                         >
-                            🔒 Password Recovery
+                            🔑 Secure Password Reset
                         </div>
 
                         {/* Title */}
@@ -81,35 +83,31 @@ const ForgotPasswordPage = () => {
           text-gray-900
           "
                         >
-                            Forgot Password?
+                            Reset Password
                         </h1>
 
                         {/* Subtitle */}
                         <p className="mt-5 text-gray-600 leading-7 max-w-md mx-auto">
-                            Enter your registered email address and we’ll send
-                            you a password reset link.
+                            Create a new secure password for your account.
                         </p>
 
                     </div>
 
                     {/* Form */}
-                    <form
-                        onSubmit={handleSubmit}
-                        className="space-y-6">
+                    <form className="space-y-6">
 
-
-                        {/* Email */}
+                        {/* New Password */}
                         <div className="space-y-3">
 
                             <label className="text-sm font-semibold text-gray-700">
-                                Email Address
+                                New Password
                             </label>
 
                             <Input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="patel@gmail.com"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                type="password"
+                                placeholder="••••••••"
                                 className="
             h-14
             rounded-2xl
@@ -123,9 +121,67 @@ const ForgotPasswordPage = () => {
 
                         </div>
 
-                        {/* Submit */}
+                        {/* Confirm Password */}
+                        <div className="space-y-3">
+
+                            <label className="text-sm font-semibold text-gray-700">
+                                Confirm Password
+                            </label>
+
+                            <Input
+                                value={conformPassword}
+                                onChange={(e) => setConformPassword(e.target.value)}
+                                type="password"
+                                placeholder="••••••••"
+                                className="
+            h-14
+            rounded-2xl
+            border-0
+            bg-[#f8fbff]
+            px-5
+            shadow-none
+            focus-visible:ring-2 focus-visible:ring-blue-200
+            "
+                            />
+
+                        </div>
+
+                        {/* Tips */}
+                        <div
+                            className="
+          rounded-2xl
+          bg-[#eef4ff]
+          border border-blue-100
+          px-5 py-4
+          "
+                        >
+
+                            <div className="flex items-start gap-3">
+
+                                <div className="text-lg">
+                                    🛡️
+                                </div>
+
+                                <div>
+
+                                    <p className="text-sm font-semibold text-blue-900">
+                                        Password Tips
+                                    </p>
+
+                                    <p className="text-sm text-blue-700 mt-1 leading-6">
+                                        Use at least 8 characters including letters,
+                                        numbers and symbols.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {/* Button */}
                         <Button
-                            type="submit"
+                            onClick={handleSubmit}
                             className="
           w-full h-14
           rounded-2xl
@@ -138,7 +194,7 @@ const ForgotPasswordPage = () => {
           hover:-translate-y-0.5
           "
                         >
-                            Send Reset Link
+                            Update Password
                         </Button>
 
                         {/* Back */}
@@ -160,39 +216,6 @@ const ForgotPasswordPage = () => {
 
                     </form>
 
-                    {/* Bottom Info */}
-                    <div
-                        className="
-        mt-10
-        rounded-2xl
-        bg-[#eef4ff]
-        border border-blue-100
-        px-5 py-4
-        "
-                    >
-
-                        <div className="flex items-start gap-3">
-
-                            <div className="text-lg">
-                                ℹ️
-                            </div>
-
-                            <div>
-
-                                <p className="text-sm font-semibold text-blue-900">
-                                    Didn’t receive the email?
-                                </p>
-
-                                <p className="text-sm text-blue-700 mt-1 leading-6">
-                                    Check your spam folder or try again after a few minutes.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
                 </div>
 
             </div>
@@ -202,4 +225,4 @@ const ForgotPasswordPage = () => {
     )
 }
 
-export default ForgotPasswordPage
+export default ResetPasswordPage

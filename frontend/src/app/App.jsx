@@ -33,6 +33,7 @@ import PrivacyPolicyPage from "@/components/shared/PrivacyPolicyPage";
 import TermAndConditionPage from "@/components/shared/TermAndConditionPage";
 import SecurityPage from "@/components/shared/SecurityPage";
 import ForgotPasswordPage from "@/components/shared/ForgotPasswordPage";
+import ResetPasswordPage from "@/components/shared/ResetPasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -155,6 +156,11 @@ const router = createBrowserRouter([
         path: "/forgot-password",
         element: (
           <ForgotPasswordPage />
+        )
+      }, {
+        path: "/reset-password/:token",
+        element: (
+          <ResetPasswordPage />
         )
       }
 

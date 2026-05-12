@@ -10,6 +10,8 @@ import {
   getAdminProfile,
   editAdminProfile,
   googleAuthentication,
+  forgotPassword,
+  resetPassword,
 } from "../controller/user.controller.js";
 import isAuthenticated from "../middleware/isAuthenticated.js";
 import { uploadResume } from "../middleware/multer.js";
@@ -48,6 +50,16 @@ router.get("/get/:applicantId/:jobId/applicant", isAuthenticated, getApplicant);
 router.get("/admin/profile", isAuthenticated, getAdminProfile);
 
 router.post("/google-login", googleAuthentication);
+
+router.post(
+  "/forgot-password",
+  forgotPassword
+);
+
+router.post(
+  "/reset-password/:token",
+  resetPassword
+);
 
 // resume
 router.put(

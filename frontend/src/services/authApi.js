@@ -98,3 +98,17 @@ export const googleAuthenticationApi = async (user) => {
   })
   return res.data;
 }
+
+export const forgotPasswordApi = async (email) => {
+  const res = await axios.post(`${USER_API_END_PORT}/forgot-password`, {
+    email
+  });
+  return res.data;
+}
+
+export const resetPasswordApi = async (token, password) => {
+  const res = await axios.post(`${USER_API_END_PORT}/reset-password/${token}`, {
+    password
+  })
+  return res.data;
+}
