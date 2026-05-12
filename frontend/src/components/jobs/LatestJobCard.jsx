@@ -13,15 +13,15 @@ const LatestJobs = ({ job }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { appliedJobs = [], savedJobs = [] } = useSelector((state) => state.job);
-  const { user } = useSelector((state) => state.auth);
-
-  const [applied, setApplied] = useState(appliedJobs.includes(job._id));
+  const { appliedJobs = [] } = useSelector((state) => state.job);
   const [applying, setApplying] = useState(false);
+
 
   if (!job) return null;
 
-  const isApplied = appliedJobs.includes(job._id);
+  const isApplied = appliedJobs?.some(
+    (id) => id.toString() === job._id.toString()
+  );
 
   //  Format Salary
   const formatSalary = (amount) => {
@@ -51,7 +51,7 @@ const LatestJobs = ({ job }) => {
   const handleApply = async (e) => {
     e.stopPropagation();
 
-    if (applied) return;
+    if (isApplied) return;
 
     try {
       setApplying(true);
@@ -59,8 +59,6 @@ const LatestJobs = ({ job }) => {
       await applyJobApi(job._id);
 
       dispatch(setAppliedJobs([...appliedJobs, job._id]));
-
-      setApplied(true);   //  this immediately disables button
 
       toast.success("Applied Successfully");
 
@@ -289,6 +287,7 @@ const LatestJobs = ({ job }) => {
               ? "Already Applied"
               : "Apply Now"}
         </Button>
+        
 
       </div>
 

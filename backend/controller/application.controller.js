@@ -122,6 +122,7 @@ export const updateStatus = async (req, res) => {
   try {
     const { status } = req.body;
     const applicationId = req.params.id;
+    // console.log(status);
     if (!status) {
       return res.status(404).json({
         message: "status is required",
@@ -341,7 +342,7 @@ export const undoApplication = async (req, res) => {
 
     return res.status(200).json({
       message: "Application delete successfully",
-      success: true 
+      success: true
     })
   } catch (error) {
     console.log(error);

@@ -684,7 +684,7 @@ export const resetPassword = async (req, res) => {
   try {
     const { token } = req.params
     const { password } = req.body;
-    console.log(token, password)
+    // console.log(token, password)
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const hashedPassword = await bcrypt.hash(password, Number(process.env.SALT_ROUND));
 

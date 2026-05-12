@@ -13,8 +13,8 @@ const Job = ({ job }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { appliedJobs = [] } = useSelector((state) => state.job);
-  const [applying, setApplying] = useState(false);
+    const { appliedJobs = [] } = useSelector((state) => state.job);
+    const [applying, setApplying] = useState(false);
 
   if (!job) return null;
 

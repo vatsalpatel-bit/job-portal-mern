@@ -1,9 +1,10 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LatestJobCard from "../jobs/LatestJobCard";
 
 const LatestJobs = () => {
   const { allJobs } = useSelector((state) => state.job);
-// const allJobs=""
+ 
+  // const allJobs=""
   return (
     <section className="w-full bg-muted/30 py-20">
       <div className="mx-auto max-w-7xl px-6">
@@ -22,7 +23,7 @@ const LatestJobs = () => {
         {/* Grid */}
         <div className="grid grid-cols-3 gap-8">
           {allJobs?.length === 0 ? (
-            
+
             <div className="flex flex-col items-center justify-center py-24 text-center ml-auto mr-auto col-start-1 col-end-6">
 
               <h2 className="text-2xl font-semibold text-gray-800 mb-2">

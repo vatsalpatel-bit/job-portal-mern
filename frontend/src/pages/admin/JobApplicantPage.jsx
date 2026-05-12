@@ -271,7 +271,7 @@ const JobApplicantPage = () => {
                       text-gray-900
                       "
                         >
-                          {a.applicant.fullname}
+                          {a.applicant?.fullname}
                         </h3>
 
                         <p className="text-gray-500 mt-2">
@@ -289,11 +289,11 @@ const JobApplicantPage = () => {
                         >
 
                           <span className="flex items-center gap-2">
-                            📧 {a.applicant.email}
+                            📧 {a.applicant?.email}
                           </span>
 
                           <span className="flex items-center gap-2">
-                            📞 +91 {a.applicant.phoneNumber}
+                            📞 +91 {a.applicant?.phoneNumber}
                           </span>
 
                         </div>

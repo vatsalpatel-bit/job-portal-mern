@@ -7,6 +7,8 @@ import { getFilteredJobsApi } from "@/services/jobApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setLoading } from "@/redux/slices/authslice";
 import Footer from "@/components/shared/Footer";
+  import { getAppliedJobsApi } from "@/services/applicationApi";
+  import { setAppliedJobs } from "@/redux/slices/jobSlice";
 
 const Browse = () => {
   const location = useLocation();
@@ -35,6 +37,26 @@ const Browse = () => {
 
     if (keyword) fetchJobs();
   }, [keyword]);
+
+  useEffect(() => {
+    const fetchAppliedJobs = async () => {
+      try {
+        const res = await getAppliedJobsApi();
+        const jobIds = res.applications.map(
+          (app) => app.job._id || app.job
+        );
+
+        dispatch(setAppliedJobs(jobIds));
+        //  dispatch(setAppliedJobs(res.data.applications));
+        // console.log(jobIds);
+
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchAppliedJobs();
+  }, [dispatch]);
 
   return (
     <>
