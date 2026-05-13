@@ -127,7 +127,7 @@ const Signup = () => {
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-[#f8fbff] flex items-center justify-center px-6 py-28 overflow-hidden relative">
+      <div className="min-h-screen bg-[#f8fbff] flex items-center justify-center px-6 py-45 overflow-hidden relative">
 
         {/* Background Blur */}
         <div className="absolute top-[-120px] left-[-80px] h-[320px] w-[320px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />

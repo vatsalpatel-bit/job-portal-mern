@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -38,6 +38,12 @@ const CompanySetup = () => {
       }));
     }
   };
+
+  useEffect(() => {
+    if (singleCompany) {
+      setForm({ name: singleCompany?.name, })
+    }
+  }, [singleCompany])
 
   const handleSubmit = async () => {
     try {
@@ -189,7 +195,7 @@ const CompanySetup = () => {
                   name="name"
                   value={form.name}
                   onChange={handleChange}
-                  placeholder={singleCompany?.name}
+                  placeholder="Enter the company name"
                   className="
               mt-3 h-14
               rounded-2xl

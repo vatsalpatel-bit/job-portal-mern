@@ -201,7 +201,7 @@ const AdminJobCreate = () => {
                                     value={input.title}
                                     onChange={changeHandler}
                                     type="text"
-                                    placeholder="Frontend Developer"
+                                    placeholder="Senior MERN Stack Developer"
                                     className="
               w-full mt-3
               h-14
@@ -229,7 +229,7 @@ const AdminJobCreate = () => {
                                     name="description"
                                     value={input.description}
                                     onChange={changeHandler}
-                                    placeholder="Write job description..."
+                                    placeholder="Write a short overview about the role, responsibilities and required skills..."
                                     className="
               w-full mt-3
               rounded-2xl
@@ -259,7 +259,7 @@ const AdminJobCreate = () => {
                                     value={input.requirements}
                                     onChange={changeHandler}
                                     type="text"
-                                    placeholder="React, Node, MongoDB"
+                                    placeholder="React, Express.js, MongoDB, REST APIs"
                                     className="
               w-full mt-3
               h-14
@@ -290,7 +290,7 @@ const AdminJobCreate = () => {
                                         value={input.salary}
                                         onChange={changeHandler}
                                         type="number"
-                                        placeholder="500000"
+                                        placeholder="1200000"
                                         className="
                 w-full mt-3
                 h-14
@@ -318,7 +318,7 @@ const AdminJobCreate = () => {
                                         value={input.location}
                                         onChange={changeHandler}
                                         type="text"
-                                        placeholder="Bangalore"
+                                        placeholder="Bangalore, India"
                                         className="
                 w-full mt-3
                 h-14
