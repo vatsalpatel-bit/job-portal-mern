@@ -14,6 +14,8 @@ const LatestJobs = ({ job }) => {
   const dispatch = useDispatch();
 
   const { appliedJobs = [] } = useSelector((state) => state.job);
+  const user = useSelector((state) => state.auth.user);
+  console.log(user?.role) // const user=true
   const [applying, setApplying] = useState(false);
 
 
@@ -69,6 +71,11 @@ const LatestJobs = ({ job }) => {
       setApplying(false);
     }
   };
+
+  const handleUser = () => {
+    navigate("/login");
+    toast.error("First login to apply for jobs")
+  }
 
   return (
     <div
@@ -268,7 +275,7 @@ const LatestJobs = ({ job }) => {
           Details
         </Button>
 
-        <Button
+        {user?.role ? (<Button
           className="
       flex-1 h-11
       rounded-2xl
@@ -286,8 +293,24 @@ const LatestJobs = ({ job }) => {
             : isApplied
               ? "Already Applied"
               : "Apply Now"}
+        </Button>) : (<Button
+          className="
+      flex-1 h-11
+      rounded-2xl
+      bg-black
+      hover:bg-gray-900
+      text-white
+      font-medium
+      shadow-md
+      "
+          onClick={handleUser}
+        // onClick={handleApply}
+        >
+          Apply Now
         </Button>
-        
+        )}
+
+
 
       </div>
 
