@@ -6,19 +6,21 @@ import "@/style/index.css"
 import { Toaster } from "@/components/ui/sonner";
 import { Provider } from "react-redux";
 import store from "@/redux/store";
+import ScrollToTop from "@/components/shared/ScrollToTop";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
+      {/* <ScrollToTop /> */}
       <App />
       <Toaster
-  position="top-center"
-  toastOptions={{
-    style: {
-      zIndex: 999999,
-    },
-  }}
-/>
+        position="top-center"
+        toastOptions={{
+          style: {
+            zIndex: 999999,
+          },
+        }}
+      />
     </Provider>
   </React.StrictMode>
 );
