@@ -103,3 +103,11 @@ export const searchCompanyApi = async (
 
   return res.data;
 };
+
+
+export const getAllCompaniesForJob = async () => {
+  const res = await axios.post(`${COMPANY_API_END_PORT}/get/allCompanies`, {
+    withCredentials: true,
+  });
+  return res.data;
+};

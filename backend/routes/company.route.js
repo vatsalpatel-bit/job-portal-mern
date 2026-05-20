@@ -1,6 +1,7 @@
 import express from "express";
 import {
   deleteCompany,
+  getAllCompaniesForJob,
   getCompany,
   getCompanyById,
   getCompanyStatus,
@@ -19,6 +20,7 @@ router.get("/get/:id", isAuthenticated, getCompanyById);
 router.get("/get/:id/status", isAuthenticated, getCompanyStatus);
 router.delete("/delete/:id/company", isAuthenticated, deleteCompany);
 router.get("/search/company", isAuthenticated, searchCompany);
+router.post("/get/allCompanies", isAuthenticated, getAllCompaniesForJob);
 router.put(
   "/update/:id",
   uploadImage.single("logo"),

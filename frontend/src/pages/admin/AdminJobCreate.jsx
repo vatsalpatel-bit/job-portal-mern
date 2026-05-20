@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
-import { getAllCompanyApi, postJobApi } from '@/services/companyApi';
+import { getAllCompaniesForJob, getAllCompanyApi, postJobApi } from '@/services/companyApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllCompanies } from '@/redux/slices/companiesSlice';
 import { toast } from 'sonner';
@@ -29,8 +29,9 @@ const AdminJobCreate = () => {
         const fetchCompanyApi = async () => {
             try {
                 setLoading(true);
-                const data = await getAllCompanyApi();
-                dispatch(setAllCompanies(data.companies))
+                const data = await getAllCompaniesForJob();
+                console.log(data);
+                dispatch(setAllCompanies(data.companies));
             } catch (error) {
                 console.log(error);
             } finally {
