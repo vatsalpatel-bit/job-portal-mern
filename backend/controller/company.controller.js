@@ -391,7 +391,7 @@ export const getAllCompaniesForJob = async (req, res) => {
   try {
     const userId = new mongoose.Types.ObjectId(req.userId);
 
-    const companies = await Company.find({ userId });
+    const companies = await Company.find({ userId }).sort({ createdAt: -1 });
 
     if (!companies || companies.length === 0) {
       return res.status(404).json({
