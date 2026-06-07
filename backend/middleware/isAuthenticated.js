@@ -11,13 +11,10 @@ const isAuthenticated = (req, res, next) => {
       });
     }
 
-    // MUST MATCH login controller
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-
-    //  THIS IS THE FIX
     req.userId = decoded.userId;
-
     next();
+    
   } catch (error) {
     console.error("Auth middleware error:", error);
     return res.status(401).json({

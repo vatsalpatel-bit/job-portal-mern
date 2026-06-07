@@ -65,6 +65,8 @@ export const updateJobApi = async (jobId, jobData) => {
 
   const res = await axios.put(`${JOB_API_END_PORT}/update/${jobId}`, {
     jobData,
+  }, {
+    withCredentials: true,
   });
   return res.data;
 };

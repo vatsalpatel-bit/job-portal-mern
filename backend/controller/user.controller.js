@@ -31,14 +31,6 @@ export const Register = async (req, res) => {
 
     const normalizedEmail = email.toLowerCase().trim();
 
-    if (email === 'veerpatel@gmail.com') {
-      return res.status(404).json({
-        message: "You are gay",
-        success: false
-      })
-
-    }
-
     const existing = await User.findOne({ email: normalizedEmail });
     if (existing) {
       return res.status(400).json({
@@ -81,7 +73,7 @@ export const Register = async (req, res) => {
       password: hashPassword,
       role,
       profile: {
-        profilePhoto, // SAVED HERE
+        profilePhoto,
       },
     });
 
@@ -511,7 +503,6 @@ export const getAdminProfile = async (req, res) => {
 export const editAdminProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber } = req.body;
-    console.log(fullname, email, phoneNumber);
     const userId = new mongoose.Types.ObjectId(req.userId);
     const file = req.file;
 
@@ -574,9 +565,6 @@ export const googleAuthentication = async (
 ) => {
 
   try {
-
-    console.log(req.body);
-
     const {
       fullname,
       email,
@@ -647,8 +635,8 @@ export const forgotPassword = async (req, res) => {
         success: false,
       })
     }
-    if (!user.password) {
 
+    if (!user.password) {
       return res.status(400).json({
         success: false,
         message:
@@ -690,10 +678,12 @@ export const forgotPassword = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   try {
-    const { token } = req.params
+    const { token } = req.params;
     const { password } = req.body;
-    // console.log(token, password)
+
+
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    
     const hashedPassword = await bcrypt.hash(password, Number(process.env.SALT_ROUND));
 
     await User.findByIdAndUpdate(decoded.userId, {

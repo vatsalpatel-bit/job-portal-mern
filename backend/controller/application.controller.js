@@ -47,6 +47,10 @@ export const applyJob = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false
+    })
   }
 };
 
@@ -78,7 +82,6 @@ export const getAppliedJobs = async (req, res) => {
   }
 };
 
-// admin get job aplication
 export const jobApplicant = async (req, res) => {
   try {
     const jobId = new mongoose.Types.ObjectId(req.params.id);
@@ -122,7 +125,7 @@ export const updateStatus = async (req, res) => {
   try {
     const { status } = req.body;
     const applicationId = req.params.id;
-    // console.log(status);
+
     if (!status) {
       return res.status(404).json({
         message: "status is required",
@@ -146,6 +149,7 @@ export const updateStatus = async (req, res) => {
       message: "Status update successfully",
       success: true,
     });
+
   } catch (error) {
     console.log(error);
     return res.status(400).json({
@@ -160,7 +164,7 @@ export const getAllJobs = async (req, res) => {
     const userId = req.id;
 
     const jobs = await Job.find().populate("company");
-
+    
     const applications = await Application.find({
       applicant: userId,
     });
@@ -313,7 +317,6 @@ export const updateApplicantStatus = async (req, res) => {
     });
   }
 };
-
 
 export const undoApplication = async (req, res) => {
   try {

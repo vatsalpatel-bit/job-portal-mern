@@ -3,10 +3,9 @@ import { Job } from "../utils/job.model.js";
 import { Application } from "../utils/application.model.js";
 import Company from "../utils/company.model.js";
 
-// for recruiter
 export const postJob = async (req, res) => {
   try {
-    const userId = req.userId;
+    const userId = req?.userId;
 
     const {
       title,
@@ -18,19 +17,19 @@ export const postJob = async (req, res) => {
       experience,
       position,
       companyId,
-    } = req.body.jobData;
+    } = req?.body?.jobData;
 
     if (
       !title ||
       !description ||
       !jobType ||
       !location ||
-      !experience === undefined ||
+      experience === undefined ||
       !companyId ||
       position === undefined ||
       salary === undefined ||
       !Array.isArray(requirements) ||
-      requirements?.length === 0
+      requirements.length === 0
     ) {
       return res.status(400).json({
         message: "Something is missing",
@@ -67,38 +66,73 @@ export const postJob = async (req, res) => {
 
 export const updateJob = async (req, res) => {
   try {
+
     const jobId = req.params.id;
+    const userId = req.userId;
+
     if (!mongoose.Types.ObjectId.isValid(jobId)) {
       return res.status(400).json({
         message: "Invalid Job Id",
         success: false,
       });
     }
+    const allowedFields = [
+      "title",
+      "description",
+      "requirements",
+      "salary",
+      "location",
+      "jobType",
+      "experienceLevel",
+      "position",
+    ];
 
     const updateData = {};
-    Object.keys(req.body).forEach((key) => {
-      if (req.body[key] !== undefined) {
-        updateData[key] = req.body[key];
+
+    Object.keys(req.body.jobData).forEach((key) => {
+      if (allowedFields.includes(key) && req.body.jobData[key] !== undefined) {
+        updateData[key] = req.body.jobData[key];
       }
     });
 
-    const job = await Job.findByIdAndUpdate(jobId, updateData.jobData, {
-      new: true,
-      runValidators: true,
-    });
+    if (Object.keys(req.body.jobData).length === 0) {
+      return res.status(400).json({
+        message: "No valid fields provided for update",
+        success: false
+      })
+    }
 
-    if (!job) {
+    const existingJob = await Job.findById(jobId);
+
+    if (!existingJob) {
       return res.status(404).json({
-        message: "Job is not found",
         success: false,
+        message: "Job not found",
       });
     }
 
+    if (existingJob.created_by.toString() !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const updatedJob = await Job.findByIdAndUpdate(
+      jobId,
+      { $set: updateData },
+      {
+        new: true,
+        runValidators: true,
+      }
+    ).populate("company");
+
     return res.status(200).json({
       message: "Job update successfully",
-      job,
+      job: updateJob,
       success: true,
     });
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -108,12 +142,12 @@ export const updateJob = async (req, res) => {
   }
 };
 
-// for student
 export const getAllJob = async (req, res) => {
   try {
     const { keyword = "", location, industry, salary } = req.query;
 
     const andConditions = [];
+
     // Keyword Search
     if (keyword) {
       andConditions.push({
@@ -130,7 +164,7 @@ export const getAllJob = async (req, res) => {
     if (location) {
       andConditions.push({
         location: {
-          $in: lconstocation
+          $in: location
             .split(",")
             .map((loc) => new RegExp(`^${loc.trim()}$`, "i")),
         },
@@ -180,6 +214,7 @@ export const getAllJob = async (req, res) => {
         andConditions.push({ $or: salaryConditions });
       }
     }
+    
     // Final Query
     const finalQuery = andConditions.length > 0 ? { $and: andConditions } : {};
     const jobs = await Job.find(finalQuery)
@@ -199,7 +234,6 @@ export const getAllJob = async (req, res) => {
   }
 };
 
-// for student
 export const getJobById = async (req, res) => {
   try {
     const jobId = req.params.id;
@@ -234,7 +268,6 @@ export const getJobById = async (req, res) => {
   }
 };
 
-// for recruiter
 export const getAdminJobs = async (req, res) => {
   try {
     const adminId = req.userId;

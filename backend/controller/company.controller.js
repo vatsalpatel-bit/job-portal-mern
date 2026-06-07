@@ -1,4 +1,3 @@
-// controller/company.controller.js
 import Company from "../utils/company.model.js";
 import { uploadFromBuffer } from "../utils/cloudinaryUpload.js";
 import cloudinary from "../utils/cloudinary.js";
@@ -26,7 +25,7 @@ export const registerCompany = async (req, res) => {
     }
 
     try {
-      const userId = req.userId || req.id;
+      const userId = req.userId;
       const company = await Company.create({
         name: companyName,
         userId,
@@ -54,7 +53,7 @@ export const getCompany = async (req, res) => {
   try {
     const userId = new mongoose.Types.ObjectId(req.userId);
     const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 1;
+    const limit = Number(req.query.limit) || 6;
     const skip = (page - 1) * limit;
 
     const totalCompanies = await Company.countDocuments({
@@ -198,18 +197,19 @@ export const updateCompany = async (req, res) => {
 
     const updateData = { name, description, website, location };
 
-    // If new file uploaded
+    // if new file uploaded
     if (file) {
-      //  1. Delete old image
+
+      //  1. delete old image
       if (existingCompany.logoPublicId) {
         await cloudinary.uploader.destroy(existingCompany.logoPublicId);
       }
 
-      //  2. Upload new image
+      //  2. upload new image
       const result = await uploadFromBuffer(file.buffer);
 
-      //  3. Save new data
-      updateData.logo = result.secure_url;
+      //  3. save new data
+      updateData.logo = result.secure_url;      
       updateData.logoPublicId = result.public_id;
     }
 
@@ -334,6 +334,7 @@ export const deleteCompany = async (req, res) => {
     await Application.deleteMany({
       job: { $in: jobId },
     });
+    
     await Job.deleteMany({ company: companyId });
 
     await Company.findByIdAndDelete(companyId);

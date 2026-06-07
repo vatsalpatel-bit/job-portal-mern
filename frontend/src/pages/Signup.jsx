@@ -34,11 +34,6 @@ const Signup = () => {
     file: null,
   });
 
-
-
-  /* -------------------------
-     INPUT HANDLERS
-  -------------------------- */
   const changeHandler = (e) => {
     const { name, value } = e.target;
     setInput((prev) => ({
@@ -65,9 +60,9 @@ const Signup = () => {
         );
 
       const user = result.user;
-      // console.log(user);
+
       const data = await googleAuthenticationApi(user);
-      // console.log(data)
+
       dispatch(setUser(data.user));
       navigate("/")
 
@@ -77,9 +72,6 @@ const Signup = () => {
     }
   };
 
-  /* -------------------------
-     SUBMIT HANDLER (FINAL)
-  -------------------------- */
   const submitHandler = async (e) => {
     e.preventDefault();
     if (loading) return;
@@ -87,7 +79,7 @@ const Signup = () => {
     dispatch(setLoading(true));
 
     try {
-      /* 1️⃣ SIGNUP */
+      /* SIGNUP */
       const formData = new FormData();
       formData.append("fullname", input.fullname.trim());
       formData.append("email", input.email.trim().toLowerCase());
@@ -109,8 +101,6 @@ const Signup = () => {
       dispatch(setUser(loginRes.data.user));
 
       toast.success("Welcome 🎉 Account created successfully!");
-
-      /* 4️ NAVIGATE AFTER REDUX UPDATE */
       navigate("/");
 
     } catch (error) {

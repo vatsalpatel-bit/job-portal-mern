@@ -1,14 +1,14 @@
 import multer from "multer";
 
-const storage = multer.memoryStorage();
+const storage = multer.memoryStorage();  // file store in server memory (Buffer)
 
-const fileFilter = (req, file, cb) => {
+function fileFilter(req, file, cb) {
   if (file.mimetype === "application/pdf") {
     cb(null, true);
   } else {
     cb(new Error("Only PDF resumes allowed"), false);
   }
-};
+}
 export const upload = multer({ storage });
 export const uploadResume = multer({
   storage,
