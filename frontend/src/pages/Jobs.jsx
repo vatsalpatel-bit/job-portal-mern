@@ -20,7 +20,6 @@ const Jobs = () => {
     salary: []
   });
   const [filterOptions, setFilterOptions] = useState({
-    // locations: [],
     industries: []
   });
 
@@ -29,7 +28,6 @@ const Jobs = () => {
       try {
         const res = await getJobFiltersApi();
         setFilterOptions({
-          // locations: res.data.locations,
           industries: res.data.industries
         });
       } catch (error) {
@@ -50,8 +48,6 @@ const Jobs = () => {
         );
 
         dispatch(setAppliedJobs(jobIds));
-        //  dispatch(setAppliedJobs(res.data.applications));
-        // console.log(jobIds);
 
       } catch (error) {
         console.log(error);

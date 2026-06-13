@@ -10,6 +10,7 @@ function fileFilter(req, file, cb) {
   }
 }
 export const upload = multer({ storage });
+
 export const uploadResume = multer({
   storage,
   fileFilter,

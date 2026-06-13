@@ -20,10 +20,7 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  // REAL AUTH STATE
   const user = useSelector((state) => state.auth.user);
-  // console.log(user?.role) // const user=true;
 
   useEffect(() => {
     const onScroll = () => {
@@ -35,14 +32,14 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  //  LOGOUT HANDLER
+
   const handleLogout = async () => {
     try {
-      await logoutUser(); // backend cookie clear
+      await logoutUser();
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
-      dispatch(setUser(null)); // clear redux
+      dispatch(setUser(null));
       setOpen(false);
       navigate("/login");
     }
@@ -67,13 +64,6 @@ const Navbar = () => {
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-
-            {/* <div
-          className="h-10 w-10 rounded-2xl bg-gradient-to-br from-[#dbeafe] to-[#fff4db]
-          flex items-center justify-center shadow-sm"
-        >
-          <div className="h-4 w-4 rounded-full bg-black" />
-        </div> */}
 
             <img
               src={brandLogo}
@@ -119,13 +109,6 @@ const Navbar = () => {
                   >
                     Jobs
                   </Link>
-
-                  {/* <Link
-                to="/browse"
-                className="px-5 py-2 rounded-full text-gray-700 hover:bg-white hover:shadow-sm transition-all duration-300"
-              >
-                Browse
-              </Link> */}
                 </>
               )
             }

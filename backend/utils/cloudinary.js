@@ -8,9 +8,7 @@ cloudinary.config({
 });
 
 console.log("✅ Cloudinary READY");
-
 export default cloudinary;
-
 
 export const getPublicIdFromUrl = (url) => {
   if (!url) return null;

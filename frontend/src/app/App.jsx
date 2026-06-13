@@ -8,12 +8,9 @@ import Jobs from "@/pages/Jobs";
 import Browse from "@/pages/Browse";
 import ProfilePage from "@/pages/ProfilePage";
 import DetailPage from "@/pages/DetailPage";
-
-// Admin pages
 import Companies from "@/pages/admin/Companies";
 
 // Protected Route
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import CompanyCreate from "@/pages/admin/CompanyCreate";
 import CompanySetUp from "@/pages/admin/companySetup";
 import CompanyEdit from "@/pages/admin/CompanyEdit";
@@ -34,142 +31,242 @@ import TermAndConditionPage from "@/components/shared/TermAndConditionPage";
 import SecurityPage from "@/components/shared/SecurityPage";
 import ForgotPasswordPage from "@/components/shared/ForgotPasswordPage";
 import ResetPasswordPage from "@/components/shared/ResetPasswordPage";
+import StudentProtectedRoute from "@/components/auth/StudentProtectedRoute";
+import RecruiterProtectedRoute from "@/components/auth/RecruiterProtectedRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     children: [
+
       { index: true, element: <Home /> },
-      { path: "jobs", element: <Jobs /> },
-      { path: "browse", element: <Browse /> },
-      { path: "profile", element: <ProfilePage /> },
-      { path: "job/:id", element: <DetailPage /> },
-
-
+      {
+        path: "jobs",
+        element: (
+          <Jobs />
+        )
+      },
+      {
+        path: "browse",
+        element: (
+          <>
+            <StudentProtectedRoute>
+              <Browse />
+            </StudentProtectedRoute>
+          </>)
+      },
+      {
+        path: "profile",
+        element: (
+          <>
+            <StudentProtectedRoute>
+              <ProfilePage />
+            </StudentProtectedRoute>
+          </>
+        )
+      },
+      {
+        path: "job/:id",
+        element: (<>
+          <StudentProtectedRoute>
+            <DetailPage />
+          </StudentProtectedRoute>
+        </>
+        )
+      },
       {
         path: "admin/companies",
-        element: (
-          <Companies />
+        element: (<>
+          <RecruiterProtectedRoute>
+            <Companies />
+          </RecruiterProtectedRoute>
+        </>
         ),
       },
       {
         path: "admin/company/create",
         element: (
-          <CompanyCreate />
+          <>
+            <RecruiterProtectedRoute>
+              <CompanyCreate />
+            </RecruiterProtectedRoute>
+          </>
+
         )
       },
       {
         path: "admin/companies/:id",
         element: (
-          <CompanySetUp />)
+          <>
+            <RecruiterProtectedRoute>
+              <CompanySetUp />
+            </RecruiterProtectedRoute>
+          </>
+        )
       },
       {
         path: "/admin/company/:id/edit",
         element: (
-          <CompanyEdit />)
-      }, {
+          <>
+            <RecruiterProtectedRoute>
+              <CompanyEdit />
+            </RecruiterProtectedRoute>
+          </>
+        )
+      },
+      {
         path: "/admin/company/:id",
         element: (
-          <CompanyDetialPage />
+          <>
+            <RecruiterProtectedRoute>
+              <CompanyDetialPage />
+            </RecruiterProtectedRoute>
+          </>
         )
       },
       {
         path: "/admin/jobs",
         element: (
-          <CompanyJobsPage />
+          <>
+            <RecruiterProtectedRoute>
+              <CompanyJobsPage />
+            </RecruiterProtectedRoute>
+          </>
         )
       },
       {
         path: "/admin/job/create",
         element: (
-          <AdminJobCreate />
+          <>
+            <RecruiterProtectedRoute>
+              <AdminJobCreate />
+            </RecruiterProtectedRoute>
+          </>
         )
       },
       {
         path: "/admin/job/:id/edit",
         element: (
-          <JobEditPage />
+          <>
+            <RecruiterProtectedRoute>
+              <JobEditPage />
+            </RecruiterProtectedRoute>
+          </>
         )
       },
       {
         path: "/admin/job/:id/view",
         element: (
-          <JobViewPage />
+          <>
+            <RecruiterProtectedRoute>
+              <JobViewPage />
+            </RecruiterProtectedRoute>
+          </>
         )
       },
       {
         path: "/admin/job/:id/applicant",
         element: (
-          <JobApplicantPage />
+          <>
+            <RecruiterProtectedRoute>
+              <JobApplicantPage />
+            </RecruiterProtectedRoute>
+          </>
         )
       },
       {
         path: "/applicant/:applicantId/:jobId/profile",
         element: (
-          <ApplicantDetailPage />
+          <>
+            <RecruiterProtectedRoute>
+              <ApplicantDetailPage />
+            </RecruiterProtectedRoute>
+          </>
         )
       },
       {
         path: "/admin/profile",
         element: (
-          <AdminProfilePage />
+          <>
+            <RecruiterProtectedRoute>
+              <AdminProfilePage />
+            </RecruiterProtectedRoute>
+          </>
         )
       },
       {
         path: "/admin/profile/edit",
         element: (
-          <AdminProfileEditPage />
-        )
-      }, {
-        path: "*",
-        element: (
-          <NotFound />
+          <>
+            <RecruiterProtectedRoute>
+              <AdminProfileEditPage />
+            </RecruiterProtectedRoute>
+          </>
         )
       },
-      {
-        path: "/about us",
-        element: (
-          <AboutUsPage />
-        )
-      }, {
-        path: "/help center",
-        element: (
-          <HelpCenterPage />
-        )
-      }, {
-        path: "/privacy policy",
-        element: (
-          <PrivacyPolicyPage />
-        )
-      }, {
-        path: "/term & condition",
-        element: (
-          <TermAndConditionPage />
-        )
-      }, {
-        path: "/security",
-        element: (
-          <SecurityPage />
-        )
-      }, {
-        path: "/forgot-password",
-        element: (
-          <ForgotPasswordPage />
-        )
-      }, {
-        path: "/reset-password/:token",
-        element: (
-          <ResetPasswordPage />
-        )
-      }
-
     ],
   },
 
   // Public routes
-  { path: "/signup", element: <Signup /> },
-  { path: "/login", element: <Login /> },
+  {
+    path: "/signup",
+    element: (
+      <Signup />)
+  },
+  {
+    path: "/login",
+    element: (
+      <Login />)
+  },
+  {
+    path: "*",
+    element: (
+      <NotFound />
+    )
+  },
+  {
+    path: "/about us",
+    element: (
+      <AboutUsPage />
+    )
+  },
+  {
+    path: "/help center",
+    element: (
+      <HelpCenterPage />
+    )
+  },
+  {
+    path: "/privacy policy",
+    element: (
+      <PrivacyPolicyPage />
+    )
+  },
+  {
+    path: "/term & condition",
+    element: (
+      <TermAndConditionPage />
+    )
+  },
+  {
+    path: "/security",
+    element: (
+      <SecurityPage />
+    )
+  },
+  {
+    path: "/forgot-password",
+    element: (
+      <ForgotPasswordPage />
+    )
+  },
+  {
+    path: "/reset-password/:token",
+    element: (
+      <ResetPasswordPage />
+    )
+  }
 ]);
 
 const App = () => {

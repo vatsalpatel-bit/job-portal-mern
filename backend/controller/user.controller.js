@@ -44,7 +44,7 @@ export const Register = async (req, res) => {
       Number(process.env.SALT_ROUND),
     );
 
-    //  NEW: handle profile photo
+    // handle profile photo
     let profilePhoto = "";
 
     if (req.file) {
@@ -309,11 +309,12 @@ export const uploadUserResume = async (req, res) => {
           .pipe(stream);
       }
     );
-    // SAVE INTO MONGODB (THIS WAS MISSING)
+
+    //save into mongoDB
     user.profile.resume = uploadResult.secure_url;
     user.profile.resumeOringinalName = req.file.originalname;
 
-    await user.save(); //
+    await user.save();
 
     console.log("Resume saved:", user.profile.resume);
 
@@ -386,7 +387,6 @@ export const uploadProfilePhoto = async (req, res) => {
   }
 };
 
-// get applicant profile
 export const getApplicant = async (req, res) => {
   try {
     const applicantId = new mongoose.Types.ObjectId(req.params.applicantId);
@@ -674,7 +674,6 @@ export const forgotPassword = async (req, res) => {
     });
   }
 }
-
 
 export const resetPassword = async (req, res) => {
   try {

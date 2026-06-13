@@ -20,35 +20,13 @@ import { upload } from "../middleware/multer.js";
 
 const router = express.Router();
 
-// ----------------------------------
-// AUTH
-// ----------------------------------
-
-// Register (with optional profile file)
 router.post("/register", upload.single("file"), Register);
-
-// Login
 router.post("/login", login);
-
-// Logout
 router.post("/logout", logout);
-
-// ----------------------------------
-// PROFILE
-// ----------------------------------
-
-// Get logged-in user profile
 router.get("/profile", isAuthenticated, getProfile);
-
-// Update profile (JSON)
 router.put("/profile", isAuthenticated, updateProfile);
-
-//Get Applicant(for Recruiter)
 router.get("/get/:applicantId/:jobId/applicant", isAuthenticated, getApplicant);
-
-//admin profile
 router.get("/admin/profile", isAuthenticated, getAdminProfile);
-
 router.post("/google-login", googleAuthentication);
 
 router.post(
