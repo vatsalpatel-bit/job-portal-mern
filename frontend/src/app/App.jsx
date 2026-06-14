@@ -33,6 +33,7 @@ import ForgotPasswordPage from "@/components/shared/ForgotPasswordPage";
 import ResetPasswordPage from "@/components/shared/ResetPasswordPage";
 import StudentProtectedRoute from "@/components/auth/StudentProtectedRoute";
 import RecruiterProtectedRoute from "@/components/auth/RecruiterProtectedRoute";
+import GuestProtectedRoute from "@/components/auth/GuestProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -40,20 +41,22 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
 
-      { index: true, element: <Home /> },
+      {
+        index: true, element: (<>
+          <GuestProtectedRoute><Home /></GuestProtectedRoute></>)
+      },
       {
         path: "jobs",
         element: (
-          <Jobs />
-        )
+          <><GuestProtectedRoute>  < Jobs /></GuestProtectedRoute></>)
       },
       {
         path: "browse",
         element: (
           <>
-            <StudentProtectedRoute>
+            <GuestProtectedRoute>
               <Browse />
-            </StudentProtectedRoute>
+            </GuestProtectedRoute>
           </>)
       },
       {

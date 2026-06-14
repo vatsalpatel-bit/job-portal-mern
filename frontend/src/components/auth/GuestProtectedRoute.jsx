@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-const RecruiterProtectedRoute = ({ children }) => {
+const GuestProtectedRoute = ({ children }) => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true);
 
@@ -41,15 +41,10 @@ const RecruiterProtectedRoute = ({ children }) => {
             </div>
         );
     }
-
-    if (!user) {
-        return <Navigate to="/login" />
-    }
-
-    if (user.role !== "recruiter") {
-        return <Navigate to="/" />
+    if (user?.role == "recruiter") {
+        return <Navigate to="admin/companies" />
     }
     return children;
 }
 
-export default RecruiterProtectedRoute
+export default GuestProtectedRoute

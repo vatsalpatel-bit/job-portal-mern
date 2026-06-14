@@ -20,21 +20,18 @@ const JobViewPage = () => {
     const dispatch = useDispatch();
     const { id: jobId } = useParams();
     const [loading, setLoading] = useState(true)
-    const job = useSelector((state) => state?.company?.singleJob);
-    console.log(job?.application)
+    const job = useSelector((state) => state?.company?.singleJob); 
     useEffect(() => {
         const fetchJobApi = async () => {
             try {
                 setLoading(true);
                 const data = await getJobByIdApi(jobId);
-                // console.log(data.job);
                 dispatch(setSingleJob(data.job))
             } catch (error) {
                 console.log(error);
             } finally {
                 setLoading(false)
             }
-
         }
         fetchJobApi();
     }, [dispatch, jobId]);
