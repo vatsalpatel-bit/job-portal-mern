@@ -49,7 +49,7 @@ const Companies = () => {
     };
     fetchCompanies();
 
-  }, [page, debounceSearch]);
+  }, [page, debounceSearch,dispatch]);
 
   useEffect(() => {
 

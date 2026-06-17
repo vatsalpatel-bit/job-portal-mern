@@ -55,7 +55,7 @@ const Jobs = () => {
     };
 
     fetchAppliedJobs();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     const handleFilterChange = async () => {
@@ -70,7 +70,7 @@ const Jobs = () => {
       }
     };
     handleFilterChange();
-  }, [filters]);
+  }, [filters,dispatch]);
 
   return (
     <>

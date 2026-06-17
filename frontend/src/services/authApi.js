@@ -94,7 +94,7 @@ export const editAdminProfileApi = async (formData) => {
 export const googleAuthenticationApi = async (user) => {
   const res = await axios.post(`${USER_API_END_PORT}/google-login`, {
     fullname: user.displayName,
-    email: user.email, profilePhoto: user.phtoURL
+    email: user.email, profilePhoto: user.photoURL
   })
   return res.data;
 }

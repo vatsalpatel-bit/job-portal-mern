@@ -13,7 +13,6 @@ const StudentProtectedRoute = ({ children }) => {
     const fetchProfileApi = async () => {
       try {
         const data = await getProfileApi();
-        console.log(data.data.user)
         dispatch(setUser(data.data.user));
       } catch (error) {
         console.log(error);

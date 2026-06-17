@@ -1,6 +1,6 @@
 import Footer from '@/components/shared/Footer';
 import { setSingleCompany } from '@/redux/slices/companiesSlice';
-import { deleteCompanyApi, getCompanyById, getCompanyStatus } from '@/services/companyApi';
+import { deleteCompanyApi,getCompanyStatus } from '@/services/companyApi';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -13,14 +13,12 @@ const CompanyDetialPage = () => {
   const { id: companyId } = useParams();
   const [loading, setLoading] = useState(true);
   const company = useSelector((state) => state.company.singleCompany)
-  // console.log(company);
 
   useEffect(() => {
     const fetchCompnayStatusApi = async () => {
       try {
         setLoading(true);
         const data = await getCompanyStatus(companyId);
-        // console.log(data.companyStatus);
         dispatch(setSingleCompany(data.companyStatus));
       } catch (error) {
         console.log(error);

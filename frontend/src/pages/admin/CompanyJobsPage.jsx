@@ -1,16 +1,15 @@
 import { setAllAdminJobs } from "@/redux/slices/companiesSlice";
-import { getAdminJobsApi } from "@/services/companyApi";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { MapPin, IndianRupee, Calendar, Search } from "lucide-react";
+import { MapPin, IndianRupee, Calendar} from "lucide-react";
 import {
     Popover,
     PopoverTrigger,
     PopoverContent,
 } from "@/components/ui/popover";
 import { MoreVertical } from "lucide-react";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil,} from "lucide-react";
 import { getAdminJobStatus } from "@/services/applicationApi";
 import { searchJobApi } from "@/services/jobApi";
 import { Button } from "@/components/ui/button";
@@ -23,7 +22,6 @@ const CompanyJobsPage = () => {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const jobs = useSelector((state) => state.company.allAdminJobs);
-    console.log(jobs);
 
     useEffect(() => {
 
@@ -54,7 +52,7 @@ const CompanyJobsPage = () => {
 
         fetchJobs();
 
-    }, [page, debounceSearch]);
+    }, [page, debounceSearch,dispatch]);
 
     useEffect(() => {
 

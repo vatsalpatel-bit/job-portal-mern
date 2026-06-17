@@ -161,7 +161,7 @@ export const updateStatus = async (req, res) => {
 
 export const getAllJobs = async (req, res) => {
   try {
-    const userId = req.id;
+    const userId = req.userId;
 
     const jobs = await Job.find().populate("company");
     

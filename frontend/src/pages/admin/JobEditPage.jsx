@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from 'react-router-dom';
-import { getAllCompanyApi, getJobByIdApi, postJobApi, updateJobApi } from '@/services/companyApi';
-import { useDispatch, useSelector } from 'react-redux';
-import { setAllCompanies, setSingleJob } from '@/redux/slices/companiesSlice';
+import { getJobByIdApi,updateJobApi } from '@/services/companyApi';
 import { toast } from 'sonner';
 import Footer from '@/components/shared/Footer';
 

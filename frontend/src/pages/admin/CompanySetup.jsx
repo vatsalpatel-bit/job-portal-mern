@@ -17,7 +17,7 @@ const CompanySetup = () => {
   const singleCompany = useSelector(
     (state) => state.company?.singleCompany
   );
-  // console.log(singleCompany || "singleCompany undefind")
+  
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -59,9 +59,6 @@ const CompanySetup = () => {
       if (form.logo) {
         formData.append("logo", form.logo);
       }
-      // for (let pair of formData.entries()) {
-      //   console.log(pair[0], pair[1]);
-      // }
 
       const data = await editCompanyApi(companyId, formData)
       console.log(data);

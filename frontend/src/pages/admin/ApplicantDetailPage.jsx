@@ -4,8 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getApplicantApi } from "@/services/authApi";
 import { useDispatch, useSelector } from "react-redux";
 import { changeApplicantStatus, setApplicant } from "@/redux/slices/authslice";
-import ResumeViewer from "@/components/resume/ResumeViewer";
-import { updateApplicantStatus, updateApplicantStatusByIds } from "@/services/applicationApi";
+import { updateApplicantStatusByIds } from "@/services/applicationApi";
 import Footer from "@/components/shared/Footer";
 
 const ApplicantDetailPage = () => {

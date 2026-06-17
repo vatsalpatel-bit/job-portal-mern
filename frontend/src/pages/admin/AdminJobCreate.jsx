@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
-import { getAllCompaniesForJob, getAllCompanyApi, postJobApi } from '@/services/companyApi';
+import { getAllCompaniesForJob,postJobApi } from '@/services/companyApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllCompanies } from '@/redux/slices/companiesSlice';
 import { toast } from 'sonner';
