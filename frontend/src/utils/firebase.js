@@ -1,18 +1,16 @@
 import { initializeApp } from "firebase/app";
-
 import {
     getAuth,
     GoogleAuthProvider,
 } from "firebase/auth";
- 
+
 const firebaseConfig = {
-    apiKey: "AIzaSyDLKcsrrOurJCserOSmmsCLc11Q4K37iH4",
-    authDomain: "nextwork-f2484.firebaseapp.com",
-    projectId: "nextwork-f2484",
-    storageBucket: "nextwork-f2484.firebasestorage.app",
-    messagingSenderId: "1012980291990",
-    appId: "1:1012980291990:web:9de28b786ff88732a865b7",
-    measurementId: "G-98FM635LYL"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);

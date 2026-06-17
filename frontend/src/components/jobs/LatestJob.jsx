@@ -1,9 +1,9 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import LatestJobCard from "../jobs/LatestJobCard";
 
 const LatestJobs = () => {
   const { allJobs } = useSelector((state) => state.job);
- 
+
   // const allJobs=""
   return (
     <section className="w-full bg-muted/30 py-20">

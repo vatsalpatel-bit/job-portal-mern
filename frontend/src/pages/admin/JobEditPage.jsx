@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from 'react-router-dom';
-import { getJobByIdApi,updateJobApi } from '@/services/companyApi';
+import { getJobByIdApi, updateJobApi } from '@/services/companyApi';
 import { toast } from 'sonner';
 import Footer from '@/components/shared/Footer';
 
-const jobEditPage = () => {
+const JobEditPage = () => {
   const navigate = useNavigate();
   const { id: jobId } = useParams();
   const [input, setInput] = useState({
@@ -579,4 +579,4 @@ const jobEditPage = () => {
   )
 }
 
-export default jobEditPage;
+export default JobEditPage;

@@ -17,7 +17,7 @@ const CompanySetup = () => {
   const singleCompany = useSelector(
     (state) => state.company?.singleCompany
   );
-  
+
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -41,7 +41,10 @@ const CompanySetup = () => {
 
   useEffect(() => {
     if (singleCompany) {
-      setForm({ name: singleCompany?.name, })
+      setForm((prev) => ({
+        ...prev,
+        name: singleCompany?.name || "",
+      }))
     }
   }, [singleCompany])
 

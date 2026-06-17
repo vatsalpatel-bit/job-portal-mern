@@ -14,10 +14,10 @@ const FilterCard = ({ options, onFilterChange }) => {
 
   const [open, setOpen] = useState(true);
 
-  //  SAFE parent update
+  // safe parent update
   useEffect(() => {
     onFilterChange?.(filters);
-  }, [filters]);
+  }, [filters,onFilterChange]);
 
   const toggleFilter = (type, value) => {
     setFilters((prev) => {
@@ -45,10 +45,6 @@ const FilterCard = ({ options, onFilterChange }) => {
           <h1 className="text-xl font-bold text-gray-900 tracking-tight">
             Filter Jobs
           </h1>
-
-          {/* <p className="text-sm text-gray-500 mt-1">
-            Find jobs faster
-          </p> */}
         </div>
 
         <Button

@@ -59,7 +59,7 @@ const Job = ({ job }) => {
     try {
       setApplying(true);
 
-      const res = await applyJobApi(job._id);
+      await applyJobApi(job._id);
 
       dispatch(setAppliedJobs([...appliedJobs, job._id]));
       toast.success("Applied Successfully ✅");

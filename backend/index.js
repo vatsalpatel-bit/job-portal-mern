@@ -20,13 +20,13 @@ app.use(cookieParser());
 
 // cors
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: process.env.FRONTEND_URL,
   credentials: true,
 };
 app.use(cors(corsOptions));
 
 // port 
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT;
 
 // api's
 app.use("/api/v1/user", userRoute);

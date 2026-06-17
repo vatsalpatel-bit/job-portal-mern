@@ -21,7 +21,7 @@ const MainLayout = () => {
           // not logged in → ignore
         });
     }
-  }, []);
+  }, [dispatch, user]);
 
   return (
     <>

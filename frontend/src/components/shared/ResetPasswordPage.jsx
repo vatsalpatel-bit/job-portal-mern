@@ -10,14 +10,12 @@ const ResetPasswordPage = () => {
     const { token } = useParams();
     const [password, setPassword] = useState("");
     const [conformPassword, setConformPassword] = useState("");
-    console.log(token);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             if (password === conformPassword) {
                 const data = await resetPasswordApi(token, password);
-                console.log(data);
                 toast.success(
                     data?.message ||
                     "Password reset successfully"

@@ -7,18 +7,17 @@ import { getFilteredJobsApi } from "@/services/jobApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setLoading } from "@/redux/slices/authslice";
 import Footer from "@/components/shared/Footer";
-  import { getAppliedJobsApi } from "@/services/applicationApi";
-  import { setAppliedJobs } from "@/redux/slices/jobSlice";
+import { getAppliedJobsApi } from "@/services/applicationApi";
+import { setAppliedJobs } from "@/redux/slices/jobSlice";
 
 const Browse = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { searchedJobs, loading } = useSelector((state) => state.job);
+  const { searchedJobs, } = useSelector((state) => state.job);
 
   //get keyword from url
   const keyword = new URLSearchParams(location.search).get("keyword");
-  console.log(keyword);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -36,7 +35,7 @@ const Browse = () => {
     };
 
     if (keyword) fetchJobs();
-  }, [keyword]);
+  }, [keyword,dispatch]);
 
   useEffect(() => {
     const fetchAppliedJobs = async () => {
