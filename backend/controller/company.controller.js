@@ -184,7 +184,6 @@ export const updateCompany = async (req, res) => {
   try {
     const { name, description, website, location } = req.body;
     const file = req.file;
-
     //  Get existing company first
     const existingCompany = await Company.findById(req.params.id);
 
@@ -209,7 +208,7 @@ export const updateCompany = async (req, res) => {
       const result = await uploadFromBuffer(file.buffer);
 
       //  3. save new data
-      updateData.logo = result.secure_url;      
+      updateData.logo = result.secure_url;
       updateData.logoPublicId = result.public_id;
     }
 
@@ -334,7 +333,7 @@ export const deleteCompany = async (req, res) => {
     await Application.deleteMany({
       job: { $in: jobId },
     });
-    
+
     await Job.deleteMany({ company: companyId });
 
     await Company.findByIdAndDelete(companyId);

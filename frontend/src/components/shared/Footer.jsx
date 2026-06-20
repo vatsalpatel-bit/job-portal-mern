@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 
 const Footer = () => {
   const user = useSelector((state) => state.auth.user);
-  // console.log(user);
+
   return (
 
     <footer className="relative w-full overflow-hidden bg-[#0b0f19]">

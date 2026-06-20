@@ -1,39 +1,39 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import MainLayout from "@/layout/MainLayout";
-import Home from "@/pages/Home";
-import Signup from "@/pages/Signup";
-import Login from "@/pages/Login";
-import Jobs from "@/pages/Jobs";
-import Browse from "@/pages/Browse";
-import ProfilePage from "@/pages/ProfilePage";
-import DetailPage from "@/pages/DetailPage";
-import Companies from "@/pages/admin/Companies";
+import Home from "@/pages/student/Home";
+import Signup from "@/authentication/Signup";
+import Login from "@/authentication/Login";
+import Jobs from "@/pages/student/Jobs";
+import Browse from "@/pages/student/Browse";
+import ProfilePage from "@/pages/student/ProfilePage";
+import DetailPage from "@/components/student/jobs/DetailPage";
+import Companies from "@/pages/recruiter/Companies";
 
 // Protected Route
-import CompanyCreate from "@/pages/admin/CompanyCreate";
-import CompanySetUp from "@/pages/admin/companySetup";
-import CompanyEdit from "@/pages/admin/CompanyEdit";
-import CompanyDetialPage from "@/pages/admin/CompanyDetialPage";
-import CompanyJobsPage from "@/pages/admin/CompanyJobsPage";
-import AdminJobCreate from "@/pages/admin/AdminJobCreate";
-import JobEditPage from "@/pages/admin/JobEditPage";
-import JobViewPage from "@/pages/admin/JobViewPage";
-import JobApplicantPage from "@/pages/admin/JobApplicantPage";
-import ApplicantDetailPage from "@/pages/admin/ApplicantDetailPage";
-import AdminProfilePage from "@/pages/admin/AdminProfilePage";
-import AdminProfileEditPage from "@/pages/admin/AdminProfileEditPage";
-import NotFound from "@/pages/NotFound";
+import CompanyCreate from "@/components/recruiter/companies/CompanyCreate";
+import CompanySetUp from "@/components/recruiter/companies/CompanySetup";
+import CompanyEdit from "@/components/recruiter/companies/CompanyEdit";
+import CompanyDetialPage from "@/components/recruiter/companies/CompanyDetialPage";
+import CompanyJobsPage from "@/pages/recruiter/CompanyJobsPage";
+import AdminJobCreate from "@/components/recruiter/jobs/AdminJobCreate";
+import JobEditPage from "@/components/recruiter/jobs/JobEditPage";
+import JobViewPage from "@/components/recruiter/jobs/JobViewPage";
+import JobApplicantPage from "@/pages/recruiter/JobApplicantPage";
+import ApplicantDetailPage from "@/components/recruiter/applicant/ApplicantDetailPage";
+import AdminProfilePage from "@/pages/recruiter/AdminProfilePage";
+import AdminProfileEditPage from "@/components/recruiter/profile/AdminProfileEditPage";
+import NotFound from "@/components/shared/NotFound";
 import AboutUsPage from "@/components/shared/AboutUsPage";
 import HelpCenterPage from "@/components/shared/HelpCenterPage";
 import PrivacyPolicyPage from "@/components/shared/PrivacyPolicyPage";
 import TermAndConditionPage from "@/components/shared/TermAndConditionPage";
 import SecurityPage from "@/components/shared/SecurityPage";
-import ForgotPasswordPage from "@/components/shared/ForgotPasswordPage";
-import ResetPasswordPage from "@/components/shared/ResetPasswordPage";
-import StudentProtectedRoute from "@/components/auth/StudentProtectedRoute";
-import RecruiterProtectedRoute from "@/components/auth/RecruiterProtectedRoute";
-import GuestProtectedRoute from "@/components/auth/GuestProtectedRoute";
+import ForgotPasswordPage from "@/authentication/ForgotPasswordPage";
+import ResetPasswordPage from "@/authentication/ResetPasswordPage";
+import StudentProtectedRoute from "@/protected routes/StudentProtectedRoute";
+import RecruiterProtectedRoute from "@/protected routes/RecruiterProtectedRoute";
+import GuestProtectedRoute from "@/protected routes/GuestProtectedRoute";
 
 const router = createBrowserRouter([
   {

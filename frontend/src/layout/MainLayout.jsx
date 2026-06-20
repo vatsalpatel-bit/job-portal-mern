@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "@/components/shared/Navbar";
 import { getProfileApi } from "@/services/authApi";
 import { setUser } from "@/redux/slices/authslice";
-import ScrollToTop from "@/components/shared/ScrollToTop";
+import ScrollToTop from "@/layout/ScrollToTop";
 
 const MainLayout = () => {
   const dispatch = useDispatch();
