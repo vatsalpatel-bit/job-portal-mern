@@ -62,7 +62,7 @@ const DetailPage = () => {
         const res = await getJobById(id);
         setJob(res.data.job);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -84,7 +84,7 @@ const DetailPage = () => {
         dispatch(setAppliedJobs(jobIds));
 
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 

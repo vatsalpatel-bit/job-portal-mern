@@ -39,7 +39,7 @@ const AppliedJobTable = () => {
         dispatch(setAppliedJobs(applications));
 
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 

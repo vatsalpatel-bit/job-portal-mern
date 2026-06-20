@@ -30,7 +30,7 @@ const AdminProfileEditPage = () => {
                 const data = await getAdminProfileApi();
                 dispatch(setAdmin(data.profile));
             } catch (error) {
-                console.log(error);
+                console.error(error);
             } finally {
                 setLoading(false);
             }
@@ -84,7 +84,7 @@ const AdminProfileEditPage = () => {
                 navigate("/admin/profile")
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
             toast.error(
                 error?.response?.data?.message 
             );

@@ -31,7 +31,7 @@ const Jobs = () => {
           industries: res.data.industries
         });
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 
@@ -50,7 +50,7 @@ const Jobs = () => {
         dispatch(setAppliedJobs(jobIds));
 
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 
@@ -64,7 +64,7 @@ const Jobs = () => {
         const res = await getFilteredJobsApi(filters);
         dispatch(setAllJobs(res.jobs));
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         dispatch(setJobLoading(false));
       }

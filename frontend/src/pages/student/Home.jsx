@@ -26,7 +26,7 @@ const Home = () => {
                 dispatch(setAppliedJobs(jobIds));
 
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
         };
 

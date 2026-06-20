@@ -21,7 +21,7 @@ const CompanyDetialPage = () => {
         const data = await getCompanyStatus(companyId);
         dispatch(setSingleCompany(data.companyStatus));
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -42,7 +42,7 @@ const CompanyDetialPage = () => {
         toast.success(data?.message || "Company deleted successfully");
         navigate(-1);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         toast.error(error?.response?.data?.message)
       } finally {
         setLoading(false)

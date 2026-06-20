@@ -39,7 +39,7 @@ const JobEditPage = () => {
         })
         setCompanyName(job.company.name);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setLoading(false)
       }
@@ -90,7 +90,7 @@ const JobEditPage = () => {
         navigate("/admin/jobs")
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error(
         error?.response?.data?.message || "Something went wrong"
       );

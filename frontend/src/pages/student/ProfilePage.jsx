@@ -78,7 +78,7 @@ const Profile = () => {
         setResume(user?.profile?.resume || "");
       } catch (error) {
         console.error("Fetch profile error:", error);
-        toast.error("Failed to load profile ❌");
+        toast.error("Failed to load profile");
       } finally {
         setLoading(false);
       }

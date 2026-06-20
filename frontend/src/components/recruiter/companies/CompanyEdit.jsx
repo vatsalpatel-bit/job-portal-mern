@@ -48,7 +48,7 @@ const CompanyEdit = () => {
                 const data = await getCompanyById(companyId);
                 dispatch(setSingleCompany(data.company))
             } catch (error) {
-                console.log(error);
+                console.error(error);
             } finally {
                 setLoading(false)
             }
@@ -92,7 +92,7 @@ const CompanyEdit = () => {
                 navigate("/admin/companies");
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
             toast.error(
                 error?.response?.data?.message ||
                 "Something went wrong"

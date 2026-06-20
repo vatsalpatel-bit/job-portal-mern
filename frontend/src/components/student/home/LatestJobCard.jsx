@@ -64,7 +64,7 @@ const LatestJobs = ({ job }) => {
       toast.success("Applied Successfully");
 
     } catch (err) {
-      console.log(err);
+      console.error(err);
       toast.error("Application failed");
     } finally {
       setApplying(false);

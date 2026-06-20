@@ -44,7 +44,7 @@ const CompanyJobsPage = () => {
 
                 dispatch(setAllAdminJobs(data));
             } catch (error) {
-                console.log(error);
+                console.error(error);
             } finally {
                 setLoading(false)
             }

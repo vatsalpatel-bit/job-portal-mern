@@ -18,7 +18,7 @@ const AdminProfilePage = () => {
                 const data = await getAdminProfileApi();
                 dispatch(setAdmin(data.profile))
             } catch (error) {
-                console.log(error);
+                console.error(error);
             } finally {
                 setLoading(false);
             }

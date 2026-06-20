@@ -22,7 +22,7 @@ const ApplicantDetailPage = () => {
         const data = await getApplicantApi(applicantId, jobId);
         dispatch(setApplicant(data.response))
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -36,7 +36,7 @@ const ApplicantDetailPage = () => {
       await updateApplicantStatusByIds(applicantId, jobId, newStatus);
       dispatch(changeApplicantStatus({ status: newStatus }));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

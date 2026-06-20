@@ -19,7 +19,7 @@ const JobApplicantPage = () => {
       await updateApplicantStatus(id, newStatus);
       dispatch(updateApplicationStatus({ id, status: newStatus }))
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
   useEffect(() => {
@@ -29,7 +29,7 @@ const JobApplicantPage = () => {
         const data = await getApplicantsApi(jobId, page);
         dispatch(setAllApplicant(data));
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setLoading(false)
       }

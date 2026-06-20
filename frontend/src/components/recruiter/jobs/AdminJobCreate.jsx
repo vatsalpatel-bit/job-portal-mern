@@ -32,7 +32,7 @@ const AdminJobCreate = () => {
                 const data = await getAllCompaniesForJob();
                 dispatch(setAllCompanies(data.companies));
             } catch (error) {
-                console.log(error);
+                console.error(error);
             } finally {
                 setLoading(false);
             }
@@ -82,7 +82,7 @@ const AdminJobCreate = () => {
                 navigate("/admin/jobs")
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
             toast.error(
                 error?.response?.data?.message ||
                 "Something went wrong"

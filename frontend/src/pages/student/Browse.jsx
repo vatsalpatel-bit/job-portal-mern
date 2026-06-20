@@ -26,7 +26,7 @@ const Browse = () => {
         const data = await getFilteredJobsApi({ keyword });
         dispatch(setSearchedJobs(data.jobs));
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
       finally {
         dispatch(setLoading(false));
@@ -48,7 +48,7 @@ const Browse = () => {
         dispatch(setAppliedJobs(jobIds));
 
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 

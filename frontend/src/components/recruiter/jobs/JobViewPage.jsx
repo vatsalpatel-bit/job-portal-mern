@@ -28,7 +28,7 @@ const JobViewPage = () => {
                 const data = await getJobByIdApi(jobId);
                 dispatch(setSingleJob(data.job))
             } catch (error) {
-                console.log(error);
+                console.error(error);
             } finally {
                 setLoading(false)
             }
