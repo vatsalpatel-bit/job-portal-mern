@@ -6,125 +6,144 @@ import { editAdminProfileApi, getAdminProfileApi } from '@/services/authApi';
 import { setAdmin } from '@/redux/slices/authslice';
 import { toast } from 'sonner';
 import Footer from '@/components/shared/Footer';
-import { ArrowLeft } from 'lucide-react';
 
 const AdminProfileEditPage = () => {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const [preview, setPreview] = useState(null);
-    const [form, setForm] = useState(
-        {
-            fullname: "",
-            email: "",
-            phoneNumber: "",
-            logo: null,
-        }
-    )
-    const [loading, setLoading] = useState(true);
-
-
-    useEffect(() => {
-        const fetchAdminProfileApi = async () => {
-            try {
-                setLoading(true);
-                const data = await getAdminProfileApi();
-                dispatch(setAdmin(data.profile));
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-
-        };
-        fetchAdminProfileApi();
-    }, [dispatch])
-
-    const user = useSelector((state) => state.auth.admin);
-    useEffect(() => {
-        if (user) {
-            setForm({
-                fullname: user.fullname || "",
-                email: user.email || "",
-                phoneNumber: user.phoneNumber || "",
-                logo: user?.profile?.profilePhoto || null
-            })
-        }
-    }, [user])
-
-    const handleChange = (e) => {
-        const { name, value, files } = e.target;
-        if (name === "logo") {
-            const file = files[0];
-            setForm({ ...form, logo: files[0] })
-            setPreview(URL.createObjectURL(file))
-        }
-        else {
-            setForm((prev) => ({
-                ...prev,
-                [name]: value
-            }))
-        }
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [preview, setPreview] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [form, setForm] = useState(
+    {
+      fullname: "",
+      email: "",
+      phoneNumber: "",
+      logo: null,
     }
+  )
+  const [loading, setLoading] = useState(true);
 
-    const handleSubmit = async () => {
-        try {
-            setLoading(true);
-            const formData = new FormData();
-            formData.append("fullname", form.fullname)
-            formData.append("email", form.email)
-            formData.append("phoneNumber", form.phoneNumber)
+  useEffect(() => {
+    const fetchAdminProfileApi = async () => {
+      try {
+        setLoading(true);
+        const data = await getAdminProfileApi();
+        dispatch(setAdmin(data.profile));
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
 
-            if (form.logo) {
-                formData.append("logo", form.logo);
-            }
+    };
+    fetchAdminProfileApi();
+  }, [dispatch])
 
-            const data = await editAdminProfileApi(formData);
-            if (data?.success) {
-                toast.success(data?.message)
-                navigate("/admin/profile")
-            }
-        } catch (error) {
-            console.error(error);
-            toast.error(
-                error?.response?.data?.message 
-            );
-        } finally {
-            setLoading(false)
-        }
+  const user = useSelector((state) => state.auth.admin);
+  useEffect(() => {
+    if (user) {
+      setForm({
+        fullname: user.fullname || "",
+        email: user.email || "",
+        phoneNumber: user.phoneNumber || "",
+        logo: user?.profile?.profilePhoto || null
+      })
     }
+  }, [user])
 
-    if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
-
-                <div className="flex flex-col items-center gap-4">
-
-                    <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
-
-                    <p className="text-sm text-gray-500">
-                        Loading ...
-                    </p>
-
-                </div>
-
-            </div>
-        );
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === "logo") {
+      const file = files[0];
+      setForm({ ...form, logo: files[0] })
+      setPreview(URL.createObjectURL(file))
     }
+    else {
+      setForm((prev) => ({
+        ...prev,
+        [name]: value
+      }))
+      setErrors((prev) => {
+        const newerror = { ...prev };
+        delete newerror[name];
+        return newerror;
+      })
+    }
+  }
 
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("fullname", form.fullname)
+      formData.append("email", form.email)
+      formData.append("phoneNumber", form.phoneNumber)
+
+      if (form.logo) {
+        formData.append("logo", form.logo);
+      }
+
+      const data = await editAdminProfileApi(formData);
+      if (data?.success) {
+        toast.success(data?.message)
+        navigate("/admin/profile")
+      }
+    } catch (error) {
+      const data = error.response?.data;
+      if (data?.error) {
+        const allErrors = {};
+
+        data.error.forEach((err, index) => {
+          allErrors[err.path[0]] = err.message;
+          setTimeout(() => {
+            toast.error(err.message);
+          }, index * 1000);
+        });
+
+        setErrors(allErrors);
+
+      } else if (data?.message) {
+        toast.error(data?.message);
+      }
+      else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
     return (
-      <>
-  <div className="min-h-screen bg-[#f7faff] overflow-hidden relative pt-24">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
 
-    {/* Background Effects */}
-    <div className="absolute top-[-140px] left-[-100px] h-[340px] w-[340px] rounded-full bg-[#e9f2ff] blur-3xl opacity-80" />
+        <div className="flex flex-col items-center gap-4">
 
-    <div className="absolute right-[-120px] top-[120px] h-[320px] w-[320px] rounded-full bg-[#fff3d9] blur-3xl opacity-70" />
+          <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
 
-    <div className="max-w-5xl mx-auto px-6 py-16 relative z-10">
+          <p className="text-sm text-gray-500">
+            Loading ...
+          </p>
 
-      {/* Main Card */}
-      <div
-        className="
+        </div>
+
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="min-h-screen bg-[#f7faff] overflow-hidden relative pt-24">
+
+        {/* Background Effects */}
+        <div className="absolute top-[-140px] left-[-100px] h-[340px] w-[340px] rounded-full bg-[#e9f2ff] blur-3xl opacity-80" />
+
+        <div className="absolute right-[-120px] top-[120px] h-[320px] w-[320px] rounded-full bg-[#fff3d9] blur-3xl opacity-70" />
+
+        <div className="max-w-5xl mx-auto px-6 py-16 relative z-10">
+
+          {/* Main Card */}
+          <div
+            className="
         relative overflow-hidden
         rounded-[40px]
         bg-white/80
@@ -132,69 +151,69 @@ const AdminProfileEditPage = () => {
         border border-white/70
         shadow-[0_20px_60px_rgba(15,23,42,0.06)]
         "
-      >
+          >
 
-        {/* Top Gradient */}
-        <div
-          className="
+            {/* Top Gradient */}
+            <div
+              className="
           h-40
           bg-gradient-to-r
           from-[#dfeeff]
           via-[#eef5ff]
           to-[#fff5df]
           "
-        />
+            />
 
-        {/* Content */}
-        <div className="relative px-8 sm:px-10 pb-10">
+            {/* Content */}
+            <div className="relative px-8 sm:px-10 pb-10">
 
-          {/* Header */}
-          <div
-            className="
+              {/* Header */}
+              <div
+                className="
             -mt-16
             flex flex-col xl:flex-row
             xl:items-end xl:justify-between
             gap-8
             "
-          >
+              >
 
-            {/* Left */}
-            <div className="flex flex-col sm:flex-row sm:items-end gap-6">
+                {/* Left */}
+                <div className="flex flex-col sm:flex-row sm:items-end gap-6">
 
-              {/* Avatar */}
-              <div className="relative">
+                  {/* Avatar */}
+                  <div className="relative">
 
-                <img
-                  src={preview || user?.profile?.profilePhoto}
-                  alt="profile"
-                  className="
+                    <img
+                      src={preview || user?.profile?.profilePhoto}
+                      alt="profile"
+                      className="
                   w-32 h-32
                   rounded-full
                   object-cover
                   border-[6px] border-white
                   shadow-xl
                   "
-                />
+                    />
 
-                {/* Status Dot */}
-                <div
-                  className="
+                    {/* Status Dot */}
+                    <div
+                      className="
                   absolute bottom-3 right-3
                   h-5 w-5
                   rounded-full
                   bg-green-500
                   border-4 border-white
                   "
-                />
+                    />
 
-              </div>
+                  </div>
 
-              {/* Info */}
-              <div className="pb-2">
+                  {/* Info */}
+                  <div className="pb-2">
 
-                {/* Badge */}
-                <div
-                  className="
+                    {/* Badge */}
+                    <div
+                      className="
                   inline-flex items-center
                   rounded-full
                   bg-[#eef4ff]
@@ -202,73 +221,73 @@ const AdminProfileEditPage = () => {
                   text-sm font-medium text-blue-700
                   mb-4
                   "
-                >
-                  ✨ Edit Recruiter Profile
-                </div>
+                    >
+                      ✨ Edit Recruiter Profile
+                    </div>
 
-                {/* Title */}
-                <h1
-                  className="
+                    {/* Title */}
+                    <h1
+                      className="
                   text-4xl sm:text-5xl
                   font-black
                   tracking-tight
                   text-gray-900
                   "
-                >
-                  Edit Profile
-                </h1>
+                    >
+                      Edit Profile
+                    </h1>
 
-                <p className="text-gray-500 text-base mt-4 leading-7">
-                  Update your recruiter information and personal details.
-                </p>
+                    <p className="text-gray-500 text-base mt-4 leading-7">
+                      Update your recruiter information and personal details.
+                    </p>
+
+                  </div>
+
+                </div>
 
               </div>
 
-            </div>
+              {/* Divider */}
+              <div className="my-10 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
 
-          </div>
-
-          {/* Divider */}
-          <div className="my-10 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-
-          {/* Upload Section */}
-          <div
-            className="
+              {/* Upload Section */}
+              <div
+                className="
             rounded-[30px]
             bg-[#f9fbff]
             border border-[#edf2ff]
             p-6
             mb-10
             "
-          >
+              >
 
-            <div
-              className="
+                <div
+                  className="
               flex flex-col sm:flex-row
               sm:items-center sm:justify-between
               gap-5
               "
-            >
+                >
 
-              {/* Left */}
-              <div>
+                  {/* Left */}
+                  <div>
 
-                <h2 className="text-xl font-bold text-gray-900">
-                  Profile Picture
-                </h2>
+                    <h2 className="text-xl font-bold text-gray-900">
+                      Profile Picture
+                    </h2>
 
-                <p className="text-sm text-gray-500 mt-2">
-                  Upload a professional profile image.
-                </p>
+                    <p className="text-sm text-gray-500 mt-2">
+                      Upload a professional profile image.
+                    </p>
 
-              </div>
+                  </div>
 
-              {/* Upload */}
-              <div>
+                  {/* Upload */}
+                  <div>
 
-                <label
-                  htmlFor="logoUpload"
-                  className="
+                    <label
+                      htmlFor="logoUpload"
+                      className="
                   inline-flex items-center justify-center
                   h-12 px-6
                   rounded-2xl
@@ -280,46 +299,46 @@ const AdminProfileEditPage = () => {
                   cursor-pointer
                   transition-all duration-300
                   "
-                >
-                  Change Photo
-                </label>
+                    >
+                      Change Photo
+                    </label>
 
-                <input
-                  type="file"
-                  name="logo"
-                  id="logoUpload"
-                  className="hidden"
-                  onChange={handleChange}
-                />
+                    <input
+                      type="file"
+                      name="logo"
+                      id="logoUpload"
+                      className="hidden"
+                      onChange={handleChange}
+                    />
+
+                  </div>
+
+                </div>
 
               </div>
 
-            </div>
-
-          </div>
-
-          {/* FORM GRID */}
-          <div
-            className="
+              {/* FORM GRID */}
+              <div
+                className="
             grid grid-cols-1 md:grid-cols-2
             gap-7
             "
-          >
+              >
 
-            {/* Full Name */}
-            <div>
+                {/* Full Name */}
+                <div>
 
-              <label className="text-sm font-semibold text-gray-700 mb-3 block">
-                Full Name
-              </label>
+                  <label className="text-sm font-semibold text-gray-700 mb-3 block">
+                    Full Name
+                  </label>
 
-              <input
-                name="fullname"
-                value={form.fullname}
-                onChange={handleChange}
-                type="text"
-                placeholder="Enter full name"
-                className="
+                  <input
+                    name="fullname"
+                    value={form.fullname}
+                    onChange={handleChange}
+                    type="text"
+                    placeholder="Enter full name"
+                    className="
                 w-full h-14
                 rounded-2xl
                 border border-[#edf2ff]
@@ -330,24 +349,29 @@ const AdminProfileEditPage = () => {
                 transition-all duration-300
                 focus:ring-4 focus:ring-blue-100
                 "
-              />
+                  />
+                  {errors.fullname && (
+                    <p className="text-red-500 text-sm">
+                      {errors.fullname}
+                    </p>
+                  )}
 
-            </div>
+                </div>
 
-            {/* Email */}
-            <div>
+                {/* Email */}
+                <div>
 
-              <label className="text-sm font-semibold text-gray-700 mb-3 block">
-                Email Address
-              </label>
+                  <label className="text-sm font-semibold text-gray-700 mb-3 block">
+                    Email Address
+                  </label>
 
-              <input
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                type="email"
-                placeholder="Enter email"
-                className="
+                  <input
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    type="email"
+                    placeholder="Enter email"
+                    className="
                 w-full h-14
                 rounded-2xl
                 border border-[#edf2ff]
@@ -358,24 +382,28 @@ const AdminProfileEditPage = () => {
                 transition-all duration-300
                 focus:ring-4 focus:ring-blue-100
                 "
-              />
+                  />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm">
+                      {errors.email}
+                    </p>
+                  )}
+                </div>
 
-            </div>
+                {/* Phone */}
+                <div>
 
-            {/* Phone */}
-            <div>
+                  <label className="text-sm font-semibold text-gray-700 mb-3 block">
+                    Phone Number
+                  </label>
 
-              <label className="text-sm font-semibold text-gray-700 mb-3 block">
-                Phone Number
-              </label>
-
-              <input
-                name="phoneNumber"
-                value={form.phoneNumber}
-                onChange={handleChange}
-                type="text"
-                placeholder="Enter phone number"
-                className="
+                  <input
+                    name="phoneNumber"
+                    value={form.phoneNumber}
+                    onChange={handleChange}
+                    type="text"
+                    placeholder="Enter phone number"
+                    className="
                 w-full h-14
                 rounded-2xl
                 border border-[#edf2ff]
@@ -386,22 +414,26 @@ const AdminProfileEditPage = () => {
                 transition-all duration-300
                 focus:ring-4 focus:ring-blue-100
                 "
-              />
+                  />
+                  {errors.phoneNumber && (
+                    <p className="text-red-500 text-sm">
+                      {errors.phoneNumber}
+                    </p>
+                  )}
+                </div>
 
-            </div>
+                {/* Role */}
+                <div>
 
-            {/* Role */}
-            <div>
+                  <label className="text-sm font-semibold text-gray-700 mb-3 block">
+                    Role
+                  </label>
 
-              <label className="text-sm font-semibold text-gray-700 mb-3 block">
-                Role
-              </label>
-
-              <input
-                type="text"
-                value={user?.role}
-                disabled
-                className="
+                  <input
+                    type="text"
+                    value={user?.role}
+                    disabled
+                    className="
                 w-full h-14
                 rounded-2xl
                 border border-[#edf2ff]
@@ -410,26 +442,26 @@ const AdminProfileEditPage = () => {
                 text-gray-500
                 cursor-not-allowed
                 "
-              />
+                  />
 
-            </div>
+                </div>
 
-          </div>
+              </div>
 
-          {/* Footer Buttons */}
-          <div
-            className="
+              {/* Footer Buttons */}
+              <div
+                className="
             flex flex-col sm:flex-row
             items-center justify-end
             gap-4
             mt-12
             "
-          >
+              >
 
-            {/* Cancel */}
-            <button
-              onClick={() => navigate(-1)}
-              className="
+                {/* Cancel */}
+                <button
+                  onClick={() => navigate(-1)}
+                  className="
               h-12 px-6
               rounded-2xl
               bg-white
@@ -439,14 +471,14 @@ const AdminProfileEditPage = () => {
               shadow-sm
               transition-all duration-300
               "
-            >
-              Cancel
-            </button>
+                >
+                  Cancel
+                </button>
 
-            {/* Save */}
-            <button
-              onClick={handleSubmit}
-              className="
+                {/* Save */}
+                <button
+                  onClick={handleSubmit}
+                  className="
               h-12 px-7
               rounded-2xl
               bg-gradient-to-r from-blue-600 to-violet-600
@@ -457,9 +489,13 @@ const AdminProfileEditPage = () => {
               transition-all duration-300
               hover:-translate-y-0.5
               "
-            >
-              Update Profile
-            </button>
+                >
+                  Update Profile
+                </button>
+
+              </div>
+
+            </div>
 
           </div>
 
@@ -467,13 +503,9 @@ const AdminProfileEditPage = () => {
 
       </div>
 
-    </div>
-
-  </div>
-
-  <Footer />
-</>
-    )
+      <Footer />
+    </>
+  )
 }
 
 export default AdminProfileEditPage

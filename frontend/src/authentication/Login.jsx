@@ -34,6 +34,11 @@ const Login = () => {
   const changeEventeHandeler = (e) => {
     const { name, value } = e.target;
     setInput((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => {
+      const newError = { ...prev };
+      delete newError[name];
+      return newError;
+    })
   };
 
   const handleGoogleLogin = async () => {
@@ -80,7 +85,7 @@ const Login = () => {
       if (data?.error) {
         const allErrors = {};
 
-        data.error.forEach((err,index) => {
+        data.error.forEach((err, index) => {
           allErrors[err.path[0]] = err.message;
           setTimeout(() => {
             toast(err.message)

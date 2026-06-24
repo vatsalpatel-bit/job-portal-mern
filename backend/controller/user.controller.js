@@ -26,7 +26,8 @@ export const Register = async (req, res) => {
       fullname: z.string().min(3, "Name must be at least 3 characters")
         .max(50, "Name cannot exceed 50 characters"),
       email: z.string().email("Invalid email address"),
-      phoneNumber: z.string().length(10, "Phone number must be exactly 10 digits"),
+      phoneNumber: z.string().length(10, "Phone number must be exactly 10 digits")
+        .regex(/^\d+$/, "Phone number must contain only digits"),
       password: z.string().min(6, "Password must be at least 6 characters")
         .max(20, "Password cannot exceed 20 characters"),
       role: z.string(),
@@ -220,7 +221,8 @@ export const updateProfile = async (req, res) => {
       fullname: z.string().min(3, "Name must be at least 3 characters")
         .max(50, "Name cannot exceed 50 characters").optional(),
       email: z.string().email("Invalid email address").optional(),
-      phoneNumber: z.string().length(10, "Phone number must be exactly 10 digits").optional(),
+      phoneNumber: z.string().length(10, "Phone number must be exactly 10 digits").
+        regex(/^\d+$/, "Phone number must contain only digits").optional(),
       bio: z.string().max(200, "Name cannot excced 50 characters").optional(),
       skills: z
         .array(z.string())
@@ -563,7 +565,34 @@ export const getAdminProfile = async (req, res) => {
 export const editAdminProfile = async (req, res) => {
   try {
 
-    const { fullname, email, phoneNumber } = req.body;
+    const profileSchema = z.object({
+      fullname: z
+        .string()
+        .trim()
+        .min(3, "Full name must be at least 3 characters")
+        .max(50, "Full name cannot exceed 50 characters"),
+
+      email: z
+        .string()
+        .trim()
+        .email("Please enter a valid email address"),
+
+      phoneNumber: z
+        .string()
+        .trim()
+        .length(10, "Phone number must be exactly 10 digits")
+        .regex(/^\d+$/, "Phone number must contain only digits"),
+    });
+    const result = profileSchema.safeParse(req.body);
+
+    if (!result.success) {
+      return res.status(400).json({
+        success: false,
+        error: result.error.issues,
+      })
+    }
+    const { fullname, email, phoneNumber } = result.data;
+
     const userId = new mongoose.Types.ObjectId(req.userId);
     const file = req.file;
 

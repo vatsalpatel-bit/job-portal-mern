@@ -41,6 +41,11 @@ const Signup = () => {
       ...prev,
       [name]: value,
     }));
+    setErrors((prev) => {
+      const newError = { ...prev };
+      delete newError[name];
+      return newError;
+    })
   };
 
   const fileHandler = (e) => {

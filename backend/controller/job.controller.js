@@ -2,10 +2,64 @@ import mongoose, { Types } from "mongoose";
 import { Job } from "../utils/job.model.js";
 import { Application } from "../utils/application.model.js";
 import Company from "../utils/company.model.js";
+import z from "zod";
 
 export const postJob = async (req, res) => {
   try {
     const userId = req?.userId;
+    const jobRegisterSchema = z.object({
+      title: z
+        .string()
+        .min(3, "Job title must be at least 3 characters")
+        .max(100, "Job title cannot exceed 100 characters"),
+
+      description: z
+        .string()
+        .min(20, "Description must be at least 20 characters")
+        .max(2000, "Description cannot exceed 2000 characters"),
+
+      requirements: z
+        .array(z.string())
+        .min(1, "At least one requirement is required"),
+
+      salary: z
+        .coerce
+        .number()
+        .min(1, "Salary must be greater than 0"),
+
+      location: z
+        .string()
+        .min(2, "Location is required")
+        .max(100, "Location cannot exceed 100 characters"),
+
+      jobType: z
+        .string()
+        .min(1, "Job type is required"),
+
+      experience: z
+        .coerce
+        .number()
+        .min(0, "Experience cannot be negative")
+        .max(50, "Experience seems invalid"),
+
+      position: z
+        .coerce
+        .number()
+        .min(1, "At least 1 position is required"),
+
+      companyId: z
+        .string()
+        .min(1, "Please select a company"),
+    });
+
+    const result = jobRegisterSchema.safeParse(req.body.jobData);
+
+    if (!result.success) {
+      return res.status(400).json({
+        success: false,
+        error: result.error.issues,
+      })
+    }
 
     const {
       title,
@@ -17,7 +71,7 @@ export const postJob = async (req, res) => {
       experience,
       position,
       companyId,
-    } = req?.body?.jobData;
+    } = result.data;
 
     if (
       !title ||
@@ -66,6 +120,58 @@ export const postJob = async (req, res) => {
 
 export const updateJob = async (req, res) => {
   try {
+    const jobSchema = z.object({
+      title: z
+        .string()
+        .min(3, "Job title must be at least 3 characters")
+        .max(100, "Job title cannot exceed 100 characters"),
+
+      description: z
+        .string()
+        .min(20, "Description must be at least 20 characters")
+        .max(2000, "Description cannot exceed 2000 characters"),
+
+      requirements: z
+        .array(
+          z.string().min(2, "Requirement is too short")
+        )
+        .min(1, "At least one requirement is required"),
+
+      salary: z
+        .coerce
+        .number()
+        .min(1, "Salary must be greater than 0"),
+
+      location: z
+        .string()
+        .min(2, "Location is required")
+        .max(100, "Location cannot exceed 100 characters"),
+
+      jobType: z
+        .string()
+        .min(1, "Job type is required"),
+
+      experienceLevel: z
+        .coerce
+        .number()
+        .min(0, "Experience cannot be negative")
+        .max(50, "Experience level seems invalid"),
+
+      position: z
+        .coerce
+        .number()
+        .min(1, "Position must be at least 1")
+        .max(1000, "Position count seems invalid"),
+
+    });
+    const result = jobSchema.safeParse(req.body.jobData);
+
+    if (!result.success) {
+      return res.status(400).json({
+        success: false,
+        error: result.error.issues,
+      });
+    }
 
     const jobId = req.params.id;
     const userId = req.userId;
@@ -89,13 +195,13 @@ export const updateJob = async (req, res) => {
 
     const updateData = {};
 
-    Object.keys(req.body.jobData).forEach((key) => {
-      if (allowedFields.includes(key) && req.body.jobData[key] !== undefined) {
-        updateData[key] = req.body.jobData[key];
+    Object.keys(result.data).forEach((key) => {
+      if (allowedFields.includes(key) && result.data[key] !== undefined) {
+        updateData[key] = result.data[key];
       }
     });
 
-    if (Object.keys(req.body.jobData).length === 0) {
+    if (Object.keys(result.data).length === 0) {
       return res.status(400).json({
         message: "No valid fields provided for update",
         success: false
@@ -214,7 +320,7 @@ export const getAllJob = async (req, res) => {
         andConditions.push({ $or: salaryConditions });
       }
     }
-    
+
     // Final Query
     const finalQuery = andConditions.length > 0 ? { $and: andConditions } : {};
     const jobs = await Job.find(finalQuery)

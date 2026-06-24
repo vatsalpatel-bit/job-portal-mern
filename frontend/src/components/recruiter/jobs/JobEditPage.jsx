@@ -20,6 +20,7 @@ const JobEditPage = () => {
   });
   const [companyName, setCompanyName] = useState("");
   const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchJobApi = async () => {
@@ -53,6 +54,11 @@ const JobEditPage = () => {
       ...prev,
       [name]: value,
     }));
+    setErrors((prev) => {
+      const newError = { ...prev };
+      delete newError[name];
+      return newError;
+    })
   }
 
   const submitHandler = async () => {
@@ -90,10 +96,25 @@ const JobEditPage = () => {
         navigate("/admin/jobs")
       }
     } catch (error) {
-      console.error(error);
-      toast.error(
-        error?.response?.data?.message || "Something went wrong"
-      );
+      const data = error.response?.data;
+      if (data?.error) {
+        const allErrors = {};
+
+        data.error.forEach((err, index) => {
+          allErrors[err.path[0]] = err.message;
+          setTimeout(() => {
+            toast.error(err.message);
+          }, index * 1000);
+        });
+
+        setErrors(allErrors);
+
+      } else if (data?.message) {
+        toast.error(data?.message);
+      }
+      else {
+        toast.error("Something went wrong");
+      }
     } finally {
       setLoading(false)
     }
@@ -243,6 +264,11 @@ const JobEditPage = () => {
                 focus:ring-4 focus:ring-blue-100
                 "
                   />
+                  {errors.title && (
+                    <p className="text-red-500 text-sm">
+                      {errors.title}
+                    </p>
+                  )}
 
                 </div>
 
@@ -272,7 +298,11 @@ const JobEditPage = () => {
                 focus:ring-4 focus:ring-blue-100
                 "
                   />
-
+                  {errors.description && (
+                    <p className="text-red-500 text-sm">
+                      {errors.description}
+                    </p>
+                  )}
                 </div>
 
                 {/* Requirements */}
@@ -300,7 +330,11 @@ const JobEditPage = () => {
                 focus:ring-4 focus:ring-blue-100
                 "
                   />
-
+                  {errors.requirements && (
+                    <p className="text-red-500 text-sm">
+                      {errors.requirements}
+                    </p>
+                  )}
                 </div>
 
                 {/* Grid */}
@@ -330,7 +364,11 @@ const JobEditPage = () => {
                   focus:ring-4 focus:ring-blue-100
                   "
                     />
-
+                    {errors.salary && (
+                      <p className="text-red-500 text-sm">
+                        {errors.salary}
+                      </p>
+                    )}
                   </div>
 
                   {/* Location */}
@@ -357,7 +395,11 @@ const JobEditPage = () => {
                   focus:ring-4 focus:ring-blue-100
                   "
                     />
-
+                    {errors.location && (
+                      <p className="text-red-500 text-sm">
+                        {errors.location}
+                      </p>
+                    )}
                   </div>
 
                 </div>
@@ -389,7 +431,11 @@ const JobEditPage = () => {
                   focus:ring-4 focus:ring-blue-100
                   "
                     />
-
+                    {errors.position && (
+                      <p className="text-red-500 text-sm">
+                        {errors.position}
+                      </p>
+                    )}
                   </div>
 
                   {/* Experience */}
@@ -416,7 +462,11 @@ const JobEditPage = () => {
                   focus:ring-4 focus:ring-blue-100
                   "
                     />
-
+                    {errors.experienceLevel && (
+                      <p className="text-red-500 text-sm">
+                        {errors.experienceLevel}
+                      </p>
+                    )}
                   </div>
 
                 </div>
@@ -448,7 +498,11 @@ const JobEditPage = () => {
                     <option value="Part-Time">Part-Time</option>
                     <option value="Internship">Internship</option>
                   </select>
-
+                  {errors.jobType && (
+                    <p className="text-red-500 text-sm">
+                      {errors.jobType}
+                    </p>
+                  )}
                 </div>
 
               </div>
