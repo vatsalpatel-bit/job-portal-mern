@@ -14,9 +14,7 @@ const CompanySetup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id: companyId } = useParams();
-  const singleCompany = useSelector(
-    (state) => state.company?.singleCompany
-  );
+  const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -25,6 +23,10 @@ const CompanySetup = () => {
     logo: null,
   });
 
+  const singleCompany = useSelector(
+    (state) => state.company?.singleCompany
+  );
+
   useEffect(() => {
     const fetchComapanyApi = async () => {
       const data = await getCompanyById(companyId)
@@ -32,9 +34,10 @@ const CompanySetup = () => {
     }
     fetchComapanyApi();
   }, [dispatch, companyId])
+
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-
     if (name === "logo") {
       setForm({ ...form, logo: files[0] });
     }
@@ -49,6 +52,11 @@ const CompanySetup = () => {
         ...prev,
         [name]: value,
       }));
+      setErrors((prev) => {
+        const newError = { ...prev }
+        delete newError[name];
+        return newError;
+      })
     }
   };
 
@@ -60,12 +68,6 @@ const CompanySetup = () => {
       }))
     }
   }, [singleCompany])
-
-  // useEffect(() => {
-  //   if (form.name?.trim().length == 0) {
-  //     setForm({ name: singleCompany?.name })
-  //   }
-  // })
 
   const handleSubmit = async () => {
     try {
@@ -90,11 +92,25 @@ const CompanySetup = () => {
         navigate("/admin/companies");
       }
     } catch (error) {
-      console.error(error);
-      toast.error(
-        error?.response?.data?.message ||
-        "Something went wrong"
-      );
+      const data = error.response?.data;
+      if (data?.error) {
+        const allErrors = {};
+
+        data.error.forEach((err, index) => {
+          allErrors[err.path[0]] = err.message;
+          setTimeout(() => {
+            toast.error(err.message);
+          }, index * 1000);
+        });
+
+        setErrors(allErrors);
+
+      } else if (data?.message) {
+        toast.error(data?.message);
+      }
+      else {
+        toast.error("Something went wrong");
+      }
     }
   };
 
@@ -226,6 +242,11 @@ const CompanySetup = () => {
               focus-visible:ring-2 focus-visible:ring-blue-200
               "
                 />
+                {errors.name && (
+                  <p className="text-red-500 text-sm">
+                    {errors.name}
+                  </p>
+                )}
 
               </div>
 
@@ -251,6 +272,11 @@ const CompanySetup = () => {
               focus-visible:ring-2 focus-visible:ring-blue-200
               "
                 />
+                {errors.description && (
+                  <p className="text-red-500 text-sm">
+                    {errors.description}
+                  </p>
+                )}
 
               </div>
 
@@ -276,7 +302,11 @@ const CompanySetup = () => {
               focus-visible:ring-2 focus-visible:ring-blue-200
               "
                 />
-
+                {errors.website && (
+                  <p className="text-red-500 text-sm">
+                    {errors.website}
+                  </p>
+                )}
               </div>
 
               {/* Location */}
@@ -301,7 +331,11 @@ const CompanySetup = () => {
               focus-visible:ring-2 focus-visible:ring-blue-200
               "
                 />
-
+                {errors.location && (
+                  <p className="text-red-500 text-sm">
+                    {errors.location}
+                  </p>
+                )}
               </div>
 
               {/* Logo Upload */}

@@ -23,12 +23,11 @@ const CreateCompany = () => {
       ...prev,
       [name]: value,
     }))
-      setErrors((prev) => {
-        const newError = { ...prev }
-        delete newError[name];
-        return newError;
-      })
-
+    setErrors((prev) => {
+      const newError = { ...prev }
+      delete newError[name];
+      return newError;
+    })
   }
   const handleCreateCompany = async () => {
     if (!input.companyName.trim()) return;

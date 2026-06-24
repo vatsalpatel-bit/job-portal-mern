@@ -11,131 +11,150 @@ import { toast } from "sonner";
 import Footer from "@/components/shared/Footer";
 
 const CompanyEdit = () => {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const { id: companyId } = useParams();
-    const [loading, setLoading] = useState(true);
-    const singleCompany = useSelector(
-        (state) => state.company.singleCompany
-    );
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { id: companyId } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState({});
+  const singleCompany = useSelector(
+    (state) => state.company.singleCompany
+  );
 
-    const [form, setForm] = useState({
-        name: "",
-        description: "",
-        website: "",
-        location: "",
-        logo: null,
-    });
-    const [preview, setPreview] = useState(null);
+  const [form, setForm] = useState({
+    name: "",
+    description: "",
+    website: "",
+    location: "",
+    logo: null,
+  });
+  const [preview, setPreview] = useState(null);
 
-    useEffect(() => {
-        if (singleCompany) {
-            setForm({
-                name: singleCompany.name || "",
-                description: singleCompany.description || "",
-                website: singleCompany.website || "",
-                location: singleCompany.location || "",
-                logo: singleCompany.logo || null,
-            })
+  useEffect(() => {
+    if (singleCompany) {
+      setForm({
+        name: singleCompany.name || "",
+        description: singleCompany.description || "",
+        website: singleCompany.website || "",
+        location: singleCompany.location || "",
+        logo: singleCompany.logo || null,
+      })
 
-        }
-    }, [singleCompany])
-
-    useEffect(() => {
-        const fetchCompanyApi = async () => {
-            try {
-                setLoading(true);
-                const data = await getCompanyById(companyId);
-                dispatch(setSingleCompany(data.company))
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false)
-            }
-
-        }
-        fetchCompanyApi();
-    }, [companyId, dispatch])
-
-    const handleChange = (e) => {
-        const { name, value, files } = e.target;
-
-        if (name === "logo") {
-            const file = files[0];
-            setForm({ ...form, logo: files[0] });
-            setPreview(URL.createObjectURL(file));
-        } else {
-            setForm((prev) => ({
-                ...prev,
-                [name]: value,
-            }));
-        }
-    };
-
-    const handleSubmit = async () => {
-        try {
-            setLoading(true);
-            const formData = new FormData();
-
-            formData.append("name", form.name);
-            formData.append("description", form.description);
-            formData.append("website", form.website);
-            formData.append("location", form.location);
-
-            if (form.logo) {
-                formData.append("logo", form.logo);
-            }
-
-            const data = await editCompanyApi(companyId, formData);
-            if (data?.success) {
-                toast.success(data?.message)
-                navigate("/admin/companies");
-            }
-        } catch (error) {
-            console.error(error);
-            toast.error(
-                error?.response?.data?.message ||
-                "Something went wrong"
-            );
-        } finally {
-            setLoading(false)
-        }
-    };
-    if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
-
-                <div className="flex flex-col items-center gap-4">
-
-                    <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
-
-                    <p className="text-sm text-gray-500">
-                        Loading ...
-                    </p>
-
-                </div>
-
-            </div>
-        );
     }
+  }, [singleCompany])
+
+  useEffect(() => {
+    const fetchCompanyApi = async () => {
+      try {
+        setLoading(true);
+        const data = await getCompanyById(companyId);
+        dispatch(setSingleCompany(data.company))
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchCompanyApi();
+  }, [companyId, dispatch])
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+
+    if (name === "logo") {
+      const file = files[0];
+      setForm({ ...form, logo: files[0] });
+      setPreview(URL.createObjectURL(file));
+    } else {
+      setForm((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+      setErrors((prev) => {
+        const newError = { ...prev }
+        delete newError[name];
+        return newError;
+      })
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      const formData = new FormData();
+
+      formData.append("name", form.name);
+      formData.append("description", form.description);
+      formData.append("website", form.website);
+      formData.append("location", form.location);
+
+      if (form.logo) {
+        formData.append("logo", form.logo);
+      }
+
+      const data = await editCompanyApi(companyId, formData);
+      if (data?.success) {
+        toast.success(data?.message)
+        navigate("/admin/companies");
+      }
+    } catch (error) {
+      const data = error.response?.data;
+      if (data?.error) {
+        const allErrors = {};
+
+        data.error.forEach((err, index) => {
+          allErrors[err.path[0]] = err.message;
+          setTimeout(() => {
+            toast.error(err.message);
+          }, index * 1000);
+        });
+
+        setErrors(allErrors);
+
+      } else if (data?.message) {
+        toast.error(data?.message);
+      }
+      else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      setLoading(false)
+    }
+  };
+  if (loading) {
     return (
-       <>
-  <div className="min-h-screen bg-[#f8fbff] overflow-hidden relative pt-18">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
 
-    {/* Background Blur */}
-    <div className="absolute top-[-120px] left-[-80px] h-[320px] w-[320px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
+        <div className="flex flex-col items-center gap-4">
 
-    <div className="absolute right-[-120px] top-[120px] h-[280px] w-[280px] rounded-full bg-[#fff4db] blur-3xl opacity-70" />
+          <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
 
-    <div className="max-w-5xl mx-auto px-6 py-20 relative z-10">
+          <p className="text-sm text-gray-500">
+            Loading ...
+          </p>
 
-      {/* Header */}
-      <div className="mb-10">
+        </div>
 
-        {/* Back */}
-        <button
-          onClick={() => navigate(-1)}
-          className="
+      </div>
+    );
+  }
+  return (
+    <>
+      <div className="min-h-screen bg-[#f8fbff] overflow-hidden relative pt-18">
+
+        {/* Background Blur */}
+        <div className="absolute top-[-120px] left-[-80px] h-[320px] w-[320px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
+
+        <div className="absolute right-[-120px] top-[120px] h-[280px] w-[280px] rounded-full bg-[#fff4db] blur-3xl opacity-70" />
+
+        <div className="max-w-5xl mx-auto px-6 py-20 relative z-10">
+
+          {/* Header */}
+          <div className="mb-10">
+
+            {/* Back */}
+            <button
+              onClick={() => navigate(-1)}
+              className="
           inline-flex items-center gap-2
           rounded-full
           bg-white/80
@@ -148,32 +167,32 @@ const CompanyEdit = () => {
           transition-all duration-300
           mb-6
           "
-        >
-          <ArrowLeft size={16} />
-          Back
-        </button>
+            >
+              <ArrowLeft size={16} />
+              Back
+            </button>
 
-        {/* Heading */}
-        <h1
-          className="
+            {/* Heading */}
+            <h1
+              className="
           text-4xl sm:text-5xl
           font-extrabold
           tracking-tight
           text-gray-900
           "
-        >
-          Edit Company
-        </h1>
+            >
+              Edit Company
+            </h1>
 
-        <p className="mt-4 text-gray-600 text-base leading-7 max-w-2xl">
-          Update your company information, branding and business details.
-        </p>
+            <p className="mt-4 text-gray-600 text-base leading-7 max-w-2xl">
+              Update your company information, branding and business details.
+            </p>
 
-      </div>
+          </div>
 
-      {/* Main Card */}
-      <div
-        className="
+          {/* Main Card */}
+          <div
+            className="
         relative overflow-hidden
         rounded-[40px]
         border border-white/60
@@ -182,14 +201,14 @@ const CompanyEdit = () => {
         shadow-[0_10px_40px_rgba(0,0,0,0.05)]
         p-8 sm:p-10
         "
-      >
+          >
 
-        {/* Glow */}
-        <div className="absolute top-[-100px] right-[-80px] h-[240px] w-[240px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
+            {/* Glow */}
+            <div className="absolute top-[-100px] right-[-80px] h-[240px] w-[240px] rounded-full bg-[#eef4ff] blur-3xl opacity-70" />
 
-        {/* Badge */}
-        <div
-          className="
+            {/* Badge */}
+            <div
+              className="
           relative z-10
           inline-flex items-center
           rounded-full
@@ -198,32 +217,32 @@ const CompanyEdit = () => {
           text-sm font-medium text-blue-700
           mb-8
           "
-        >
-          🏢 Company Information
-        </div>
+            >
+              🏢 Company Information
+            </div>
 
-        {/* Form Grid */}
-        <div
-          className="
+            {/* Form Grid */}
+            <div
+              className="
           relative z-10
           grid grid-cols-1 md:grid-cols-2
           gap-6
           "
-        >
+            >
 
-          {/* Company Name */}
-          <div>
+              {/* Company Name */}
+              <div>
 
-            <Label className="text-sm font-semibold text-gray-700">
-              Company Name
-            </Label>
+                <Label className="text-sm font-semibold text-gray-700">
+                  Company Name
+                </Label>
 
-            <Input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder={singleCompany?.name}
-              className="
+                <Input
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder={singleCompany?.name}
+                  className="
               mt-3 h-14
               rounded-2xl
               border-0
@@ -233,23 +252,28 @@ const CompanyEdit = () => {
               shadow-none
               focus-visible:ring-2 focus-visible:ring-blue-200
               "
-            />
+                />
+                {errors.name && (
+                  <p className="text-red-500 text-sm">
+                    {errors.name}
+                  </p>
+                )}
 
-          </div>
+              </div>
 
-          {/* Description */}
-          <div>
+              {/* Description */}
+              <div>
 
-            <Label className="text-sm font-semibold text-gray-700">
-              Description
-            </Label>
+                <Label className="text-sm font-semibold text-gray-700">
+                  Description
+                </Label>
 
-            <Input
-              name="description"
-              value={form.description}
-              onChange={handleChange}
-              placeholder="Enter description"
-              className="
+                <Input
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  placeholder="Enter description"
+                  className="
               mt-3 h-14
               rounded-2xl
               border-0
@@ -258,23 +282,27 @@ const CompanyEdit = () => {
               shadow-none
               focus-visible:ring-2 focus-visible:ring-blue-200
               "
-            />
+                />
+                {errors.description && (
+                  <p className="text-red-500 text-sm">
+                    {errors.description}
+                  </p>
+                )}
+              </div>
 
-          </div>
+              {/* Website */}
+              <div>
 
-          {/* Website */}
-          <div>
+                <Label className="text-sm font-semibold text-gray-700">
+                  Website
+                </Label>
 
-            <Label className="text-sm font-semibold text-gray-700">
-              Website
-            </Label>
-
-            <Input
-              name="website"
-              value={form.website}
-              onChange={handleChange}
-              placeholder="https://company.com"
-              className="
+                <Input
+                  name="website"
+                  value={form.website}
+                  onChange={handleChange}
+                  placeholder="https://company.com"
+                  className="
               mt-3 h-14
               rounded-2xl
               border-0
@@ -283,23 +311,27 @@ const CompanyEdit = () => {
               shadow-none
               focus-visible:ring-2 focus-visible:ring-blue-200
               "
-            />
+                />
+                {errors.website && (
+                  <p className="text-red-500 text-sm">
+                    {errors.website}
+                  </p>
+                )}
+              </div>
 
-          </div>
+              {/* Location */}
+              <div>
 
-          {/* Location */}
-          <div>
+                <Label className="text-sm font-semibold text-gray-700">
+                  Location
+                </Label>
 
-            <Label className="text-sm font-semibold text-gray-700">
-              Location
-            </Label>
-
-            <Input
-              name="location"
-              value={form.location}
-              onChange={handleChange}
-              placeholder="Enter location"
-              className="
+                <Input
+                  name="location"
+                  value={form.location}
+                  onChange={handleChange}
+                  placeholder="Enter location"
+                  className="
               mt-3 h-14
               rounded-2xl
               border-0
@@ -308,36 +340,40 @@ const CompanyEdit = () => {
               shadow-none
               focus-visible:ring-2 focus-visible:ring-blue-200
               "
-            />
+                />
+                {errors.location && (
+                  <p className="text-red-500 text-sm">
+                    {errors.location}
+                  </p>
+                )}
+              </div>
 
-          </div>
+              {/* Logo Upload */}
+              <div className="md:col-span-2">
 
-          {/* Logo Upload */}
-          <div className="md:col-span-2">
-
-            <div
-              className="
+                <div
+                  className="
               rounded-[30px]
               bg-[#f8fbff]
               border border-[#edf2ff]
               p-6
               "
-            >
+                >
 
-              <div
-                className="
+                  <div
+                    className="
                 flex flex-col sm:flex-row
                 sm:items-center sm:justify-between
                 gap-6
                 "
-              >
+                  >
 
-                {/* Left */}
-                <div className="flex items-center gap-5">
+                    {/* Left */}
+                    <div className="flex items-center gap-5">
 
-                  {/* Preview */}
-                  <div
-                    className="
+                      {/* Preview */}
+                      <div
+                        className="
                     h-20 w-20
                     rounded-3xl
                     bg-white
@@ -345,47 +381,47 @@ const CompanyEdit = () => {
                     overflow-hidden
                     shadow-sm
                     "
-                  >
+                      >
 
-                    <img
-                      src={preview || singleCompany?.logo}
-                      alt="logo"
-                      className="w-full h-full object-cover"
-                    />
+                        <img
+                          src={preview || singleCompany?.logo}
+                          alt="logo"
+                          className="w-full h-full object-cover"
+                        />
 
-                  </div>
+                      </div>
 
-                  {/* Text */}
-                  <div>
+                      {/* Text */}
+                      <div>
 
-                    <h3 className="font-semibold text-gray-900">
-                      Company Logo
-                    </h3>
+                        <h3 className="font-semibold text-gray-900">
+                          Company Logo
+                        </h3>
 
-                    <p className="text-sm text-gray-500 mt-1 leading-6">
-                      Upload a clean square logo for better branding.
-                    </p>
+                        <p className="text-sm text-gray-500 mt-1 leading-6">
+                          Upload a clean square logo for better branding.
+                        </p>
 
-                  </div>
+                      </div>
 
-                </div>
+                    </div>
 
-                {/* Upload */}
-                <div>
+                    {/* Upload */}
+                    <div>
 
-                  {/* Hidden Input */}
-                  <input
-                    type="file"
-                    name="logo"
-                    id="logoUpload"
-                    className="hidden"
-                    onChange={handleChange}
-                  />
+                      {/* Hidden Input */}
+                      <input
+                        type="file"
+                        name="logo"
+                        id="logoUpload"
+                        className="hidden"
+                        onChange={handleChange}
+                      />
 
-                  {/* Custom Button */}
-                  <label
-                    htmlFor="logoUpload"
-                    className="
+                      {/* Custom Button */}
+                      <label
+                        htmlFor="logoUpload"
+                        className="
                     inline-flex items-center justify-center
                     h-12 px-6
                     rounded-2xl
@@ -397,33 +433,33 @@ const CompanyEdit = () => {
                     cursor-pointer
                     transition-all duration-300
                     "
-                  >
-                    Change Logo
-                  </label>
+                      >
+                        Change Logo
+                      </label>
+
+                    </div>
+
+                  </div>
 
                 </div>
 
               </div>
 
-            </div>
-
-          </div>
-
-          {/* Buttons */}
-          <div
-            className="
+              {/* Buttons */}
+              <div
+                className="
             md:col-span-2
             flex flex-col sm:flex-row
             justify-end gap-4
             pt-4
             "
-          >
+              >
 
-            {/* Cancel */}
-            <Button
-              variant="outline"
-              onClick={() => navigate(-1)}
-              className="
+                {/* Cancel */}
+                <Button
+                  variant="outline"
+                  onClick={() => navigate(-1)}
+                  className="
               h-12 px-6
               rounded-2xl
               border-0
@@ -432,14 +468,14 @@ const CompanyEdit = () => {
               text-gray-700
               shadow-sm
               "
-            >
-              Cancel
-            </Button>
+                >
+                  Cancel
+                </Button>
 
-            {/* Save */}
-            <Button
-              onClick={handleSubmit}
-              className="
+                {/* Save */}
+                <Button
+                  onClick={handleSubmit}
+                  className="
               h-12 px-8
               rounded-2xl
               bg-gradient-to-r from-blue-600 to-violet-600
@@ -450,9 +486,13 @@ const CompanyEdit = () => {
               transition-all duration-300
               hover:-translate-y-0.5
               "
-            >
-              Save Changes
-            </Button>
+                >
+                  Save Changes
+                </Button>
+
+              </div>
+
+            </div>
 
           </div>
 
@@ -460,14 +500,10 @@ const CompanyEdit = () => {
 
       </div>
 
-    </div>
+      <Footer />
 
-  </div>
-
-  <Footer />
-
-</>
-    );
+    </>
+  );
 };
 
 export default CompanyEdit;

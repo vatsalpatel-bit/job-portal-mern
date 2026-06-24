@@ -195,7 +195,38 @@ export const getCompanyById = async (req, res) => {
 
 export const updateCompany = async (req, res) => {
   try {
-    const { name, description, website, location } = req.body;
+
+    const setUpCompanySchema = z.object({
+      name: z
+        .string()
+        .min(3, "Company name must be at least 3 characters")
+        .max(50, "Company name cannot exceed 50 characters"),
+
+      description: z
+        .string()
+        .min(20, "Description must be at least 20 characters")
+        .max(500, "Description cannot exceed 500 characters"),
+
+      website: z
+        .string()
+        .url("Please enter a valid website URL"),
+
+      location: z
+        .string()
+        .min(2, "Location must be at least 2 characters")
+        .max(100, "Location cannot exceed 100 characters"),
+
+    });
+    const result = setUpCompanySchema.safeParse(req.body);
+    
+    if (!result.success) {
+      return res.status(400).json({
+        success: false,
+        error: result.error.issues,
+      })
+    }
+    const { name, description, website, location } = result.data;
+
     const file = req.file;
     //  Get existing company first
     const existingCompany = await Company.findById(req.params.id);
