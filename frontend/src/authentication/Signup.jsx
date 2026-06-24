@@ -24,6 +24,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.auth.loading);
+  const [errors, setErrors] = useState({});
 
   const [input, setInput] = useState({
     fullname: "",
@@ -88,8 +89,8 @@ const Signup = () => {
       formData.append("role", input.role.toLowerCase());
       if (input.file) formData.append("file", input.file);
 
-      await signupUser(formData);
-
+      const data = await signupUser(formData);
+      console.log(data);
       /* SET COOKE */
       const loginRes = await loginUser({
         email: input.email.trim().toLowerCase(),
@@ -104,10 +105,25 @@ const Signup = () => {
       navigate("/");
 
     } catch (error) {
-      console.error("Signup error:", error);
-      toast.error(
-        error?.response?.data?.message || "Signup failed"
-      );
+      const data = error.response?.data;
+      if (data?.error) {
+        const allErrors = {};
+
+        data.error.forEach((err, index) => {
+          allErrors[err.path[0]] = err.message;
+          setTimeout(() => {
+            toast.error(err.message);
+          }, index * 1000);
+        });
+
+        setErrors(allErrors);
+
+      } else if (data?.message) {
+        toast.error(data?.message);
+      }
+      else {
+        toast.error("Something went wrong");
+      }
     } finally {
       dispatch(setLoading(false));
     }
@@ -281,6 +297,11 @@ const Signup = () => {
             focus-visible:ring-2 focus-visible:ring-blue-200
             "
               />
+              {errors.fullname && (
+                <p className="text-red-500 text-sm">
+                  {errors.fullname}
+                </p>
+              )}
 
               {/* Email */}
               <Input
@@ -299,10 +320,16 @@ const Signup = () => {
             focus-visible:ring-2 focus-visible:ring-blue-200
             "
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm">
+                  {errors.email}
+                </p>
+              )}
 
               {/* Phone */}
               <Input
                 name="phoneNumber"
+                type="tel"
                 placeholder="Phone Number"
                 value={input.phoneNumber}
                 onChange={changeHandler}
@@ -316,6 +343,11 @@ const Signup = () => {
             focus-visible:ring-2 focus-visible:ring-blue-200
             "
               />
+              {errors.phoneNumber && (
+                <p className="text-red-500 text-sm">
+                  {errors.phoneNumber}
+                </p>
+              )}
 
               {/* Password */}
               <Input
@@ -335,6 +367,13 @@ const Signup = () => {
             focus-visible:ring-2 focus-visible:ring-blue-200
             "
               />
+
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password}
+                </p>
+              )}
+
               {/* Forgot Password */}
               <div className="flex items-center justify-end -mt-1">
 

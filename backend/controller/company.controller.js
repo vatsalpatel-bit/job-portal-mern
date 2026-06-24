@@ -4,10 +4,23 @@ import cloudinary from "../utils/cloudinary.js";
 import mongoose from "mongoose";
 import { Job } from "../utils/job.model.js";
 import { Application } from "../utils/application.model.js";
+import z from "zod";
 
 export const registerCompany = async (req, res) => {
   try {
-    const { companyName } = req.body;
+    const companyRegisterSchema = z.object({
+      companyName: z.string().min(3, "Company name must be at least 3 characters")
+        .max(50, "Name cannot exceed 50 characters")
+    })
+    const result = companyRegisterSchema.safeParse(req.body);
+
+    if (!result.success) {
+      return res.status(400).json({
+        success: false,
+        error: result.error.issues,
+      })
+    }
+    const { companyName } = result.data;
     if (!companyName) {
       return res.status(400).json({
         message: "Company name is required",
@@ -37,7 +50,7 @@ export const registerCompany = async (req, res) => {
         success: true,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return res.status(404).json({
         message: "UserId not found",
         success: false,
@@ -302,7 +315,7 @@ export const getCompanyStatus = async (req, res) => {
       companyStatus,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Server error",
       success: false,
@@ -343,7 +356,7 @@ export const deleteCompany = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Server error",
       success: false,
@@ -379,7 +392,7 @@ export const searchCompany = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Server error",
       success: false,
@@ -406,7 +419,7 @@ export const getAllCompaniesForJob = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     return res.status(500).json({
       message: "Server error",

@@ -17,25 +17,26 @@ import isAuthenticated from "../middleware/isAuthenticated.js";
 import { uploadResume } from "../middleware/multer.js";
 import { uploadUserResume } from "../controller/user.controller.js";
 import { upload } from "../middleware/multer.js";
+import rateLimiter from "../middleware/rateLimit.js"
 
 const router = express.Router();
 
-router.post("/register", upload.single("file"), Register);
-router.post("/login", login);
+router.post("/register", upload.single("file"), rateLimiter, Register);
+router.post("/login", rateLimiter, login);
 router.post("/logout", logout);
 router.get("/profile", isAuthenticated, getProfile);
 router.put("/profile", isAuthenticated, updateProfile);
 router.get("/get/:applicantId/:jobId/applicant", isAuthenticated, getApplicant);
 router.get("/admin/profile", isAuthenticated, getAdminProfile);
-router.post("/google-login", googleAuthentication);
+router.post("/google-login", rateLimiter, googleAuthentication);
 
 router.post(
-  "/forgot-password",
+  "/forgot-password", rateLimiter,
   forgotPassword
 );
 
 router.post(
-  "/reset-password/:token",
+  "/reset-password/:token", rateLimiter,
   resetPassword
 );
 
@@ -44,6 +45,7 @@ router.put(
   "/profile/resume",
   isAuthenticated,
   uploadResume.single("resume"),
+  rateLimiter,
   uploadUserResume,
 );
 
@@ -52,6 +54,7 @@ router.put(
   "/profile/photo",
   isAuthenticated,
   upload.single("photo"),
+  rateLimiter,
   uploadProfilePhoto,
 );
 
@@ -59,6 +62,7 @@ router.put(
 router.put(
   "/admin/profile",
   upload.single("logo"),
+  rateLimiter,
   isAuthenticated,
   editAdminProfile,
 );

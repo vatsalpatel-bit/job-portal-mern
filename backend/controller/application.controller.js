@@ -46,7 +46,7 @@ export const applyJob = async (req, res) => {
       message: "Application submitted",
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Server error",
       success: false
@@ -113,7 +113,7 @@ export const jobApplicant = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(400).json({
       message: "Server error",
       success: false,
@@ -151,7 +151,7 @@ export const updateStatus = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(400).json({
       message: "Server error",
       success: false,
@@ -279,7 +279,7 @@ export const getAdminJobStatus = async (req, res) => {
       totalJobs,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Server error",
       success: false,
@@ -310,7 +310,7 @@ export const updateApplicantStatus = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Server error",
       success: false,
@@ -348,7 +348,7 @@ export const undoApplication = async (req, res) => {
       success: true
     })
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Server error",
       success: false,

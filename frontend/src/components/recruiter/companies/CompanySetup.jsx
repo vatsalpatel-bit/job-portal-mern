@@ -17,7 +17,6 @@ const CompanySetup = () => {
   const singleCompany = useSelector(
     (state) => state.company?.singleCompany
   );
-
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -48,9 +47,16 @@ const CompanySetup = () => {
     }
   }, [singleCompany])
 
+  // useEffect(() => {
+  //   if (form.name?.trim().length == 0) {
+  //     setForm({ name: singleCompany?.name })
+  //   }
+  // })
+
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
+
       if (form.name) {
         formData.append("name", form.name);
       }

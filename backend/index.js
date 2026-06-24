@@ -1,7 +1,19 @@
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception", err.message)
+  process.exit(-1);   //if err restart server
+});
+
+process.on("unhandledRejection", (err) => {
+  console.error("Unhandle Rejection", err.message)
+  process.exit(-1);
+});
+
 import dotenv from "dotenv";
 dotenv.config({});
 
 import express, { Router } from "express";
+import compression from "compression";
+import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -13,10 +25,11 @@ import applicationRoute from "./routes/application.route.js";
 
 const app = express();
 
-// midlleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+// helmet
+app.use(helmet());
+
+//compression
+app.use(compression());
 
 // cors
 const corsOptions = {
@@ -24,6 +37,13 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
+
+
+// midlleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
 
 // port 
 const PORT = process.env.PORT;

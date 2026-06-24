@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "@/components/shared/Navbar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -10,15 +9,31 @@ import { useDispatch } from "react-redux";
 import { setSingleCompany } from "@/redux/slices/companiesSlice";
 import Footer from "@/components/shared/Footer";
 
+
 const CreateCompany = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [companyName, setName] = useState("");
+  const [errors, setErrors] = useState({});
+  const [input, setInput] = useState({
+    companyName: "",
+  });
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+    setInput((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+      setErrors((prev) => {
+        const newError = { ...prev }
+        delete newError[name];
+        return newError;
+      })
 
+  }
   const handleCreateCompany = async () => {
-    if (!companyName.trim()) return;
+    if (!input.companyName.trim()) return;
     try {
-      const { success, company, message } = await createCompanyApi(companyName);
+      const { success, company, message } = await createCompanyApi(input.companyName);
       if (!success) {
         return toast.error(message || "Failed to create Company");
       }
@@ -30,9 +45,25 @@ const CreateCompany = () => {
       navigate(`/admin/companies/${company?._id}`)
 
     } catch (error) {
-      console.error(error);
-      const errorMessage = error?.res?.data?.message;
-      toast.error(errorMessage || "Something went wrong");
+      const data = error.response?.data;
+      if (data?.error) {
+        const allErrors = {};
+
+        data.error.forEach((err, index) => {
+          allErrors[err.path[0]] = err.message;
+          setTimeout(() => {
+            toast.error(err.message);
+          }, index * 1000);
+        });
+
+        setErrors(allErrors);
+
+      } else if (data?.message) {
+        toast.error(data?.message);
+      }
+      else {
+        toast.error("Something went wrong");
+      }
     }
   }
 
@@ -121,8 +152,9 @@ const CreateCompany = () => {
 
                 <Input
                   type="text"
-                  value={companyName}
-                  onChange={(e) => setName(e.target.value)}
+                  name="companyName"
+                  value={input.companyName}
+                  onChange={changeHandler}
                   placeholder="JobHunt, Microsoft etc."
                   className="
               mt-3 h-14
@@ -134,6 +166,12 @@ const CreateCompany = () => {
               focus-visible:ring-2 focus-visible:ring-blue-200
               "
                 />
+                {errors.companyName && (
+                  <p className="text-red-500 text-sm">
+                    {errors.companyName}
+                  </p>
+                )}
+
 
               </div>
 
@@ -159,7 +197,7 @@ const CreateCompany = () => {
 
                 {/* Continue */}
                 <Button
-                  disabled={!companyName}
+                  disabled={!input.companyName}
                   onClick={handleCreateCompany}
                   className="
               h-12 px-7

@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import { Application } from "../utils/application.model.js";
 import { uploadFromBuffer } from "../utils/cloudinaryUpload.js";
 import { transporter } from "../utils/transporter.js";
+import { optional, success, z } from "zod";
 
 const buildSafeUser = (user) => ({
   _id: user._id,
@@ -20,7 +21,27 @@ const buildSafeUser = (user) => ({
 
 export const Register = async (req, res) => {
   try {
-    const { fullname, email, phoneNumber, password, role } = req.body;
+
+    const registerSchema = z.object({
+      fullname: z.string().min(3, "Name must be at least 3 characters")
+        .max(50, "Name cannot exceed 50 characters"),
+      email: z.string().email("Invalid email address"),
+      phoneNumber: z.string().length(10, "Phone number must be exactly 10 digits"),
+      password: z.string().min(6, "Password must be at least 6 characters")
+        .max(20, "Password cannot exceed 20 characters"),
+      role: z.string(),
+    })
+
+    const result = registerSchema.safeParse(req.body);
+
+    if (!result.success) {
+      return res.status(400).json({
+        success: false,
+        error: result.error.issues,
+      })
+    }
+
+    const { fullname, email, phoneNumber, password, role } = result.data;
 
     if (!fullname || !email || !phoneNumber || !password || !role) {
       return res.status(400).json({
@@ -69,7 +90,7 @@ export const Register = async (req, res) => {
     const newUser = await User.create({
       fullname: fullname.trim(),
       email: normalizedEmail,
-      phoneNumber: Number(phoneNumber),
+      phoneNumber: phoneNumber,
       password: hashPassword,
       role,
       profile: {
@@ -93,7 +114,23 @@ export const Register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, password, role } = req.body;
+
+    const loginSchema = z.object({
+      email: z.string().email("Invalid email address"),
+      // password: z.string().min(6, "Password must be at least 6 characters")
+      //   .max(20, "Password cannot exceed 20 characters"),     
+      password: z.string().max(20, "Password cannot exceed 20 characters"),
+      role: z.string(),
+    })
+    const result = loginSchema.safeParse(req.body);
+
+    if (!result.success) {
+      res.status(400).json({
+        success: false,
+        error: result.error.issues,
+      })
+    }
+    const { email, password, role } = result.data;
 
     if (!email || !password || !role) {
       return res.status(400).json({
@@ -178,9 +215,32 @@ export const logout = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { fullname, email, phoneNumber, bio, skills } = req.body;
+
+    const updateProfileSchema = z.object({
+      fullname: z.string().min(3, "Name must be at least 3 characters")
+        .max(50, "Name cannot exceed 50 characters").optional(),
+      email: z.string().email("Invalid email address").optional(),
+      phoneNumber: z.string().length(10, "Phone number must be exactly 10 digits").optional(),
+      bio: z.string().max(200, "Name cannot excced 50 characters").optional(),
+      skills: z
+        .array(z.string())
+        .min(1, "Please add at least one skill")
+        .max(10, "Maximum 10 skills allowed")
+        .optional(),
+    });
+    const result = updateProfileSchema.safeParse(req.body);
+
+    if (!result.success) {
+      return res.status(400).json({
+        success: false,
+        error: result.error.issues,
+      })
+    }
+
+    const { fullname, email, phoneNumber, bio, skills } = result.data;
 
     const userId = req.userId;
+
     if (!userId) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
@@ -214,7 +274,7 @@ export const updateProfile = async (req, res) => {
       user.email = normalizedEmail;
     }
 
-    if (phoneNumber) user.phoneNumber = Number(phoneNumber);
+    if (phoneNumber) user.phoneNumber = phoneNumber;
     if (bio !== undefined) user.profile.bio = bio;
 
     if (skills !== undefined) {
@@ -226,17 +286,17 @@ export const updateProfile = async (req, res) => {
     }
 
     await user.save();
-
     res.status(200).json({
       success: true,
       message: "Profile updated successfully",
       user: buildSafeUser(user),
     });
+
   } catch (error) {
     console.error("Update profile error:", error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Server error",
     });
   }
 };
@@ -316,7 +376,7 @@ export const uploadUserResume = async (req, res) => {
 
     await user.save();
 
-    console.log("Resume saved:", user.profile.resume);
+    console.error("Resume saved:", user.profile.resume);
 
     return res.status(200).json({
       success: true,
@@ -417,7 +477,7 @@ export const getApplicant = async (req, res) => {
       response,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       messgae: "server error",
       success: false,
@@ -492,7 +552,7 @@ export const getAdminProfile = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Server error",
       success: false,
@@ -502,6 +562,7 @@ export const getAdminProfile = async (req, res) => {
 
 export const editAdminProfile = async (req, res) => {
   try {
+
     const { fullname, email, phoneNumber } = req.body;
     const userId = new mongoose.Types.ObjectId(req.userId);
     const file = req.file;
@@ -550,7 +611,7 @@ export const editAdminProfile = async (req, res) => {
       user: updatedUser,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     return res.status(500).json({
       message: "Server error",
@@ -614,7 +675,7 @@ export const googleAuthentication = async (
 
   } catch (error) {
 
-    console.log(error);
+    console.error(error);
 
     return res.status(500).json({
       success: false,
@@ -666,7 +727,7 @@ export const forgotPassword = async (req, res) => {
       message: "Reset link sent",
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     return res.status(500).json({
       success: false,
@@ -682,7 +743,7 @@ export const resetPassword = async (req, res) => {
 
 
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    
+
     const hashedPassword = await bcrypt.hash(password, Number(process.env.SALT_ROUND));
 
     await User.findByIdAndUpdate(decoded.userId, {
@@ -695,7 +756,7 @@ export const resetPassword = async (req, res) => {
     })
 
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Server error",
       success: false

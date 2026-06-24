@@ -56,7 +56,7 @@ export const postJob = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Server error",
       success: false,
@@ -134,7 +134,7 @@ export const updateJob = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Server error",
       success: false,
@@ -226,7 +226,7 @@ export const getAllJob = async (req, res) => {
       jobs,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       success: false,
       message: "Server error",
@@ -260,7 +260,7 @@ export const getJobById = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log("ERRROR IN getJobById:", error);
+    console.error("ERRROR IN getJobById:", error);
     return res.status(500).json({
       message: "server error",
       success: false,
@@ -283,7 +283,7 @@ export const getAdminJobs = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({
       message: "Server error",
       success: false,
@@ -301,7 +301,7 @@ export const getJobFilters = async (req, res) => {
       industries,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({
       message: "Failed to fetch filters",
     });
@@ -337,7 +337,7 @@ export const deleteJob = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Server error",
       success: false,
@@ -373,7 +373,7 @@ export const searchJob = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       message: "Server error",
       success: false,

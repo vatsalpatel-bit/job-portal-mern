@@ -29,6 +29,7 @@ const Login = () => {
     password: "",
     role: "student",
   });
+  const [errors, setErrors] = useState({});
 
   const changeEventeHandeler = (e) => {
     const { name, value } = e.target;
@@ -75,10 +76,25 @@ const Login = () => {
         navigate("/");
       }
     } catch (error) {
-      console.error("Login error:", error);
-      toast.error(
-        error?.response?.data?.message || "Login failed"
-      );
+      const data = error.response?.data;
+      if (data?.error) {
+        const allErrors = {};
+
+        data.error.forEach((err,index) => {
+          allErrors[err.path[0]] = err.message;
+          setTimeout(() => {
+            toast(err.message)
+          }, index * 1000);
+        });
+
+        setErrors(allErrors);
+
+      } else if (data?.message) {
+        toast.error(data?.message);
+      }
+      else {
+        toast.error("Something went wrong");
+      }
     } finally {
       dispatch(setLoading(false));
     }
@@ -168,6 +184,11 @@ const Login = () => {
           focus-visible:ring-2 focus-visible:ring-blue-200
           "
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm">
+                  {errors.email}
+                </p>
+              )}
 
             </div>
 
@@ -195,6 +216,11 @@ const Login = () => {
           focus-visible:ring-2 focus-visible:ring-blue-200
           "
               />
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password}
+                </p>
+              )}
 
             </div>
             {/* Forgot Password */}
