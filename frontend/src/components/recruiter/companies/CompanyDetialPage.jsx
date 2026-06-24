@@ -25,7 +25,6 @@ const CompanyDetialPage = () => {
       } finally {
         setLoading(false);
       }
-
     }
     fetchCompnayStatusApi();
   }, [companyId, dispatch]);

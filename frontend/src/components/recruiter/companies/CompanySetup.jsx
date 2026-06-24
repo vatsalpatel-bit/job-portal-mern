@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { editCompanyApi } from "@/services/companyApi";
+import { editCompanyApi, getCompanyById } from "@/services/companyApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setSingleCompany } from "@/redux/slices/companiesSlice";
 import { toast } from "sonner";
@@ -25,12 +25,26 @@ const CompanySetup = () => {
     logo: null,
   });
 
+  useEffect(() => {
+    const fetchComapanyApi = async () => {
+      const data = await getCompanyById(companyId)
+      dispatch(setSingleCompany(data.company))
+    }
+    fetchComapanyApi();
+  }, [dispatch, companyId])
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
     if (name === "logo") {
       setForm({ ...form, logo: files[0] });
-    } else {
+    }
+    else {
+      if (form.name.trim().length == 0) {
+        setForm((prev) => ({
+          ...prev,
+          name: singleCompany?.name || "",
+        }))
+      }
       setForm((prev) => ({
         ...prev,
         [name]: value,
