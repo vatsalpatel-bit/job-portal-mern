@@ -45,9 +45,9 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
 
   const [profile, setProfile] = useState({
-    name: "",
+    fullname: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
     bio: "",
   });
 
@@ -69,9 +69,9 @@ const Profile = () => {
         dispatch(setUser(user)); // keep redux in sync
 
         setProfile({
-          name: user?.fullname || "",
+          fullname: user?.fullname || "",
           email: user?.email || "",
-          phone: user?.phoneNumber || "",
+          phoneNumber: user?.phoneNumber || "",
           bio: user?.profile?.bio || "",
         });
 
@@ -97,10 +97,27 @@ const Profile = () => {
     );
   }
 
+  const handleProfile = (e) => {
+    const { name, value } = e.target;
+    setProfile((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setErrors((prev) => {
+      const newError = { ...prev };
+      delete newError[name];
+      return newError
+    })
+  }
   // ---------------- SKILLS ----------------
   const addSkill = () => {
     if (!newSkill.trim() || skills.includes(newSkill)) return;
     setSkills([...skills, newSkill]);
+    setErrors((prev) => {
+      const newError = { ...prev };
+      delete newError.skills;
+      return newError;
+    })
     setNewSkill("");
 
   };
@@ -113,9 +130,9 @@ const Profile = () => {
   const handleUpdateProfile = async () => {
     try {
       const payload = {
-        fullname: profile.name,
+        fullname: profile.fullname,
         email: profile.email,
-        phoneNumber: profile.phone,
+        phoneNumber: profile.phoneNumber,
         bio: profile.bio,
         skills,
       };
@@ -126,9 +143,9 @@ const Profile = () => {
       dispatch(setUser(user));
 
       setProfile({
-        name: user.fullname,
+        fullname: user.fullname,
         email: user.email,
-        phone: user.phoneNumber,
+        phoneNumber: user.phoneNumber,
         bio: user.profile?.bio || "",
       });
 
@@ -225,7 +242,7 @@ const Profile = () => {
   // ---------------- CONTACT INFO ----------------
   const contacts = [
     { icon: Mail, value: profile.email },
-    { icon: Phone, value: profile.phone },
+    { icon: Phone, value: profile.phoneNumber },
   ];
 
   // ---------------- UI ----------------
@@ -359,7 +376,7 @@ const Profile = () => {
                 text-gray-900
                 "
                   >
-                    {profile.name}
+                    {profile.fullname}
                   </h2>
 
                   <p
@@ -420,10 +437,9 @@ const Profile = () => {
                   <div className="space-y-4 mt-6">
 
                     <Input
-                      value={profile.name}
-                      onChange={(e) =>
-                        setProfile({ ...profile, name: e.target.value })
-                      }
+                      name="fullname"
+                      value={profile.fullname}
+                      onChange={handleProfile}
                       placeholder="Full Name"
                       className="h-12 rounded-2xl border-0 bg-[#f8fbff]"
                     />
@@ -434,10 +450,9 @@ const Profile = () => {
                     )}
 
                     <Input
+                      name="bio"
                       value={profile.bio}
-                      onChange={(e) =>
-                        setProfile({ ...profile, bio: e.target.value })
-                      }
+                      onChange={handleProfile}
                       placeholder="Bio / Headline"
                       className="h-12 rounded-2xl border-0 bg-[#f8fbff]"
                     />
@@ -448,10 +463,9 @@ const Profile = () => {
                     )}
 
                     <Input
+                      name="email"
                       value={profile.email}
-                      onChange={(e) =>
-                        setProfile({ ...profile, email: e.target.value })
-                      }
+                      onChange={handleProfile}
                       placeholder="Email"
                       className="h-12 rounded-2xl border-0 bg-[#f8fbff]"
                     />
@@ -462,10 +476,9 @@ const Profile = () => {
                     )}
 
                     <Input
-                      value={profile.phone}
-                      onChange={(e) =>
-                        setProfile({ ...profile, phone: e.target.value })
-                      }
+                      name="phoneNumber"
+                      value={profile.phoneNumber}
+                      onChange={handleProfile}
                       placeholder="Phone"
                       className="h-12 rounded-2xl border-0 bg-[#f8fbff]"
                     />
@@ -605,6 +618,7 @@ const Profile = () => {
                 <div className="mt-5 flex gap-3 max-w-md">
 
                   <Input
+
                     value={newSkill}
                     onChange={(e) => setNewSkill(e.target.value)}
                     placeholder="Add new skill"
@@ -629,6 +643,10 @@ const Profile = () => {
                   </Button>
 
                 </div>
+                {errors.skills && (
+                  <p className="text-red-500 text-sm">
+                    {errors.skills}
+                  </p>)}
 
               </div>
 

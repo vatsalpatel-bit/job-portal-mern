@@ -223,7 +223,7 @@ export const updateProfile = async (req, res) => {
       email: z.string().email("Invalid email address").optional(),
       phoneNumber: z.string().length(10, "Phone number must be exactly 10 digits").
         regex(/^\d+$/, "Phone number must contain only digits").optional(),
-      bio: z.string().max(200, "Name cannot excced 50 characters").optional(),
+      bio: z.string(). max(200, "Name cannot excced 50 characters").optional(),
       skills: z
         .array(z.string())
         .min(1, "Please add at least one skill")
