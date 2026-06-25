@@ -46,7 +46,7 @@ const DetailPage = () => {
   };
 
   const handleUndo = async () => {
-    const data = await undoApplicationApi(id);
+    await undoApplicationApi(id);
     dispatch(
       setAppliedJobs(
         appliedJobs.filter(
