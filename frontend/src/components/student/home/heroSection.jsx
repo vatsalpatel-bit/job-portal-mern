@@ -4,14 +4,22 @@ import { Search } from "lucide-react";
 import CategoryCarousel from "@/components/student/home/createCarsousel";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner";
 
 const HeroSection = () => {
 
     const [query, setQuery] = useState("");
     const navigate = useNavigate();
 
+    const handleSearch = (e) => {
+        setQuery(e.target.value)
+    };
+
     const handlSearch = () => {
-        if (!query.trim()) return;
+        if (!query.trim()) {
+            toast.error("Please enter a keyword");
+            return;
+        }
         navigate(`/browse?keyword=${query}`);
     }
 
@@ -81,7 +89,7 @@ const HeroSection = () => {
                             placeholder="Find your dream jobs"
                             className="h-14 flex-1 border-none bg-transparent px-6 text-base text-gray-800 placeholder:text-gray-400 focus-visible:ring-0 shadow-none"
                             value={query}
-                            onChange={(e) => setQuery(e.target.value)}
+                            onChange={handleSearch}
                             onKeyDown={(e) => e.key === "Enter" && handlSearch()}
                         />
 
