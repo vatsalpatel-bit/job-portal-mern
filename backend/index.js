@@ -46,7 +46,7 @@ app.use(cookieParser());
 
 
 // port 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8000;
 
 // api's
 app.use("/api/v1/user", userRoute);
