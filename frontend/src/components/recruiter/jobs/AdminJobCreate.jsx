@@ -72,9 +72,7 @@ const AdminJobCreate = () => {
             } setLoading(true);
             const jobData = {
                 ...input,
-                requirements: input.requirements
-                    .split(",")
-                    .map((r) => r.trim())
+                requirements: input?.requirements?.split(",").map((r) => r.trim())
                     .filter(Boolean),
                 salary: Number(input.salary),
                 position: Number(input.position),

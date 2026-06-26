@@ -483,7 +483,7 @@ const JobApplicantPage = () => {
               {/* Pages */}
               <div className="flex items-center gap-2">
 
-                {[...Array(applicant?.totalPages || 1)].map((_, index) => {
+                {[...Array(applicant?.totalPages || 1)]?.map((_, index) => {
 
                   const pageNumber = index + 1;
 

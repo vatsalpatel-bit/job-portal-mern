@@ -81,8 +81,7 @@ const JobEditPage = () => {
         ...input,
         requirements: Array.isArray(input.requirements)
           ? input.requirements
-          : input.requirements
-            .split(",")
+          : input?.requirements?.split(",")
             .map((r) => r.trim())
             .filter(Boolean)
         ,

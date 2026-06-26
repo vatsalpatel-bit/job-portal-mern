@@ -14,7 +14,7 @@ const CategoryCarousel = () => {
   const { allJobs } = useSelector((state) => state.job);
 
   // Extract unique job titles
-  const categories = [...new Set(allJobs.map((job) => job.title))];
+  const categories = [...new Set(allJobs?.map((job) => job.title))];
 
   return (
     <div className="mx-auto max-w-4xl">

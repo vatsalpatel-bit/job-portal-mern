@@ -485,7 +485,7 @@ const Companies = () => {
             {/* Pages */}
             <div className="flex items-center gap-2">
 
-              {[...Array(allCompaies?.totalPages)].map((_, index) => {
+              {[...Array(allCompaies?.totalPages)]?.map((_, index) => {
 
                 const pageNumber = index + 1;
 

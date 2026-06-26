@@ -500,7 +500,7 @@ const ApplicantDetailPage = () => {
 
                   {application?.applicant?.profile?.skills?.length > 0 ? (
 
-                    application.applicant.profile.skills.map((skill, index) => (
+                    application?.applicant?.profile?.skills?.map((skill, index) => (
 
                       <span
                         key={`${skill}-${index}`}

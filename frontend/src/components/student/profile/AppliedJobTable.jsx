@@ -88,7 +88,7 @@ const AppliedJobTable = () => {
         {/* BODY */}
         <TableBody>
 
-          {paginatedJobs.map((item) => (
+          {paginatedJobs?.map((item) => (
 
             <TableRow
               key={item._id}
@@ -205,7 +205,7 @@ const AppliedJobTable = () => {
           {/* Pages */}
           <div className="flex items-center gap-2">
 
-            {[...Array(totalPages)].map((_, index) => {
+            {[...Array(totalPages)]?.map((_, index) => {
 
               const pageNumber = index + 1;
 
