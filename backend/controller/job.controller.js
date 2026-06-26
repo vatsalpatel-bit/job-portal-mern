@@ -453,10 +453,11 @@ export const deleteJob = async (req, res) => {
 
 export const searchJob = async (req, res) => {
   try {
-
+    const userId = req.userId;
     const keyword = req.query.keyword || "";
 
     const jobs = await Job.find({
+      userId,
       $or: [
         {
           title: {

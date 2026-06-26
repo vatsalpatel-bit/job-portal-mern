@@ -218,7 +218,7 @@ export const updateCompany = async (req, res) => {
 
     });
     const result = setUpCompanySchema.safeParse(req.body);
-    
+
     if (!result.success) {
       return res.status(400).json({
         success: false,
@@ -397,10 +397,11 @@ export const deleteCompany = async (req, res) => {
 
 export const searchCompany = async (req, res) => {
   try {
-
+    const userId = req.userId;
     const keyword = req.query.keyword || "";
 
     const companies = await Company.find({
+      userId,
       $or: [
         {
           name: {
@@ -416,6 +417,7 @@ export const searchCompany = async (req, res) => {
         },
       ],
     });
+
 
     return res.status(200).json({
       success: true,
