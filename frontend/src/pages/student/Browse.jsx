@@ -172,7 +172,7 @@ const Browse = () => {
           </div>
 
           {/* Empty State */}
-          {!searchedJobs || searchedJobs.length === 0 ? (
+          {!searchedJobs || searchedJobs?.length === 0 ? (
 
             <div
               className="
@@ -215,7 +215,7 @@ const Browse = () => {
             /* Jobs Grid */
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
 
-              {searchedJobs.map((job) => (
+              {searchedJobs?.map((job) => (
                 <Job key={job._id} job={job} />
               ))}
 

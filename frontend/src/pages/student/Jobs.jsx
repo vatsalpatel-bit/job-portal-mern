@@ -43,7 +43,7 @@ const Jobs = () => {
     const fetchAppliedJobs = async () => {
       try {
         const res = await getAppliedJobsApi();
-        const jobIds = res.applications.map(
+        const jobIds = res.applications?.map(
           (app) => app.job._id || app.job
         );
 
@@ -193,7 +193,7 @@ const Jobs = () => {
                     </h2>
 
                     <p className="text-sm text-gray-500 mt-1">
-                      {allJobs.length} opportunities available
+                      {allJobs?.length} opportunities available
                     </p>
                   </div>
 
@@ -216,7 +216,7 @@ const Jobs = () => {
 
                 </div>
 
-              ) : !allJobs || allJobs.length === 0 ? (
+              ) : !allJobs || allJobs?.length === 0 ? (
 
                 /* Empty State */
                 <div className="rounded-3xl bg-white/70 backdrop-blur-sm shadow-sm p-12 flex flex-col items-center justify-center text-center min-h-[400px]">
@@ -240,7 +240,7 @@ const Jobs = () => {
 
                 /* Jobs Grid */
                 <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-2 gap-7">
-                  {allJobs.map((job) => (
+                  {allJobs?.map((job) => (
                     <Job key={job._id} job={job} />
                   ))}
                 </div>

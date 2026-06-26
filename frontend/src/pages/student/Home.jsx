@@ -19,7 +19,7 @@ const Home = () => {
         const fetchAppliedJobs = async () => {
             try {
                 const res = await getAppliedJobsApi();
-                const jobIds = res.applications.map(
+                const jobIds = res.applications?.map(
                     (app) => app.job._id || app.job
                 );
 

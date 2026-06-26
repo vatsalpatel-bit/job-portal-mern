@@ -26,7 +26,7 @@ const CategoryCarousel = () => {
 
         <CarouselContent className="-ml-3 py-2">
 
-          {categories.map((role, index) => (
+          {categories?.map((role, index) => (
 
             <CarouselItem
               key={index}

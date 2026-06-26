@@ -532,7 +532,7 @@ const Profile = () => {
 
                 <div className="space-y-4">
 
-                  {contacts.map((item, index) => {
+                  {contacts?.map((item, index) => {
 
                     const Icon = item.icon;
 
@@ -580,13 +580,13 @@ const Profile = () => {
 
                 <div className="flex flex-wrap gap-3">
 
-                  {skills.length === 0 && (
+                  {skills?.length === 0 && (
                     <span className="text-sm text-gray-500">
                       No skills added
                     </span>
                   )}
 
-                  {skills.map((skill) => (
+                  {skills?.map((skill) => (
 
                     <Badge
                       key={skill}

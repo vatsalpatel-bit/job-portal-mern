@@ -1,14 +1,14 @@
 import multer from "multer";
 
-// 🔹 memory storage (for Cloudinary buffer)
+// memory storage (for Cloudinary buffer)
 const storage = multer.memoryStorage();
 
-// 🔹 common limits
+// common limits
 const limits = {
   fileSize: 2 * 1024 * 1024, // 2MB
 };
 
-// 🔹 PDF filter
+// PDF filter
 const pdfFilter = (req, file, cb) => {
   if (file.mimetype === "application/pdf") {
     return cb(null, true);
@@ -16,7 +16,7 @@ const pdfFilter = (req, file, cb) => {
   return cb(new Error("Only PDF resumes allowed"), false);
 };
 
-// 🔹 Image filter
+// Image filter
 const imageTypes = ["image/jpeg", "image/png", "image/webp"];
 
 const imageFilter = (req, file, cb) => {
@@ -29,7 +29,7 @@ const imageFilter = (req, file, cb) => {
   );
 };
 
-// 🔹 Exports
+// Exports
 export const uploadResume = multer({
   storage,
   limits,
