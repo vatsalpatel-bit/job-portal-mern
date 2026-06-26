@@ -103,6 +103,7 @@ const Signup = () => {
         role: input.role.toLowerCase(),
       });
 
+      localStorage.setItem("token", loginRes.data.token);
 
       dispatch(setUser(loginRes.data.user));
 

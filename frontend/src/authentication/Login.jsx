@@ -71,6 +71,7 @@ const Login = () => {
 
       const res = await loginUser(input);
 
+      localStorage.setItem("token", res.data.token);
       if (res.data.success) {
 
         const profileRes = await getProfileApi();

@@ -171,19 +171,12 @@ export const login = async (req, res) => {
 
     const safeUser = buildSafeUser(user);
 
-    res
-      .status(200)
-      .cookie("token", token, {
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-      })
-      .json({
-        message: `Welcome back ${safeUser.fullname}`,
-        user: safeUser,
-        success: true,
-      });
+    return res.status(200).json({
+      success: true,
+      message: `Welcome back ${safeUser.fullname}`,
+      token,
+      user: safeUser,
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
@@ -195,15 +188,6 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    const isProd = process.env.NODE_ENV === "production";
-
-    res.clearCookie("token", {
-      httpOnly: true,
-      secure: true,
-      sameSite:"none",
-      path: "/",
-    });
-
     return res.status(200).json({
       message: "Logout successfully",
       success: true,

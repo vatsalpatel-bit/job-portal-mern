@@ -14,7 +14,6 @@ dotenv.config({});
 import express, { Router } from "express";
 import compression from "compression";
 import helmet from "helmet";
-import cookieParser from "cookie-parser";
 import cors from "cors";
 
 import connectDB from "./utils/db.js";
@@ -43,7 +42,6 @@ app.use(cors(corsOptions));
 // midlleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 
 
 // port 

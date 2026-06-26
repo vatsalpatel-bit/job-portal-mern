@@ -1,21 +1,8 @@
-import axios from "axios";
-import { USER_API_END_PORT } from "@/utils/constant";
-
-// --------------------------------------------------
-// AXIOS INSTANCE
-// --------------------------------------------------
-const API = axios.create({
-  baseURL: USER_API_END_PORT,
-  withCredentials: true,
-});
-
-// --------------------------------------------------
-// AUTH
-// --------------------------------------------------
+import API from "./api";
 
 // Signup
 export const signupUser = (formData) => {
-  return API.post("/register", formData, {
+  return API.post("/api/v1/user/register", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -24,7 +11,7 @@ export const signupUser = (formData) => {
 
 // Login
 export const loginUser = (data) => {
-  return API.post("/login", data, {
+  return API.post("/api/v1/user/login", data, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -33,56 +20,49 @@ export const loginUser = (data) => {
 
 // Logout
 export const logoutUser = () => {
-  return API.post("/logout");
+  return API.post("/api/v1/user/logout");
 };
 
-// --------------------------------------------------
-// PROFILE
-// --------------------------------------------------
 
 // Get logged-in user profile
 export const getProfileApi = () => {
-  return API.get("/profile");
+  return API.get("/api/v1/user/profile");
 };
 
 // Update profile (JSON only)
 export const saveProfile = (data) => {
-  return API.put("/profile", data);
+  return API.put("/api/v1/user/profile", data);
 };
 
 // Upload resume (file)
 export const uploadResumeApi = (file) => {
   const formData = new FormData();
-  formData.append("resume", file);
+  formData.append("/api/v1/user/resume", file);
 
-  return API.put("/profile/resume", formData);
+  return API.put("/api/v1/user/profile/resume", formData);
 };
 
 // upload profile pic
 export const uploadProfilePhotoApi = (file) => {
   const formData = new FormData();
-  formData.append("photo", file);
+  formData.append("/api/v1/userphoto", file);
 
-  return API.put("/profile/photo", formData);
+  return API.put("/api/v1/user/profile/photo", formData);
 };
 
 export const getApplicantApi = async (applicantId, jobId) => {
-  const res = await axios.get(
-    `${USER_API_END_PORT}/get/${applicantId}/${jobId}/applicant`,
+  const res = await API.get(`/api/v1/user/get/${applicantId}/${jobId}/applicant`,
   );
   return res.data;
 };
 
 export const getAdminProfileApi = async () => {
-  const res = await axios.get(`${USER_API_END_PORT}/admin/profile`, {
-    withCredentials: true,
-  });
+  const res = await API.get(`/api/v1/user/admin/profile`);
   return res.data;
 };
 
 export const editAdminProfileApi = async (formData) => {
-  const res = await axios.put(`${USER_API_END_PORT}/admin/profile`, formData, {
-    withCredentials: true,
+  const res = await API.put(`/api/v1/user/admin/profile`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -92,7 +72,7 @@ export const editAdminProfileApi = async (formData) => {
 };
 
 export const googleAuthenticationApi = async (user) => {
-  const res = await axios.post(`${USER_API_END_PORT}/google-login`, {
+  const res = await API.post(`/api/v1/user/google-login`, {
     fullname: user.displayName,
     email: user.email, profilePhoto: user.photoURL
   })
@@ -100,14 +80,14 @@ export const googleAuthenticationApi = async (user) => {
 }
 
 export const forgotPasswordApi = async (email) => {
-  const res = await axios.post(`${USER_API_END_PORT}/forgot-password`, {
+  const res = await API.post(`/api/v1/user/forgot-password`, {
     email
   });
   return res.data;
 }
 
 export const resetPasswordApi = async (token, password) => {
-  const res = await axios.post(`${USER_API_END_PORT}/reset-password/${token}`, {
+  const res = await API.post(`/api/v1/user/reset-password/${token}`, {
     password
   })
   return res.data;

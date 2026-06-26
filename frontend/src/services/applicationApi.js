@@ -1,43 +1,35 @@
-import { APPLICATION_API_END_PORT } from "@/utils/constant";
-import axios from "axios";
+import API from "./api";
 
 export const applyJobApi = async (jobId) => {
-  const res = await axios.post(
-    `${APPLICATION_API_END_PORT}/apply/${jobId}`,
-    {},
-    { withCredentials: true },
+  const res = await API.post(
+    `/api/v1/application/apply/${jobId}`
   );
 
   return res.data;
 };
 
 export const getAppliedJobsApi = async () => {
-  const res = await axios.get(`${APPLICATION_API_END_PORT}/applied-jobs`, {
-    withCredentials: true,
-  });
+  const res = await API.get(`/api/v1/application/applied-jobs`);
   return res.data;
 };
 
 export const getApplicantsApi = async (jobId, page) => {
-  const res = await axios.get(
-    `${APPLICATION_API_END_PORT}/${jobId}/applicant?page=${page}&limit=4`,
+  const res = await API.get(
+    `/api/v1/application/${jobId}/applicant?page=${page}&limit=4`,
   );
   return res.data;
 };
 
 export const getAdminJobStatus = async (page) => {
-  const res = await axios.get(
-    `${APPLICATION_API_END_PORT}/status/get?page=${page}&limit=5`,
-    {
-      withCredentials: true,
-    },
+  const res = await API.get(
+    `/api/v1/application/status/get?page=${page}&limit=5`
   );
   return res.data;
 };
 
 export const updateApplicantStatus = async (id, newStatus) => {
-  const res = await axios.post(
-    `${APPLICATION_API_END_PORT}/status/${id}/update`,
+  const res = await API.post(
+    `/api/v1/application/status/${id}/update`,
     {
       status: newStatus,
     },
@@ -50,8 +42,8 @@ export const updateApplicantStatusByIds = async (
   jobId,
   newStatus,
 ) => {
-  const res = await axios.post(
-    `${APPLICATION_API_END_PORT}/status/${applicantId}/${jobId}/update`,
+  const res = await API.post(
+    `/api/v1/application/status/${applicantId}/${jobId}/update`,
     {
       status: newStatus,
     },
@@ -60,8 +52,6 @@ export const updateApplicantStatusByIds = async (
 };
 
 export const undoApplicationApi = async (id) => {
-  const res = await axios.delete(`${APPLICATION_API_END_PORT}/application/${id}/delete`, {
-    withCredentials: true,
-  });
+  const res = await API.delete(`/api/v1/application/application/${id}/delete`);
   return res.status
 }
