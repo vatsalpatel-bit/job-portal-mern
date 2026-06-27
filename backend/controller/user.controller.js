@@ -668,7 +668,7 @@ export const googleAuthentication = async (
     const token = jwt.sign(
 
       { userId: user._id },
-      
+
       process.env.SECRET_KEY,
 
       { expiresIn: "1d" }
@@ -719,7 +719,7 @@ export const forgotPassword = async (req, res) => {
     )
 
     const resetLink =
-      `${FRONTEND_RESET_PAGE_URL}/${token}`;
+      `${process.env.FRONTEND_RESET_PAGE_URL}/${token}`;
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
