@@ -674,17 +674,11 @@ export const googleAuthentication = async (
       { expiresIn: "1d" }
     );
 
-    return res
-      .cookie("token", token, {
-        httpOnly: true,
-      })
-
-      .status(200)
-
-      .json({
-        success: true,
-        user,
-      });
+    return res.status(200).json({
+      success: true,
+      token,
+      user,
+    });
 
   } catch (error) {
 
