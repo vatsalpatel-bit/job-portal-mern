@@ -68,7 +68,7 @@ const Signup = () => {
       const user = result.user;
 
       const data = await googleAuthenticationApi(user);
-      localStorage.setItem("token", data.data.token)
+      localStorage.setItem("token", data.token)
       dispatch(setUser(data.user));
       navigate("/")
 
@@ -95,7 +95,6 @@ const Signup = () => {
       if (input.file) formData.append("file", input.file);
 
       const data = await signupUser(formData);
-      console.log(data);
       /* SET COOKE */
       const loginRes = await loginUser({
         email: input.email.trim().toLowerCase(),

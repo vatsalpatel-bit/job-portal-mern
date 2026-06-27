@@ -53,7 +53,7 @@ const Login = () => {
 
       const user = result.user;
       const data = await googleAuthenticationApi(user);
-      localStorage.setItem("token", data.data.token)
+      localStorage.setItem("token", data.token)
       dispatch(setUser(data.user));
       navigate("/")
 
