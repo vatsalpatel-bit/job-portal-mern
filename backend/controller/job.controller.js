@@ -457,7 +457,7 @@ export const searchJob = async (req, res) => {
     const keyword = req.query.keyword || "";
 
     const jobs = await Job.find({
-      userId,
+      created_by: userId,
       $or: [
         {
           title: {
