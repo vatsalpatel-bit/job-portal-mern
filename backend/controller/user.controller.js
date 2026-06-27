@@ -720,7 +720,7 @@ export const forgotPassword = async (req, res) => {
     console.log(token);
     const resetLink =
       `${process.env.FRONTEND_RESET_PAGE_URL}/${token}`;
-
+    console.log("Before sendMail");
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
