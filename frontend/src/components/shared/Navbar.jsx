@@ -36,13 +36,13 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logoutUser();
+      localStorage.removeItem("token");
+      dispatch(setUser(null));
+      navigate("/login");
     } catch (error) {
       console.error(error);
     } finally {
-      localStorage.removeItem("token");
-      dispatch(setUser(null));
       setOpen(false);
-      navigate("/login");
     }
   };
 
