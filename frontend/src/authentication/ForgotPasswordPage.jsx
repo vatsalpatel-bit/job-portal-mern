@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { forgotPasswordApi } from '@/services/authApi';
 import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState("");
@@ -13,12 +14,12 @@ const ForgotPasswordPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true);
             const data = await forgotPasswordApi(email);
             toast.success(
                 data?.message ||
                 "Reset link sent successfully"
             );
-            setLoading(true);
         } catch (error) {
             toast.error(
                 error?.response?.data?.message ||
