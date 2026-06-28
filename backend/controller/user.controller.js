@@ -750,7 +750,9 @@ export const forgotPassword = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: "Server error",
+      message: error.message,
+      code: error.code,
+      response: error.response,
     });
   }
 }
