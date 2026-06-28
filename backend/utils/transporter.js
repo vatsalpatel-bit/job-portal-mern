@@ -6,8 +6,6 @@ console.log(
     process.env.EMAIL_PASS ? "Exists" : "Missing"
 );
 
-await transporter.verify();
-console.log("SMTP Connected");
 export const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
