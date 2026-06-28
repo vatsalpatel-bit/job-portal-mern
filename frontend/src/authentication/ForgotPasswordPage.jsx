@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState("");
+    const [loading, setLoading] = useState(false);
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -17,13 +18,14 @@ const ForgotPasswordPage = () => {
                 data?.message ||
                 "Reset link sent successfully"
             );
-
-
+            setLoading(true);
         } catch (error) {
             toast.error(
                 error?.response?.data?.message ||
                 "Something went wrong"
             );
+        } finally {
+            setLoading(false);
         }
     }
     return (
@@ -122,21 +124,31 @@ const ForgotPasswordPage = () => {
                         {/* Submit */}
                         <Button
                             type="submit"
+                            disabled={loading}
                             className="
-          w-full h-14
-          rounded-2xl
-          bg-gradient-to-r from-blue-600 to-violet-600
-          hover:from-blue-700 hover:to-violet-700
-          text-white
-          text-base font-semibold
-          shadow-[0_10px_30px_rgba(59,130,246,0.25)]
-          transition-all duration-300
-          hover:-translate-y-0.5
-          "
+    w-full h-14
+    rounded-2xl
+    bg-gradient-to-r from-blue-600 to-violet-600
+    hover:from-blue-700 hover:to-violet-700
+    text-white
+    text-base font-semibold
+    shadow-[0_10px_30px_rgba(59,130,246,0.25)]
+    transition-all duration-300
+    hover:-translate-y-0.5
+    disabled:opacity-70
+    disabled:cursor-not-allowed
+    disabled:hover:translate-y-0
+  "
                         >
-                            Send Reset Link
+                            {loading ? (
+                                <div className="flex items-center justify-center gap-2">
+                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                    Sending...
+                                </div>
+                            ) : (
+                                "Send Reset Link"
+                            )}
                         </Button>
-
                         {/* Back */}
                         <div className="text-center pt-2">
 
