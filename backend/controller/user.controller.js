@@ -723,8 +723,7 @@ export const forgotPassword = async (req, res) => {
       `${process.env.FRONTEND_RESET_PAGE_URL}/${token}`;
 
     console.log("Before sendMail");
-    await transporter.verify();
-    console.log("SMTP Connected");
+
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
