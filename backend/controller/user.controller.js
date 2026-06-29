@@ -7,7 +7,7 @@ import { getPublicIdFromUrl } from "../utils/cloudinary.js";
 import mongoose from "mongoose";
 import { Application } from "../utils/application.model.js";
 import { uploadFromBuffer } from "../utils/cloudinaryUpload.js";
-import { resend, transporter } from "../utils/transporter.js";
+import { resend } from "../utils/transporter.js";
 import { optional, success, z } from "zod";
 
 const buildSafeUser = (user) => ({
