@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAllCompanies } from '@/redux/slices/companiesSlice';
 import { toast } from 'sonner';
 import Footer from '@/components/shared/Footer';
-
+import { Loader2 } from "lucide-react";
 
 const AdminJobCreate = () => {
     const navigate = useNavigate();
@@ -56,6 +56,7 @@ const AdminJobCreate = () => {
 
     const submitHandler = async () => {
         try {
+            setLoading(true);
             if (
                 !input.title ||
                 !input.description ||
@@ -69,7 +70,7 @@ const AdminJobCreate = () => {
             ) {
                 alert("Please fill all fields");
                 return;
-            } setLoading(true);
+            }
             const jobData = {
                 ...input,
                 requirements: input?.requirements?.split(",").map((r) => r.trim())
@@ -547,21 +548,32 @@ const AdminJobCreate = () => {
                                 </button>
 
                                 {/* Create */}
+
                                 <button
                                     onClick={submitHandler}
+                                    disabled={loading}
                                     className="
-              h-12 px-7
-              rounded-2xl
-              bg-gradient-to-r from-blue-600 to-violet-600
-              hover:from-blue-700 hover:to-violet-700
-              text-white
-              text-sm font-medium
-              shadow-[0_10px_25px_rgba(59,130,246,0.25)]
-              transition-all duration-300
-              hover:-translate-y-0.5
-              "
+    h-12 px-7
+    rounded-2xl
+    bg-gradient-to-r from-blue-600 to-violet-600
+    hover:from-blue-700 hover:to-violet-700
+    text-white
+    text-sm font-medium
+    shadow-[0_10px_25px_rgba(59,130,246,0.25)]
+    transition-all duration-300
+    hover:-translate-y-0.5
+    disabled:opacity-50
+    disabled:pointer-events-none
+  "
                                 >
-                                    Create Job
+                                    {loading ? (
+                                        <span className="flex items-center gap-2">
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                            Creating...
+                                        </span>
+                                    ) : (
+                                        "Create Job"
+                                    )}
                                 </button>
 
                             </div>

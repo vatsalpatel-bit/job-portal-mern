@@ -1,33 +1,73 @@
 import React, { useState } from 'react'
 import Navbar from '@/components/shared/Navbar'
 import Footer from '@/components/shared/Footer'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { resetPasswordApi } from '@/services/authApi'
 import { toast } from 'sonner'
+import { Loader2 } from 'lucide-react'
+
 const ResetPasswordPage = () => {
     const { token } = useParams();
-    const [password, setPassword] = useState("");
-    const [conformPassword, setConformPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [input, setInput] = useState({
+        password: "",
+        conformPassword: ""
+    })
+    const navigate = useNavigate();
+
+    const changeHandler = (e) => {
+        const { name, value } = e.target;
+        setInput((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+        setErrors((prev) => {
+            const newError = { ...prev };
+            delete newError[name];
+            return newError;
+        })
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (password === conformPassword) {
-                const data = await resetPasswordApi(token, password);
+            if (input.password === input.conformPassword) {
+                setLoading(true)
+                const data = await resetPasswordApi(token, input.password);
                 toast.success(
                     data?.message ||
                     "Password reset successfully"
                 );
+                navigate("/login");
             } else {
                 toast.error("password and conform password not match ");
             }
         } catch (error) {
-            toast.error(
-                error?.response?.data?.message ||
-                "Something went wrong"
-            );
+            const data = error.response?.data;
+            if (data?.error) {
+                const allErrors = {};
+
+                data.error.forEach((err, index) => {
+                    allErrors[err.path[0]] = err.message;
+                    setTimeout(() => {
+                        toast.error(err.message);
+                    }, index * 1000);
+                });
+
+                setErrors(allErrors);
+
+            } else if (data?.message) {
+                toast.error(data?.message);
+            }
+            else {
+                toast.error("Something went wrong");
+            }
+        } finally {
+            setLoading(false)
+
         }
     }
     return (
@@ -102,8 +142,9 @@ const ResetPasswordPage = () => {
                             </label>
 
                             <Input
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                name="password"
+                                value={input.password}
+                                onChange={changeHandler}
                                 type="password"
                                 placeholder="••••••••"
                                 className="
@@ -116,7 +157,11 @@ const ResetPasswordPage = () => {
             focus-visible:ring-2 focus-visible:ring-blue-200
             "
                             />
-
+                            {errors.password && (
+                                <p className="text-red-500 text-sm">
+                                    {errors.password}
+                                </p>
+                            )}
                         </div>
 
                         {/* Confirm Password */}
@@ -127,8 +172,9 @@ const ResetPasswordPage = () => {
                             </label>
 
                             <Input
-                                value={conformPassword}
-                                onChange={(e) => setConformPassword(e.target.value)}
+                                name="conformPassword"
+                                value={input.conformPassword}
+                                onChange={changeHandler}
                                 type="password"
                                 placeholder="••••••••"
                                 className="
@@ -180,6 +226,7 @@ const ResetPasswordPage = () => {
                         {/* Button */}
                         <Button
                             onClick={handleSubmit}
+                            disabled={loading}
                             className="
           w-full h-14
           rounded-2xl
@@ -190,9 +237,20 @@ const ResetPasswordPage = () => {
           shadow-[0_10px_30px_rgba(59,130,246,0.25)]
           transition-all duration-300
           hover:-translate-y-0.5
+          hover:-translate-y-0.5
+          disabled:opacity-70
+          disabled:cursor-not-allowed
+          disabled:hover:translate-y-0
           "
-                        >
-                            Update Password
+                        > {loading ? (
+                            <div className="flex items-center justify-center gap-2">
+                                <Loader2 className="h-5 w-5 animate-spin" />
+                                Updating...
+                            </div>
+                        ) : (
+                            "Update Password"
+                        )}
+
                         </Button>
 
                         {/* Back */}

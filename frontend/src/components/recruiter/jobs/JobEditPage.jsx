@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getJobByIdApi, updateJobApi } from '@/services/companyApi';
 import { toast } from 'sonner';
 import Footer from '@/components/shared/Footer';
+import { Loader2 } from "lucide-react";
 
 const JobEditPage = () => {
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ const JobEditPage = () => {
 
   const submitHandler = async () => {
     try {
+      setLoading(true);
       if (
         !input.title ||
         !input.description ||
@@ -76,7 +78,7 @@ const JobEditPage = () => {
         alert("Please fill all fields");
         return;
       }
-      setLoading(true);
+
       const jobData = {
         ...input,
         requirements: Array.isArray(input.requirements)
@@ -584,19 +586,29 @@ const JobEditPage = () => {
 
                 <button
                   onClick={submitHandler}
+                  disabled={loading}
                   className="
-              w-full h-14
-              rounded-2xl
-              bg-gradient-to-r from-blue-600 to-violet-600
-              hover:from-blue-700 hover:to-violet-700
-              text-white
-              font-medium
-              shadow-[0_12px_30px_rgba(59,130,246,0.25)]
-              transition-all duration-300
-              hover:-translate-y-0.5
-              "
+    w-full h-14
+    rounded-2xl
+    bg-gradient-to-r from-blue-600 to-violet-600
+    hover:from-blue-700 hover:to-violet-700
+    text-white
+    font-medium
+    shadow-[0_12px_30px_rgba(59,130,246,0.25)]
+    transition-all duration-300
+    hover:-translate-y-0.5
+    disabled:opacity-50
+    disabled:pointer-events-none
+  "
                 >
-                  Save Changes
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                      Saving...
+                    </span>
+                  ) : (
+                    "Save Changes"
+                  )}
                 </button>
 
                 <button

@@ -8,12 +8,13 @@ import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { setSingleCompany } from "@/redux/slices/companiesSlice";
 import Footer from "@/components/shared/Footer";
-
+import { Loader2 } from "lucide-react";
 
 const CreateCompany = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const [input, setInput] = useState({
     companyName: "",
   });
@@ -32,6 +33,7 @@ const CreateCompany = () => {
   const handleCreateCompany = async () => {
     if (!input.companyName.trim()) return;
     try {
+      setLoading(true);
       const { success, company, message } = await createCompanyApi(input.companyName);
       if (!success) {
         return toast.error(message || "Failed to create Company");
@@ -63,6 +65,8 @@ const CreateCompany = () => {
       else {
         toast.error("Something went wrong");
       }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -195,24 +199,32 @@ const CreateCompany = () => {
                 </Button>
 
                 {/* Continue */}
+
                 <Button
-                  disabled={!input.companyName}
+                  disabled={!input.companyName || loading}
                   onClick={handleCreateCompany}
                   className="
-              h-12 px-7
-              rounded-2xl
-              bg-gradient-to-r from-blue-600 to-violet-600
-              hover:from-blue-700 hover:to-violet-700
-              text-white
-              font-medium
-              shadow-[0_10px_25px_rgba(59,130,246,0.25)]
-              transition-all duration-300
-              hover:-translate-y-0.5
-              disabled:opacity-50
-              disabled:pointer-events-none
-              "
+    h-12 px-7
+    rounded-2xl
+    bg-gradient-to-r from-blue-600 to-violet-600
+    hover:from-blue-700 hover:to-violet-700
+    text-white
+    font-medium
+    shadow-[0_10px_25px_rgba(59,130,246,0.25)]
+    transition-all duration-300
+    hover:-translate-y-0.5
+    disabled:opacity-50
+    disabled:pointer-events-none
+  "
                 >
-                  Continue
+                  {loading ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Creating...
+                    </span>
+                  ) : (
+                    "Continue"
+                  )}
                 </Button>
 
               </div>

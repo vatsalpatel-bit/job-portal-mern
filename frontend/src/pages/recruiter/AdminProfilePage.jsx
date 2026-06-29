@@ -58,7 +58,7 @@ const AdminProfilePage = () => {
                     <div className="mb-8">
 
                         <button
-                            onClick={() => navigate(-1)}
+                            onClick={() => navigate("/admin/companies")}
                             className="
                                     inline-flex items-center gap-2
                                     rounded-full

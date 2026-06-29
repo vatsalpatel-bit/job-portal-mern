@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
+import { Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -42,7 +42,7 @@ const Profile = () => {
 
 
   // ---------------- STATE ----------------
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const [profile, setProfile] = useState({
     fullname: "",
@@ -63,6 +63,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        setLoading(true);
         const res = await getProfileApi();
         const user = res.data.user;
 
@@ -129,6 +130,7 @@ const Profile = () => {
   // ---------------- UPDATE PROFILE ----------------
   const handleUpdateProfile = async () => {
     try {
+      setLoading(true);
       const payload = {
         fullname: profile.fullname,
         email: profile.email,
@@ -172,6 +174,8 @@ const Profile = () => {
       else {
         toast.error("Something went wrong");
       }
+    } finally {
+      setLoading(false)
     }
   };
   // profile pic
@@ -489,17 +493,27 @@ const Profile = () => {
                     )}
 
                     <Button
-                      className="
-  w-full h-12
-  rounded-2xl
-  bg-black hover:bg-gray-900
-  text-white
-  font-medium
-  shadow-md
-  "
                       onClick={handleUpdateProfile}
+                      disabled={loading}
+                      className="
+    w-full h-12
+    rounded-2xl
+    bg-black hover:bg-gray-900
+    text-white
+    font-medium
+    shadow-md
+    disabled:opacity-50
+    disabled:pointer-events-none
+  "
                     >
-                      Save Changes
+                      {loading ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Saving...
+                        </span>
+                      ) : (
+                        "Save Changes"
+                      )}
                     </Button>
 
                   </div>

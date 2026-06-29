@@ -128,10 +128,10 @@ const Footer = () => {
             </div>
 
             {/* CENTER SEPARATOR */}
-            <div className="hidden lg:block w-px bg-white/10" />
+            <div className="hidden lg:block w-px bg-white/10 ml-10" />
 
             {/* RIGHT SIDE */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
+            <div className="flex flex-wrap justify-center lg:justify-evenly gap-16">
               {
                 user?.role === "student" ? (<><div>
 
@@ -177,94 +177,9 @@ const Footer = () => {
                   </ul>
 
                 </div>
-                  <div>
-
-                    <h4
-                      className="
-        mb-6 text-sm font-semibold
-        uppercase tracking-[0.2em]
-        text-white
-        "
-                    >
-                      Recruiters
-                    </h4>
-
-                    <ul className="space-y-4 text-sm text-gray-400">
-
-                      <li>
-                        <Link
-                          to="# "
-                          className="hover:text-white transition cursor-pointer"
-                        >
-                          Companies
-                        </Link>
-                      </li>
-
-                      <li>
-                        <Link
-                          to="#"
-                          className="hover:text-white transition cursor-pointer"
-                        >
-                          Jobs
-                        </Link>
-                      </li>
-
-                      <li>
-                        <Link
-                          to="#"
-                          className="hover:text-white transition cursor-pointer"
-                        >
-                          Profile
-                        </Link>
-                      </li>
-                    </ul>
-
-                  </div>
+             
                 </>) : user?.role === "recruiter" ? (<>
-                  <div>
-
-                    <h4
-                      className="
-        mb-6 text-sm font-semibold
-        uppercase tracking-[0.2em]
-        text-white
-        "
-                    >
-                      Candidates
-                    </h4>
-
-                    <ul className="space-y-4 text-sm text-gray-400">
-
-                      <li>
-                        <Link
-                          to="#"
-                          className="hover:text-white transition cursor-pointer"
-                        >
-                          Jobs
-                        </Link>
-                      </li>
-
-                      <li>
-                        <Link
-                          to="#"
-                          className="hover:text-white transition cursor-pointer"
-                        >
-                          Browse
-                        </Link>
-                      </li>
-
-                      <li>
-                        <Link
-                          to="#"
-                          className="hover:text-white transition cursor-pointer"
-                        >
-                          Profile
-                        </Link>
-                      </li>
-
-                    </ul>
-
-                  </div>
+              
                   <div>
 
                     <h4
@@ -309,50 +224,6 @@ const Footer = () => {
 
                   </div></>) : (
                   <>
-                    <div>
-
-                      <h4
-                        className="
-        mb-6 text-sm font-semibold
-        uppercase tracking-[0.2em]
-        text-white
-        "
-                      >
-                        Candidates
-                      </h4>
-
-                      <ul className="space-y-4 text-sm text-gray-400">
-
-                        <li>
-                          <Link
-                            to="#"
-                            className="hover:text-white transition cursor-pointer"
-                          >
-                            Jobs
-                          </Link>
-                        </li>
-
-                        <li>
-                          <Link
-                            to="#"
-                            className="hover:text-white transition cursor-pointer"
-                          >
-                            Browse
-                          </Link>
-                        </li>
-
-                        <li>
-                          <Link
-                            to="#"
-                            className="hover:text-white transition cursor-pointer"
-                          >
-                            Profile
-                          </Link>
-                        </li>
-
-                      </ul>
-
-                    </div>
                     <div>
 
                       <h4

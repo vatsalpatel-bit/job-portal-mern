@@ -475,19 +475,29 @@ const CompanyEdit = () => {
                 {/* Save */}
                 <Button
                   onClick={handleSubmit}
+                  disabled={loading}
                   className="
-              h-12 px-8
-              rounded-2xl
-              bg-gradient-to-r from-blue-600 to-violet-600
-              hover:from-blue-700 hover:to-violet-700
-              text-white
-              font-medium
-              shadow-[0_10px_25px_rgba(59,130,246,0.25)]
-              transition-all duration-300
-              hover:-translate-y-0.5
-              "
+    h-12 px-8
+    rounded-2xl
+    bg-gradient-to-r from-blue-600 to-violet-600
+    hover:from-blue-700 hover:to-violet-700
+    text-white
+    font-medium
+    shadow-[0_10px_25px_rgba(59,130,246,0.25)]
+    transition-all duration-300
+    hover:-translate-y-0.5
+    disabled:opacity-50
+    disabled:pointer-events-none
+  "
                 >
-                  Save Changes
+                  {loading ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Saving...
+                    </span>
+                  ) : (
+                    "Save Changes"
+                  )}
                 </Button>
 
               </div>
