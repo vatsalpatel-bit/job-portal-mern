@@ -1,54 +1,47 @@
-# 💼 Job Portal (MERN Stack)
+# 🚀 NextWork
 
-A full-stack job portal where recruiters can post jobs and users can apply.
-
-## 🚀 Features
-
-* User Authentication (JWT)
-* Create & Apply Jobs
-* Recruiter Dashboard
-* Company Management
-* Resume Upload
-
-## 🛠 Tech Stack
-
-* Frontend: React, Tailwind CSS
-* Backend: Node.js, Express.js
-* Database: MongoDB
-* Cloud: Cloudinary
-
-## 📸 Screenshots
-
-// ......
-
-## ⚙️ Installation
-
-### Clone the repo
-
-```bash
-git clone https://github.com/vatsalpatel-bit/job-portal-mern.git
-```
-
-### Install dependencies
-
-```bash
-cd frontend
-npm install
-
-cd ../backend
-npm install
-```
-
-### Run project
-
-```bash
-npm run batman
-```
+A production-ready MERN Job Portal where recruiters can post jobs and students can apply with resumes.
 
 ## 🌐 Live Demo
 
-//........
+https://nextwork-frontend.onrender.com
 
-## 👨‍💻 Author
+## ✨ Features
 
-Vatsal Patel 
+- Google Authentication
+- Role Based Access
+- Resume Upload
+- Company Management
+- Job Management
+- Password Reset
+- Protected Routes
+- Search & Filter Jobs
+
+## 🛠 Tech Stack
+
+Frontend
+- React
+- Redux Toolkit
+- Tailwind CSS
+- Shadcn UI
+- Axios
+
+Backend
+- Node.js
+- Express.js
+- MongoDB
+- Cloudinary
+
+Deployment
+- Render
+- MongoDB Atlas
+
+## 📸 Screenshots
+
+(Home, Login, Dashboard...)
+
+## Installation
+
+npm install
+
+npm run start
