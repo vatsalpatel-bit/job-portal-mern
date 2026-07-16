@@ -5,6 +5,7 @@ const applicationSlice = createSlice({
   initialState: {
     allApplicant: [],
   },
+  
   reducers: {
     setAllApplicant: (state, action) => {
       state.allApplicant = action.payload;

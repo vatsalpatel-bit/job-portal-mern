@@ -1,0 +1,20 @@
+services:
+  backend:
+    build: ./backend
+    container_name: nextwork-backend
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build: ./frontend
+    container_name: nextwork-frontend
+    restart: always
+    env_file:
+      - ./frontend/.env
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend

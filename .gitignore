@@ -34,7 +34,7 @@ yarn-error.log*
 Thumbs.db
 
 # ==============================
-# Uploads (if storing locally)
+# Uploads
 # ==============================
 uploads/
 

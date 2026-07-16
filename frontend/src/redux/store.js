@@ -3,6 +3,7 @@ import authReducer from "@/redux/slices/authslice";
 import jobReducer from "@/redux/slices/jobSlice";
 import companyReducer from "@/redux/slices/companiesSlice";
 import applicationReducer from "@/redux/slices/applicationSlice";
+
 const store = configureStore({
   reducer: {
     auth: authReducer,

@@ -179,7 +179,7 @@ const Footer = () => {
                 </div>
              
                 </>) : user?.role === "recruiter" ? (<>
-              
+                  
                   <div>
 
                     <h4
